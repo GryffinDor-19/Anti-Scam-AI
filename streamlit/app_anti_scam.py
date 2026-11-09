@@ -15,6 +15,7 @@ Bản nâng cấp toàn diện tích hợp Bảng Lịch Sử Tra Cứu Trong Ph
 import streamlit as st
 import sys
 import os
+import time
 import datetime
 import pandas as pd
 import numpy as np
@@ -67,6 +68,9 @@ if "demo_fake_bill" not in st.session_state:
 
 if "history" not in st.session_state:
     st.session_state.history = []
+
+if "trigger_animation" not in st.session_state:
+    st.session_state.trigger_animation = False
 
 
 def render_gauge_chart(score: int):
@@ -153,7 +157,8 @@ with st.sidebar:
     for label, text_content in sample_scenarios.items():
         if st.button(label, use_container_width=True):
             st.session_state.input_text = text_content
-            st.session_state.has_analyzed = False
+            st.session_state.has_analyzed = True
+            st.session_state.trigger_animation = True
 
 # ==========================================
 # CẤU HÌNH CSS: PHÓNG TO TOÀN BỘ BẰNG ZOOM
@@ -271,6 +276,7 @@ with tab_scan:
     with col_btn1:
         if st.button("🚀 BẮT ĐẦU PHÂN TÍCH & BÓC MẼ RỦI RO", type="primary", use_container_width=True):
             st.session_state.has_analyzed = True
+            st.session_state.trigger_animation = True
     with col_btn2:
         if st.button("🗑️ Xóa trắng nội dung", use_container_width=True):
             st.session_state.input_text = ""
@@ -325,9 +331,30 @@ with tab_scan:
             with col_gauge:
                 with st.container(border=True):
                     st.markdown("<p style='text-align: center; font-weight: bold; margin-bottom: 0;'>ĐỒNG HỒ ĐO RỦI RO (SCAM METER)</p>", unsafe_allow_html=True)
-                    fig_gauge = render_gauge_chart(mock_score)
-                    st.pyplot(fig_gauge, use_container_width=True)
-                    plt.close(fig_gauge)
+                    gauge_placeholder = st.empty()
+
+            # Hiệu ứng quét hoạt họa kim quay (Scanning Animation)
+            if st.session_state.get("trigger_animation", False):
+                st.session_state.trigger_animation = False
+
+                with col_info:
+                    scan_box = st.empty()
+                    scan_box.info("⚡ **AntiScam AI đang kích hoạt mạng nơ-ron quét phân tích...**\n\n"
+                                  "🔍 *Đang bóc tách bẫy thao túng tâm lý & Đối soát 20 bài báo Cục An toàn thông tin...*")
+
+                # Chạy hoạt họa kim quét từ 0 đến điểm mục tiêu (14 bước, khoảng 0.5s)
+                anim_steps = np.linspace(0, mock_score, num=14, dtype=int)
+                for pt in anim_steps:
+                    fig_frame = render_gauge_chart(int(pt))
+                    gauge_placeholder.pyplot(fig_frame, use_container_width=True)
+                    plt.close(fig_frame)
+                    time.sleep(0.035)
+
+                scan_box.empty()
+            else:
+                fig_static = render_gauge_chart(mock_score)
+                gauge_placeholder.pyplot(fig_static, use_container_width=True)
+                plt.close(fig_static)
 
             with col_info:
                 if mock_score >= 70:
