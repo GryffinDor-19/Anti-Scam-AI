@@ -15,15 +15,23 @@ class RAGCaseMatcher:
 
     def __init__(self, knowledge_path: Optional[str] = None):
         if knowledge_path is None:
-            # Tự động tìm đường dẫn đến data/scam_knowledge.json
-            base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            knowledge_path = os.path.join(base_dir, "data", "scam_knowledge.json")
-            
-            # Fallback nếu gọi từ thư mục khác
-            if not os.path.exists(knowledge_path):
-                alt_path = os.path.join(os.getcwd(), "data", "scam_knowledge.json")
-                if os.path.exists(alt_path):
-                    knowledge_path = alt_path
+            # Tự động tìm đường dẫn đến scam_knowledge.json qua các ứng viên
+            current_mod_dir = os.path.dirname(os.path.abspath(__file__))
+            parent_dir = os.path.dirname(current_mod_dir)
+            root_dir = os.path.dirname(parent_dir)
+
+            candidates = [
+                os.path.join(parent_dir, "data", "scam_knowledge.json"),
+                os.path.join(parent_dir, "backend", "data", "scam_knowledge.json"),
+                os.path.join(root_dir, "backend", "data", "scam_knowledge.json"),
+                os.path.join(root_dir, "data", "scam_knowledge.json"),
+                os.path.join(os.getcwd(), "backend", "data", "scam_knowledge.json"),
+                os.path.join(os.getcwd(), "data", "scam_knowledge.json"),
+            ]
+            for c in candidates:
+                if os.path.exists(c):
+                    knowledge_path = c
+                    break
 
         self.knowledge_path = knowledge_path
         self.cases: List[Dict[str, Any]] = self._load_knowledge()

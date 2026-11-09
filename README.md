@@ -26,17 +26,23 @@
 
 ---
 
-## 📁 Cấu Trúc Dự Án
+## 📁 Cấu Trúc Dự Án (Phân Tách Module Chuẩn)
 
 ```text
-AntiScam_AI/
-├── data/
-│   └── scam_knowledge.json         # Kho tri thức 20 bài báo cảnh báo chính thống
-├── modules/
-│   ├── emergency_manager.py        # Quản lý danh bạ hotline & quy trình cấp cứu
-│   └── rag_case_matcher.py         # Module RAG đối soát từ khóa và bài báo tương đồng
-├── app_anti_scam.py                # Ứng dụng giao diện chính (Streamlit Web App)
+Anti-Scam-AI/
+├── streamlit/                      # [Frontend - TV3] Toàn bộ mã nguồn giao diện Streamlit
+│   └── app_anti_scam.py            # Giao diện chính (Đồng hồ rủi ro, Fake Bill, Lịch sử)
+│
+├── backend/                        # [Backend & AI - TV1 & TV2] Module AI, RAG & Dữ liệu
+│   ├── data/
+│   │   └── scam_knowledge.json     # Kho tri thức 20 bài báo cảnh báo chính thống
+│   └── modules/
+│       ├── __init__.py
+│       ├── emergency_manager.py    # Quản lý danh bạ hotline & quy trình cấp cứu
+│       └── rag_case_matcher.py     # Module RAG đối soát từ khóa và bài báo tương đồng
+│
 ├── requirements.txt                # Danh sách thư viện phụ thuộc
+├── .gitignore                      # Cấu hình bỏ qua file tạm, bytecode
 └── README.md                       # Tài liệu hướng dẫn dự án
 ```
 
@@ -46,11 +52,11 @@ AntiScam_AI/
 
 ### 1. Cài đặt các thư viện cần thiết
 ```bash
-pip install streamlit matplotlib numpy pandas
+pip install -r requirements.txt
 ```
 
 ### 2. Khởi chạy ứng dụng
 ```bash
-streamlit run app_anti_scam.py
+streamlit run streamlit/app_anti_scam.py
 ```
 Ứng dụng sẽ tự động mở trên trình duyệt tại địa chỉ: `http://localhost:8501`.

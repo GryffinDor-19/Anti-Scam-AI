@@ -25,13 +25,21 @@ from matplotlib.patches import Wedge
 plt.rcParams['font.sans-serif'] = ['Segoe UI', 'Arial', 'DejaVu Sans']
 plt.rcParams['axes.unicode_minus'] = False
 
-# Thêm thư mục hiện tại vào system path để import modules
+# Thêm các thư mục liên quan vào system path để import modules
 current_dir = os.path.dirname(os.path.abspath(__file__))
-if current_dir not in sys.path:
-    sys.path.append(current_dir)
+root_dir = os.path.dirname(current_dir)
+backend_dir = os.path.join(root_dir, "backend")
 
-from modules.emergency_manager import EmergencyManager
-from modules.rag_case_matcher import RAGCaseMatcher
+for p in [current_dir, root_dir, backend_dir]:
+    if os.path.exists(p) and p not in sys.path:
+        sys.path.insert(0, p)
+
+try:
+    from modules.emergency_manager import EmergencyManager
+    from modules.rag_case_matcher import RAGCaseMatcher
+except ImportError:
+    from backend.modules.emergency_manager import EmergencyManager
+    from backend.modules.rag_case_matcher import RAGCaseMatcher
 
 # Khởi tạo RAG Matcher
 rag_matcher = RAGCaseMatcher()
