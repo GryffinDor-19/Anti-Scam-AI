@@ -126,82 +126,99 @@ def render_gauge_chart(score: int):
 
 
 # ==========================================
-# CẤU HÌNH CSS CYBER SOC DARK THEME
+# CẤU HÌNH CSS CYBER SOC DARK THEME & TRỢ NĂNG
 # ==========================================
-base_css = """
-<style>
-    /* Nền không gian tối chuẩn SOC Cyber */
-    .stApp {
-        background-color: #060913 !important;
-        color: #e2e8f0 !important;
-    }
+base_css = """<style>
+/* Nền không gian tối chuẩn SOC Cyber */
+.stApp {
+    background-color: #060913 !important;
+    color: #e2e8f0 !important;
+}
 
-    /* Thẻ Container bo góc và viền phát sáng nhẹ */
-    [data-testid="stVerticalBlockBorderWrapper"] {
-        background: rgba(13, 21, 39, 0.75) !important;
-        border: 1px solid rgba(56, 189, 248, 0.22) !important;
-        border-radius: 14px !important;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
-    }
+/* Thẻ Container bo góc và viền phát sáng nhẹ */
+[data-testid="stVerticalBlockBorderWrapper"] {
+    background: rgba(13, 21, 39, 0.75) !important;
+    border: 1px solid rgba(56, 189, 248, 0.22) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+}
 
-    /* Nút bấm phong cách Cyber */
-    button[kind="primary"] {
-        background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
-        border: 1px solid #38bdf8 !important;
-        box-shadow: 0 0 12px rgba(56, 189, 248, 0.4) !important;
-        color: #ffffff !important;
-        font-weight: 700 !important;
-    }
+/* Nút bấm phong cách Cyber */
+button[kind="primary"] {
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+    border: 1px solid #38bdf8 !important;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.4) !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+}
 
-    button[kind="secondary"] {
-        background: #0f172a !important;
-        border: 1px solid #334155 !important;
-        color: #cbd5e1 !important;
-    }
+button[kind="secondary"] {
+    background: #0f172a !important;
+    border: 1px solid #334155 !important;
+    color: #cbd5e1 !important;
+}
 
-    /* Hiệu ứng nhấp nháy đèn đỏ cấp cứu */
-    @keyframes pulse-red-glow {
-        0%, 100% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
-        50% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.9); }
-    }
+/* Hiệu ứng nhấp nháy đèn đỏ cấp cứu */
+@keyframes pulse-red-glow {
+    0%, 100% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+    50% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.9); }
+}
 
-    .panic-btn-glow {
-        animation: pulse-red-glow 2s infinite ease-in-out;
-    }
+.panic-btn-glow {
+    animation: pulse-red-glow 2s infinite ease-in-out;
+}
 
-    /* Tabs giao diện tối */
-    .stTabs [data-baseweb="tab-list"] {
-        background-color: #0b1120 !important;
-        border-radius: 12px !important;
-        padding: 4px !important;
-        border: 1px solid #1e293b !important;
-    }
+/* Tabs giao diện tối */
+.stTabs [data-baseweb="tab-list"] {
+    background-color: #0b1120 !important;
+    border-radius: 12px !important;
+    padding: 4px !important;
+    border: 1px solid #1e293b !important;
+}
 
-    .stTabs [data-baseweb="tab"] {
-        color: #94a3b8 !important;
-        font-weight: 600 !important;
-    }
+.stTabs [data-baseweb="tab"] {
+    color: #94a3b8 !important;
+    font-weight: 600 !important;
+}
 
-    .stTabs [aria-selected="true"] {
-        color: #38bdf8 !important;
-        background-color: #1e293b !important;
-        border-radius: 8px !important;
-    }
+.stTabs [aria-selected="true"] {
+    color: #38bdf8 !important;
+    background-color: #1e293b !important;
+    border-radius: 8px !important;
+}
 
-    /* Thanh nhập chat */
-    [data-testid="stChatInput"] {
-        border-color: rgba(56, 189, 248, 0.5) !important;
-        box-shadow: 0 0 10px rgba(56, 189, 248, 0.2) !important;
-    }
-</style>
-"""
+/* Thanh nhập chat */
+[data-testid="stChatInput"] {
+    border-color: rgba(56, 189, 248, 0.5) !important;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.2) !important;
+}
+</style>"""
+
+elderly_css = """<style>
+/* Kích hoạt chế độ Người lớn tuổi: Phóng to toàn diện */
+html, body, .stApp {
+    zoom: 1.35 !important;
+}
+p, span, label, input, textarea, button, .stMarkdown, .stSelectbox {
+    font-size: 1.15rem !important;
+    line-height: 1.6 !important;
+}
+h1 { font-size: 2.2rem !important; font-weight: 900 !important; }
+h2 { font-size: 1.8rem !important; font-weight: 800 !important; }
+h3 { font-size: 1.5rem !important; font-weight: 700 !important; }
+h4 { font-size: 1.3rem !important; font-weight: 700 !important; }
+button p { font-weight: 800 !important; font-size: 1.15rem !important; }
+[data-testid="stMetricValue"] { font-size: 1.8rem !important; font-weight: 800 !important; }
+</style>"""
 
 # ==========================================
 # SIDEBAR: TRỢ NĂNG & KỊCH BẢN MẪU
 # ==========================================
 with st.sidebar:
     st.markdown("### ⚙️ Trợ Năng & Giám Sát")
-    elderly_mode = st.toggle("👵 Chế độ Người Lớn Tuổi (Phóng to 1.45x)", value=False)
+    elderly_mode = st.toggle("👵 Chế độ Người Lớn Tuổi (Phóng to 1.35x)", value=False)
+    if elderly_mode:
+        st.info("👓 **Đang bật:** Phóng to chữ và nút bấm dành cho người cao tuổi.")
 
     st.markdown("---")
     st.markdown("### ⚡ Kịch Bản Thử Nghiệm Nhanh")
@@ -243,17 +260,10 @@ with st.sidebar:
             st.session_state.has_analyzed = True
             st.session_state.trigger_animation = True
 
-# Áp dụng CSS giao diện Cyber SOC và Zoom người lớn tuổi
+# Áp dụng CSS giao diện Cyber SOC & Chế độ người lớn tuổi
+st.markdown(base_css, unsafe_allow_html=True)
 if elderly_mode:
-    st.markdown(base_css + """
-    <style>
-        html { zoom: 1.45 !important; }
-        .main .block-container { max-width: 95% !important; }
-        button p { font-weight: 800 !important; }
-    </style>
-    """, unsafe_allow_html=True)
-else:
-    st.markdown(base_css, unsafe_allow_html=True)
+    st.markdown(elderly_css, unsafe_allow_html=True)
 
 # ==========================================
 # HEADER CHÍNH: CYBER SOC COMMAND & PANIC BUTTON
@@ -261,21 +271,8 @@ else:
 col_hdr_left, col_hdr_right = st.columns([3, 1])
 
 with col_hdr_left:
-    st.markdown("""
-    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px;">
-        <span style="font-size: 2.2rem;">🛡️</span>
-        <div>
-            <h1 style="margin: 0; font-size: 1.8rem; font-weight: 900; letter-spacing: 0.5px; color: #ffffff;">
-                ANTISCAM AI — CYBER SOC COMMAND
-            </h1>
-            <div style="font-size: 0.8rem; font-family: monospace; color: #38bdf8; display: flex; align-items: center; gap: 8px;">
-                <span>● THREAT MONITORING ACTIVE</span>
-                <span style="color: #64748b;">|</span>
-                <span>CONVERSATIONAL AI ASSISTANT v3.5</span>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.title("🛡️ ANTISCAM AI — CYBER SOC COMMAND")
+    st.caption("🟢 **THREAT MONITORING ACTIVE** · 🤖 **CONVERSATIONAL AI ASSISTANT v3.5**")
 
 with col_hdr_right:
     st.write("")
@@ -418,7 +415,7 @@ with tab_chat:
 
                 with col_gauge:
                     with st.container(border=True):
-                        st.markdown("<p style='text-align: center; font-weight: bold; margin-bottom: 0; font-family: monospace; color: #38bdf8;'>ĐỒNG HỒ ĐO RỦI RO (SCAM METER)</p>", unsafe_allow_html=True)
+                        st.markdown("##### ⏱️ ĐỒNG HỒ ĐO RỦI RO (SCAM METER)")
                         gauge_placeholder = st.empty()
 
                 # Hiệu ứng quét hoạt họa kim quay (Scanning Animation)
