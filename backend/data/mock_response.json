@@ -1,0 +1,15 @@
+{
+  "risk_score": 95,
+  "threat_level": "Nguy cơ cao",
+  "detected_tactic": "Giả danh cơ quan chức năng / Cổng dịch vụ công",
+  "explanation": "Công an không bao giờ yêu cầu cập nhật VNeID qua đường link lạ kèm giới hạn thời gian gấp gáp 15 phút. Đây là bẫy đánh cắp thông tin và chiếm đoạt tài khoản.",
+  "psychological_traps": [
+    "Uy quyền / Sợ hãi: Mạo danh VNeID báo lỗi và dọa khóa tài khoản",
+    "Ép thời gian: Yêu cầu cập nhật ngay trong 15 phút"
+  ],
+  "action_recommendations": [
+    "Tuyệt đối không bấm vào đường link lạ trong tin nhắn.",
+    "Không cung cấp mã OTP, mật khẩu ngân hàng hay hình ảnh CCCD.",
+    "Chỉ kiểm tra thông tin trực tiếp trên ứng dụng VNeID chính thức."
+  ]
+}
