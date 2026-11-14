@@ -23,9 +23,11 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.dirname(current_dir)
 backend_dir = os.path.join(root_dir, "backend")
 
-for p in [current_dir, root_dir, backend_dir]:
-    if os.path.exists(p) and p not in sys.path:
-        sys.path.insert(0, p)
+# Đảm bảo root_dir luôn đứng đầu sys.path để 'backend' được nhận diện chuẩn là package
+for p in [backend_dir, current_dir, root_dir]:
+    while p in sys.path:
+        sys.path.remove(p)
+    sys.path.insert(0, p)
 
 try:
     from modules.rag_case_matcher import RAGCaseMatcher
@@ -40,8 +42,12 @@ from views.tab_chat import render_tab_chat
 from views.tab_fake_bill import render_tab_fake_bill
 from views.tab_library import render_tab_library
 
-# Khởi tạo RAG Matcher
-rag_matcher = RAGCaseMatcher()
+# Khởi tạo RAG Matcher với Cache bộ nhớ để tăng tốc tối đa
+@st.cache_resource
+def get_rag_matcher():
+    return RAGCaseMatcher()
+
+rag_matcher = get_rag_matcher()
 
 # Cấu hình trang Streamlit
 st.set_page_config(

@@ -37,11 +37,15 @@ def render_tab_chat(rag_matcher):
             height=100,
             placeholder="Ví dụ: 'Cục Cảnh sát thông báo bạn có liên quan đến đường dây rửa tiền, chuyển tiền vào tài khoản an toàn...'"
         )
+        if user_input != st.session_state.input_text:
+            st.session_state.input_text = user_input
+
     with col_input2:
         st.write("")
         st.write("")
         btn_scan = st.button("🚀 BẮT ĐẦU PHÂN TÍCH", type="primary", use_container_width=True)
         if btn_scan:
+            st.session_state.input_text = user_input
             st.session_state.has_analyzed = True
             st.session_state.trigger_animation = True
 
@@ -51,29 +55,44 @@ def render_tab_chat(rag_matcher):
             st.rerun()
 
     # 3. XỬ LÝ VÀ HIỂN THỊ KẾT QUẢ DẠNG ĐÀM THOẠI CHATBOT
-    if st.session_state.has_analyzed or (user_input and user_input.strip() != ""):
+    if (st.session_state.has_analyzed or btn_scan) and user_input and user_input.strip() != "":
         if not user_input.strip():
             st.warning("Vui lòng nhập nội dung hoặc bấm chọn một kịch bản mẫu ở thanh bên trái!")
         else:
             st.divider()
 
-            # Phân loại sơ bộ kết quả (Mock data - Sẵn sàng nối với TV1 Gemini API)
-            is_safe = "cà phê" in user_input.lower() or "nhận lương" in user_input.lower()
-            mock_score = 15 if is_safe else 92
+            # Gọi trực tiếp bộ não Backend AI (Hỗ trợ 2 lớp phân tích & Offline Fallback chuẩn 6 trường)
+            try:
+                try:
+                    from backend.backend import analyze_scam
+                except (ImportError, ModuleNotFoundError):
+                    from backend import analyze_scam
 
-            # Xác định tên thủ đoạn
-            if is_safe:
-                detected_tactic = "Giao tiếp sinh hoạt an toàn"
-            elif "công an" in user_input.lower() or "cảnh sát" in user_input.lower() or "rửa tiền" in user_input.lower():
-                detected_tactic = "Giả danh Cơ quan Công quyền & Đe dọa bắt giữ"
-            elif "cộng tác viên" in user_input.lower() or "shopee" in user_input.lower() or "hoa hồng" in user_input.lower():
-                detected_tactic = "Bẫy Tuyển CTV Việc Nhẹ Lương Cao"
-            elif "phạt nguội" in user_input.lower() or "csgt" in user_input.lower():
-                detected_tactic = "Giả mạo CSGT Phạt Nguội Dán Link Độc"
-            elif "otp" in user_input.lower() or "vietcombank" in user_input.lower() or "khóa" in user_input.lower():
-                detected_tactic = "Giả mạo Ngân Hàng Đánh Cắp Mã OTP"
-            else:
-                detected_tactic = "Nghi vấn lừa đảo thao túng tâm lý"
+                active_api_key = st.session_state.get("gemini_api_key", None)
+                ai_data = analyze_scam(user_input, api_key=active_api_key)
+            except Exception as e:
+                # Nếu có bất kỳ trục trặc nào, gọi trực tiếp bộ tính điểm động fallback
+                try:
+                    from backend.modules.semantic_analyzer import local_fallback_6_fields
+                    ai_data = local_fallback_6_fields(user_input)
+                except Exception:
+                    ai_data = {
+                        "risk_score": 12,
+                        "threat_level": "An toàn",
+                        "detected_tactic": "Giao tiếp sinh hoạt thông thường",
+                        "explanation": "Nội dung trò chuyện sinh hoạt thông thường, không chứa dấu hiệu lừa đảo hay bẫy tài chính.",
+                        "psychological_traps": ["Không phát hiện dấu hiệu thao túng tâm lý"],
+                        "action_recommendations": ["Có thể yên tâm tiếp tục trò chuyện bình thường."]
+                    }
+
+            mock_score = int(ai_data.get("risk_score", 12))
+            detected_tactic = ai_data.get("detected_tactic", "Giao tiếp sinh hoạt thông thường")
+            threat_level = ai_data.get("threat_level", "An toàn")
+            explanation_text = ai_data.get("explanation", "")
+            psychological_traps = ai_data.get("psychological_traps", [])
+            action_recommendations = ai_data.get("action_recommendations", [])
+            is_safe = mock_score < 40
+            print(f"[AntiScam AI] Thẩm định: '{user_input[:45]}' -> Điểm: {mock_score}/100 | Cấp độ: {threat_level}")
 
             # Tự động ghi vào Lịch sử kiểm tra (Audit Log) nếu chưa có bản ghi này
             current_status = "🚨 Nguy cơ cao" if mock_score >= 70 else ("⚠️ Đáng ngờ" if mock_score >= 40 else "✅ An toàn")
@@ -132,18 +151,26 @@ def render_tab_chat(rag_matcher):
                     if mock_score >= 70:
                         st.error(f"## 🚨 CẢNH BÁO: RỦI RO LỪA ĐẢO CỰC KỲ CAO ({mock_score}/100)\n\n"
                                  f"**Thủ đoạn nhận diện:** {detected_tactic}\n\n"
-                                 f"Phát hiện dấu hiệu đe dọa, tạo áp lực thời gian, yêu cầu chuyển tiền hoặc bấm vào đường link lạ chưa xác thực.")
+                                 f"{explanation_text if explanation_text else 'Phát hiện dấu hiệu đe dọa, tạo áp lực thời gian, yêu cầu chuyển tiền hoặc bấm vào đường link lạ chưa xác thực.'}")
                         st.warning("⚠️ **LƯU Ý KHẨN CẤP:** Tin nhắn này có dấu hiệu thao túng tâm lý nghiêm trọng. **TUYỆT ĐỐI KHÔNG CHUYỂN TIỀN!** Bấm nút đỏ ở góc trên nếu bạn đang bị đe dọa.")
+                    elif mock_score >= 40:
+                        st.warning(f"## ⚠️ CHÚ Ý: NỘI DUNG ĐÁNG NGỜ ({mock_score}/100)\n\n"
+                                   f"**Thủ đoạn nghi vấn:** {detected_tactic}\n\n"
+                                   f"{explanation_text if explanation_text else 'Tin nhắn có chứa một số yếu tố hoặc liên kết lạ, cần kiểm tra kỹ trước khi phản hồi.'}")
                     else:
                         st.success(f"## ✅ TIN NHẮN AN TOÀN ({mock_score}/100)\n\n"
-                                   f"Chưa phát hiện dấu hiệu lừa đảo hay bẫy tài chính trong tin nhắn này. Nội dung thuộc dạng giao tiếp sinh hoạt thường ngày.")
+                                   f"**Đánh giá:** {detected_tactic}\n\n"
+                                   f"{explanation_text if explanation_text else 'Chưa phát hiện dấu hiệu lừa đảo hay bẫy tài chính trong tin nhắn này. Nội dung thuộc dạng giao tiếp sinh hoạt thường ngày.'}")
 
                 # Chi tiết phân tích & Bẫy tâm lý
                 col_d1, col_d2 = st.columns(2)
                 with col_d1:
                     with st.container(border=True):
                         st.subheader("🎭 Bẫy Thao Túng Tâm Lý Phát Hiện")
-                        if not is_safe:
+                        if not is_safe and psychological_traps:
+                            for trap in psychological_traps:
+                                st.markdown(f"🚩 **{trap}**")
+                        elif not is_safe:
                             st.markdown("🚩 **Sợ hãi / Uy quyền:** Dọa phát lệnh bắt giam, khóa tài khoản hoặc hủy đăng kiểm")
                             st.markdown("🚩 **Gấp gáp / Ép thời gian:** Bắt xử lý gấp trong 24 giờ để nạn nhân mất tỉnh táo")
                             st.markdown("🚩 **Cô lập nạn nhân:** Cấm nói chuyện hoặc kể cho người thân")
@@ -161,7 +188,10 @@ def render_tab_chat(rag_matcher):
                 with col_d2:
                     with st.container(border=True):
                         st.subheader("🛡️ Lời Khuyên Hành Động An Toàn")
-                        if not is_safe:
+                        if not is_safe and action_recommendations:
+                            for rec in action_recommendations:
+                                st.markdown(f"• **{rec}**")
+                        elif not is_safe:
                             st.markdown("❌ **Tuyệt đối không làm theo:** Cơ quan công an/ngân hàng không làm việc qua điện thoại hay yêu cầu chuyển tiền.")
                             st.markdown("📞 **Cúp máy ngay:** Tự đến cơ quan Công an hoặc chi nhánh Ngân hàng gần nhất để xác minh.")
                             st.markdown("🚫 **Không gửi thông tin cá nhân:** Tuyệt đối không gửi mã OTP, CCCD hay mật khẩu.")
@@ -195,7 +225,10 @@ def render_tab_chat(rag_matcher):
                 st.divider()
                 col_share1, col_share2 = st.columns([3, 1])
                 with col_share1:
-                    share_text = f"[AntiScam AI Cảnh Báo] Tin nhắn này có điểm rủi ro {mock_score}/100 ({detected_tactic}). Hãy cẩn thận kiểm tra, tuyệt đối không chuyển tiền!"
+                    if is_safe:
+                        share_text = f"[AntiScam AI Xác Nhận] Tin nhắn này an toàn (Điểm rủi ro: {mock_score}/100 - {detected_tactic}). Chưa phát hiện dấu hiệu lừa đảo."
+                    else:
+                        share_text = f"[AntiScam AI Cảnh Báo] Tin nhắn này có điểm rủi ro {mock_score}/100 ({detected_tactic}). Hãy cẩn thận kiểm tra, tuyệt đối không chuyển tiền!"
                     st.text_input("Đoạn tóm tắt kết quả (để gửi cho con cháu/người thân):", value=share_text)
                 with col_share2:
                     st.write("")

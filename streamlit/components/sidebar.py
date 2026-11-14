@@ -28,6 +28,23 @@ def render_sidebar():
 
             st.caption(f"👓 Đang hiển thị ở mức phóng to **{zoom_opt.split(' ')[0]}**.")
 
+        st.markdown("### 🔑 Cấu Hình Mô Hình AI")
+        with st.expander("Gemini API Key (Tùy chọn)", expanded=False):
+            api_key_val = st.text_input(
+                "Nhập Gemini API Key:",
+                value=st.session_state.get("gemini_api_key", ""),
+                type="password",
+                placeholder="Dán AI Studio Key (AIzaSy...)",
+                help="Dùng để kết nối trực tiếp mô hình gemini-3.8-flash & gemini-4 của nhóm"
+            )
+            if api_key_val and api_key_val.strip() != "":
+                st.session_state.gemini_api_key = api_key_val.strip()
+                import os
+                os.environ["GEMINI_API_KEY"] = api_key_val.strip()
+                st.success("✅ Đã kích hoạt Gemini 3.8 Flash & Gemini 4!")
+            else:
+                st.caption("⚡ Mặc định: Bộ tính điểm rủi ro hành vi đa tiêu chí động.")
+
         st.markdown("---")
         st.markdown("### ⚡ Kịch Bản Thử Nghiệm Nhanh")
         st.caption("Bấm chọn kịch bản để bắn trực tiếp vào khung đàm thoại AI:")
