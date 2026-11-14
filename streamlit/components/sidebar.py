@@ -82,7 +82,9 @@ def render_sidebar():
         for label, text_content in sample_scenarios.items():
             if st.button(label, use_container_width=True):
                 st.session_state.input_text = text_content
+                st.session_state.pending_user_query = text_content
                 st.session_state.has_analyzed = True
                 st.session_state.trigger_animation = True
+                st.rerun()
 
     return elderly_mode, selected_zoom

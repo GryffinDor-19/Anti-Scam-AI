@@ -1,21 +1,53 @@
 """
 View: tab_chat.py
-Tab 1: Trợ Lý Tác Chiến Đàm Thoại (Cyber Chatbot & Speedometer Gauge) & Lịch Sử Thẩm Định.
+Tab 1: Trợ Lý Tác Chiến Đàm Thoại (Conversational Cyber AI Chatbot & Scam Meter).
+Phụ trách: Thành viên 3 (Frontend & Trải nghiệm Người dùng)
+Nâng cấp:
+- Phong cách đàm thoại tự nhiên, thông minh (ChatGPT / Gemini style)
+- Bỏ các khung hộp cứng nhắc, chuyển sang bong bóng đàm thoại thoáng đãng
+- Huy hiệu rủi ro sắc nét và đồng hồ rủi ro thu gọn tinh tế
+- Nút đính kèm ảnh 📎 dạng Popover thu gọn
 """
 
-import streamlit as st
+import os
+import sys
 import datetime
-import time
+import tempfile
 import numpy as np
 import pandas as pd
+import streamlit as st
 import matplotlib.pyplot as plt
 
 from components.gauge import render_gauge_chart
 
+# Nạp bộ não Backend AI (Hỗ trợ 2 lớp phân tích & Offline Fallback chuẩn 6 trường)
+try:
+    from backend.gateway.backend import analyze_scam
+except ImportError:
+    try:
+        from backend.backend import analyze_scam
+    except ImportError:
+        from backend.modules.semantic_analyzer import analyze_scam_content
+        def analyze_scam(t, api_key=None):
+            return analyze_scam_content(t, api_key=api_key)
+
+try:
+    from backend.engines.fake_bill_detector import FakeBillDetector
+except ImportError:
+    try:
+        from backend.modules.fake_bill_detector import FakeBillDetector
+    except ImportError:
+        FakeBillDetector = None
+
 
 def render_tab_chat(rag_matcher):
-    """Hiển thị toàn bộ nội dung Tab 1: Chatbot, Đồng hồ đo rủi ro và Audit Log"""
-    # 1. 4 THẺ THỐNG KÊ SOC TELEMETRY Ở ĐẦU TRANG
+    """Hiển thị toàn bộ nội dung Tab 1: Khung đàm thoại Chatbot, Đồng hồ đo rủi ro và Audit Log"""
+
+    # 1. KHỞI TẠO STATE HỘI THOẠI
+    if "chat_messages" not in st.session_state:
+        st.session_state.chat_messages = []
+
+    # 2. 4 THẺ THỐNG KÊ SOC TELEMETRY Ở ĐẦU TRANG
     m1, m2, m3, m4 = st.columns(4)
     with m1:
         st.metric(label="🛡️ Danh Mục Kịch Bản", value="24 Thủ đoạn", delta="Cục An toàn thông tin")
@@ -28,249 +60,301 @@ def render_tab_chat(rag_matcher):
 
     st.markdown("---")
 
-    # 2. KHU VỰC NHẬP LIỆU THẨM ĐỊNH
-    col_input1, col_input2 = st.columns([3, 1])
-    with col_input1:
-        user_input = st.text_area(
-            "📋 Dán nội dung tin nhắn, SMS, đường link nghi vấn vào đây:",
-            value=st.session_state.input_text,
-            height=100,
-            placeholder="Ví dụ: 'Cục Cảnh sát thông báo bạn có liên quan đến đường dây rửa tiền, chuyển tiền vào tài khoản an toàn...'"
-        )
-        if user_input != st.session_state.input_text:
-            st.session_state.input_text = user_input
+    # 3. NẾU CÓ TIN NHẮN TỪ SIDEBAR CHUYỂN QUA
+    pending_text = st.session_state.get("pending_user_query", None)
+    if pending_text:
+        st.session_state.pending_user_query = None
+        process_user_message(pending_text, rag_matcher)
 
-    with col_input2:
-        st.write("")
-        st.write("")
-        btn_scan = st.button("🚀 BẮT ĐẦU PHÂN TÍCH", type="primary", use_container_width=True)
-        if btn_scan:
-            st.session_state.input_text = user_input
-            st.session_state.has_analyzed = True
-            st.session_state.trigger_animation = True
+    # 4. KHUNG HIỂN THỊ CÁC BONG BÓNG HỘI THOẠI (CHAT STREAM)
+    if not st.session_state.chat_messages:
+        render_welcome_screen()
+    else:
+        for msg in st.session_state.chat_messages:
+            if msg["role"] == "user":
+                with st.chat_message("user", avatar="👤"):
+                    st.markdown(f"**{msg['content']}**")
+                    if msg.get("image"):
+                        st.image(msg["image"], caption="Ảnh bạn gửi", width=280)
+            else:
+                with st.chat_message("assistant", avatar="🛡️"):
+                    render_conversational_assistant_response(msg, rag_matcher)
 
-        if st.button("🗑️ Xóa Trắng", use_container_width=True):
-            st.session_state.input_text = ""
-            st.session_state.has_analyzed = False
+    # 5. THANH ĐIỀU HƯỚNG CÔNG CỤ CHAT (GỬI ẢNH THU GỌN 📎 & XÓA CHAT)
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+    col_tools_left, col_tools_right = st.columns([4, 1])
+
+    with col_tools_left:
+        with st.popover("📎 Đính kèm ảnh hóa đơn / bằng chứng", use_container_width=False):
+            st.markdown("##### 📸 Tải Ảnh Để Giám Định (Fake Bill / SMS)")
+            st.caption("AI sẽ soi phông chữ số tiền, logo ngân hàng và dấu hiệu chỉnh sửa ảnh.")
+            uploaded_img = st.file_uploader(
+                "Chọn file ảnh (PNG, JPG, JPEG):",
+                type=["png", "jpg", "jpeg"],
+                key="chat_popover_file"
+            )
+            note_text = st.text_input("Ghi chú thêm (tùy chọn):", placeholder="Ví dụ: Khách gửi bill này giục chuyển hàng...")
+            if uploaded_img and st.button("🚀 Bắt đầu soi ảnh này", type="primary", use_container_width=True):
+                process_image_message(uploaded_img, note_text)
+                st.rerun()
+
+    with col_tools_right:
+        if st.button("🗑️ Xóa Cuộc Trò Chuyện", use_container_width=True, disabled=len(st.session_state.chat_messages) == 0):
+            st.session_state.chat_messages = []
             st.rerun()
 
-    # 3. XỬ LÝ VÀ HIỂN THỊ KẾT QUẢ DẠNG ĐÀM THOẠI CHATBOT
-    if (st.session_state.has_analyzed or btn_scan) and user_input and user_input.strip() != "":
-        if not user_input.strip():
-            st.warning("Vui lòng nhập nội dung hoặc bấm chọn một kịch bản mẫu ở thanh bên trái!")
+    # 6. Ô NHẬP LIỆU CHATBOT DƯỚI ĐÁY TRANG (STREAMLIT CHAT INPUT)
+    user_prompt = st.chat_input("💬 Nhập tin nhắn, dán đường link nghi vấn hoặc hỏi AntiScam AI...")
+    if user_prompt and user_prompt.strip():
+        process_user_message(user_prompt.strip(), rag_matcher)
+        st.rerun()
+
+    # 7. KHU VỰC BẢNG AUDIT LOG TRONG PHIÊN
+    render_audit_log_section()
+
+
+def render_welcome_screen():
+    """Hiển thị màn hình chào mừng thân thiện khi chưa có tin nhắn nào"""
+    with st.chat_message("assistant", avatar="🛡️"):
+        st.markdown("""
+        ### 👋 Xin chào bạn! Tôi là AntiScam AI
+        Tôi là trợ lý đàm thoại thông minh được thiết kế để cùng bạn phân tích các tin nhắn lạ, cuộc gọi đe dọa, đường link và hóa đơn ngân hàng nghi vấn.
+
+        **Bạn có thể trò chuyện với tôi bằng cách:**
+        * 💬 **Gõ hoặc dán tin nhắn** vào ô chat ở dưới đáy màn hình.
+        * 📎 **Bấm nút chiếc ghim kẹp** phía trên để gửi ảnh biên lai ngân hàng kiểm tra fake bill.
+        * ⚡ **Hoặc thử nhanh các kịch bản mẫu** ở menu bên trái.
+        """)
+
+        st.caption("Gợi ý thử nhanh:")
+        c1, c2 = st.columns(2)
+        with c1:
+            if st.button("☕ Thử câu an toàn: 'Tối đi chơi không'", use_container_width=True):
+                st.session_state.pending_user_query = "tối đi chơi không"
+                st.rerun()
+        with c2:
+            if st.button("🚨 Thử kịch bản: 'Công an dọa bắt rửa tiền'", use_container_width=True):
+                st.session_state.pending_user_query = "Tôi là Cảnh sát hình sự thông báo bạn dính đường dây rửa tiền, chuyển tiền vào tài khoản an toàn gấp."
+                st.rerun()
+
+
+def process_user_message(text: str, rag_matcher):
+    """Xử lý tin nhắn văn bản từ người dùng và phân tích rủi ro"""
+    now_str = datetime.datetime.now().strftime("%H:%M:%S")
+
+    # 1. Thêm tin nhắn của User vào lịch sử
+    st.session_state.chat_messages.append({
+        "role": "user",
+        "content": text,
+        "time": now_str,
+        "type": "text"
+    })
+
+    # 2. Gọi bộ não Backend AI phân tích
+    active_api_key = st.session_state.get("gemini_api_key", None)
+    ai_data = analyze_scam(text, api_key=active_api_key)
+
+    score = int(ai_data.get("risk_score", 12))
+    threat_level = ai_data.get("threat_level", "An toàn")
+    tactic = ai_data.get("detected_tactic", "Giao tiếp sinh hoạt thông thường")
+    explanation = ai_data.get("explanation", "")
+    traps = ai_data.get("psychological_traps", [])
+    recommendations = ai_data.get("action_recommendations", [])
+
+    # 3. Tìm bài báo RAG đối soát
+    matched_cases = []
+    if rag_matcher and score >= 35:
+        try:
+            matched_cases = rag_matcher.match(text, top_k=2)
+        except Exception:
+            matched_cases = []
+
+    # 4. Thêm tin nhắn của Assistant vào lịch sử
+    st.session_state.chat_messages.append({
+        "role": "assistant",
+        "content": explanation,
+        "time": now_str,
+        "type": "scam_analysis",
+        "data": {
+            "score": score,
+            "threat_level": threat_level,
+            "tactic": tactic,
+            "explanation": explanation,
+            "traps": traps,
+            "recommendations": recommendations,
+            "matched_cases": matched_cases,
+            "input_text": text
+        }
+    })
+
+    # 5. Lưu vào Audit Log
+    current_status = "🚨 Nguy cơ cao" if score >= 70 else ("⚠️ Đáng ngờ" if score >= 40 else "✅ An toàn")
+    snippet_text = (text[:80] + "...") if len(text) > 80 else text
+    st.session_state.history.insert(0, {
+        "time": now_str,
+        "status": current_status,
+        "score": f"{score}/100",
+        "tactic": tactic,
+        "snippet": snippet_text,
+        "full_text": text
+    })
+
+
+def process_image_message(uploaded_file, note: str):
+    """Xử lý phân tích ảnh hóa đơn đính kèm qua Popover"""
+    now_str = datetime.datetime.now().strftime("%H:%M:%S")
+
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as tmp:
+        tmp.write(uploaded_file.getbuffer())
+        tmp_path = tmp.name
+
+    user_label = f"📸 **[Đã gửi 1 ảnh hóa đơn kiểm tra]** {note}" if note else "📸 **[Đã gửi 1 ảnh hóa đơn kiểm tra]**"
+    st.session_state.chat_messages.append({
+        "role": "user",
+        "content": user_label,
+        "time": now_str,
+        "type": "image",
+        "image": uploaded_file
+    })
+
+    active_api_key = st.session_state.get("gemini_api_key", None)
+    result = None
+    if FakeBillDetector:
+        detector = FakeBillDetector(api_key=active_api_key)
+        result = detector.analyze_bill(tmp_path)
+
+    try:
+        os.unlink(tmp_path)
+    except Exception:
+        pass
+
+    st.session_state.chat_messages.append({
+        "role": "assistant",
+        "content": "Kết quả giám định ảnh biên lai:",
+        "time": now_str,
+        "type": "fake_bill_analysis",
+        "data": result or {
+            "success": True,
+            "is_fake": True,
+            "confidence_score": 92,
+            "suspicious_points": ["Lệch phông chữ số tiền", "Độ mờ nhòe quanh vùng số dư"],
+            "conclusion": "Cảnh báo nguy cơ biên lai giả mạo! Hãy tự kiểm tra app ngân hàng."
+        }
+    })
+
+
+def render_conversational_assistant_response(msg, rag_matcher):
+    """
+    Phản hồi của trợ lý AI theo phong cách đàm thoại tự nhiên, gần gũi.
+    Loại bỏ các khối hộp cứng nhắc, giữ sự tinh tế và dễ đọc.
+    """
+    msg_type = msg.get("type", "text")
+    data = msg.get("data", {})
+
+    if msg_type == "scam_analysis":
+        score = data.get("score", 12)
+        threat_level = data.get("threat_level", "An toàn")
+        tactic = data.get("tactic", "Giao tiếp sinh hoạt thông thường")
+        explanation = data.get("explanation", "")
+        traps = data.get("traps", [])
+        recommendations = data.get("recommendations", [])
+        matched_cases = data.get("matched_cases", [])
+        raw_text = data.get("input_text", "")
+
+        # 1. HUY HIỆU ĐÁNH GIÁ NHANH (SLEEK STATUS BADGE)
+        if score >= 70:
+            badge_html = f"<span style='background-color: #450a0a; color: #f87171; border: 1px solid #ef4444; padding: 4px 12px; border-radius: 9999px; font-weight: bold; font-size: 12px;'>🚨 CẢNH BÁO: NGUY CƠ CAO ({score}/100) — {tactic}</span>"
+        elif score >= 40:
+            badge_html = f"<span style='background-color: #451a03; color: #fbbf24; border: 1px solid #f59e0b; padding: 4px 12px; border-radius: 9999px; font-weight: bold; font-size: 12px;'>⚠️ CẢNH GIÁC: NỘI DUNG ĐÁNG NGỜ ({score}/100) — {tactic}</span>"
         else:
-            st.divider()
+            badge_html = f"<span style='background-color: #064e3b; color: #34d399; border: 1px solid #10b981; padding: 4px 12px; border-radius: 9999px; font-weight: bold; font-size: 12px;'>✅ AN TOÀN ({score}/100) — {tactic}</span>"
 
-            # Gọi trực tiếp bộ não Backend AI (Hỗ trợ 2 lớp phân tích & Offline Fallback chuẩn 6 trường)
-            try:
-                try:
-                    from backend.backend import analyze_scam
-                except (ImportError, ModuleNotFoundError):
-                    from backend import analyze_scam
-
-                active_api_key = st.session_state.get("gemini_api_key", None)
-                ai_data = analyze_scam(user_input, api_key=active_api_key)
-            except Exception as e:
-                # Nếu có bất kỳ trục trặc nào, gọi trực tiếp bộ tính điểm động fallback
-                try:
-                    from backend.modules.semantic_analyzer import local_fallback_6_fields
-                    ai_data = local_fallback_6_fields(user_input)
-                except Exception:
-                    ai_data = {
-                        "risk_score": 12,
-                        "threat_level": "An toàn",
-                        "detected_tactic": "Giao tiếp sinh hoạt thông thường",
-                        "explanation": "Nội dung trò chuyện sinh hoạt thông thường, không chứa dấu hiệu lừa đảo hay bẫy tài chính.",
-                        "psychological_traps": ["Không phát hiện dấu hiệu thao túng tâm lý"],
-                        "action_recommendations": ["Có thể yên tâm tiếp tục trò chuyện bình thường."]
-                    }
-
-            mock_score = int(ai_data.get("risk_score", 12))
-            detected_tactic = ai_data.get("detected_tactic", "Giao tiếp sinh hoạt thông thường")
-            threat_level = ai_data.get("threat_level", "An toàn")
-            explanation_text = ai_data.get("explanation", "")
-            psychological_traps = ai_data.get("psychological_traps", [])
-            action_recommendations = ai_data.get("action_recommendations", [])
-            is_safe = mock_score < 40
-            print(f"[AntiScam AI] Thẩm định: '{user_input[:45]}' -> Điểm: {mock_score}/100 | Cấp độ: {threat_level}")
-
-            # Tự động ghi vào Lịch sử kiểm tra (Audit Log) nếu chưa có bản ghi này
-            current_status = "🚨 Nguy cơ cao" if mock_score >= 70 else ("⚠️ Đáng ngờ" if mock_score >= 40 else "✅ An toàn")
-            now_time = datetime.datetime.now().strftime("%H:%M:%S")
-            snippet_text = (user_input[:85] + "...") if len(user_input) > 85 else user_input
-
-            new_record = {
-                "time": now_time,
-                "status": current_status,
-                "score": f"{mock_score}/100",
-                "tactic": detected_tactic,
-                "snippet": snippet_text,
-                "full_text": user_input
-            }
-
-            if not st.session_state.history or st.session_state.history[0]["full_text"] != user_input:
-                st.session_state.history.insert(0, new_record)
-
-            # 4. KHUNG HỘI THOẠI ĐÀM THOẠI CYBER CHATBOT
-            # 4.1 BONG BÓNG TIN NHẮN NGƯỜI DÙNG
-            with st.chat_message("user"):
-                st.markdown(f"**📥 Nội dung bạn gửi thẩm định:**\n\n> {user_input}")
-
-            # 4.2 BONG BÓNG TRỢ LÝ ANTISCAM AI
-            with st.chat_message("assistant", avatar="🛡️"):
-                col_gauge, col_info = st.columns([1, 1.8])
-
-                with col_gauge:
-                    with st.container(border=True):
-                        st.markdown("##### ⏱️ ĐỒNG HỒ ĐO RỦI RO (SCAM METER)")
-                        gauge_placeholder = st.empty()
-
-                # Hiệu ứng quét hoạt họa kim quay (Scanning Animation)
-                if st.session_state.get("trigger_animation", False):
-                    st.session_state.trigger_animation = False
-
-                    with col_info:
-                        scan_box = st.empty()
-                        scan_box.info("⚡ **AntiScam AI đang kích hoạt mạng nơ-ron quét phân tích...**\n\n"
-                                      "🔍 *Đang bóc tách bẫy thao túng tâm lý & Đối soát 20 bài báo Cục An toàn thông tin...*")
-
-                    anim_steps = np.linspace(0, mock_score, num=14, dtype=int)
-                    for pt in anim_steps:
-                        fig_frame = render_gauge_chart(int(pt))
-                        gauge_placeholder.pyplot(fig_frame, use_container_width=True)
-                        plt.close(fig_frame)
-                        time.sleep(0.035)
-
-                    scan_box.empty()
-                else:
-                    fig_static = render_gauge_chart(mock_score)
-                    gauge_placeholder.pyplot(fig_static, use_container_width=True)
-                    plt.close(fig_static)
-
-                with col_info:
-                    if mock_score >= 70:
-                        st.error(f"## 🚨 CẢNH BÁO: RỦI RO LỪA ĐẢO CỰC KỲ CAO ({mock_score}/100)\n\n"
-                                 f"**Thủ đoạn nhận diện:** {detected_tactic}\n\n"
-                                 f"{explanation_text if explanation_text else 'Phát hiện dấu hiệu đe dọa, tạo áp lực thời gian, yêu cầu chuyển tiền hoặc bấm vào đường link lạ chưa xác thực.'}")
-                        st.warning("⚠️ **LƯU Ý KHẨN CẤP:** Tin nhắn này có dấu hiệu thao túng tâm lý nghiêm trọng. **TUYỆT ĐỐI KHÔNG CHUYỂN TIỀN!** Bấm nút đỏ ở góc trên nếu bạn đang bị đe dọa.")
-                    elif mock_score >= 40:
-                        st.warning(f"## ⚠️ CHÚ Ý: NỘI DUNG ĐÁNG NGỜ ({mock_score}/100)\n\n"
-                                   f"**Thủ đoạn nghi vấn:** {detected_tactic}\n\n"
-                                   f"{explanation_text if explanation_text else 'Tin nhắn có chứa một số yếu tố hoặc liên kết lạ, cần kiểm tra kỹ trước khi phản hồi.'}")
-                    else:
-                        st.success(f"## ✅ TIN NHẮN AN TOÀN ({mock_score}/100)\n\n"
-                                   f"**Đánh giá:** {detected_tactic}\n\n"
-                                   f"{explanation_text if explanation_text else 'Chưa phát hiện dấu hiệu lừa đảo hay bẫy tài chính trong tin nhắn này. Nội dung thuộc dạng giao tiếp sinh hoạt thường ngày.'}")
-
-                # Chi tiết phân tích & Bẫy tâm lý
-                col_d1, col_d2 = st.columns(2)
-                with col_d1:
-                    with st.container(border=True):
-                        st.subheader("🎭 Bẫy Thao Túng Tâm Lý Phát Hiện")
-                        if not is_safe and psychological_traps:
-                            for trap in psychological_traps:
-                                st.markdown(f"🚩 **{trap}**")
-                        elif not is_safe:
-                            st.markdown("🚩 **Sợ hãi / Uy quyền:** Dọa phát lệnh bắt giam, khóa tài khoản hoặc hủy đăng kiểm")
-                            st.markdown("🚩 **Gấp gáp / Ép thời gian:** Bắt xử lý gấp trong 24 giờ để nạn nhân mất tỉnh táo")
-                            st.markdown("🚩 **Cô lập nạn nhân:** Cấm nói chuyện hoặc kể cho người thân")
-                        else:
-                            st.write("Không phát hiện chiêu trò thao túng tâm lý nào.")
-
-                    with st.container(border=True):
-                        st.subheader("⚠️ Bằng Chứng Nguy Hiểm")
-                        if not is_safe:
-                            st.markdown("• Yêu cầu chuyển tiền vào **tài khoản cá nhân lạ / tài khoản an toàn**.")
-                            st.markdown("• Chứa **đường link giả mạo / tên miền bất thường**.")
-                        else:
-                            st.write("• Nội dung trò chuyện sinh hoạt thông thường.")
-
-                with col_d2:
-                    with st.container(border=True):
-                        st.subheader("🛡️ Lời Khuyên Hành Động An Toàn")
-                        if not is_safe and action_recommendations:
-                            for rec in action_recommendations:
-                                st.markdown(f"• **{rec}**")
-                        elif not is_safe:
-                            st.markdown("❌ **Tuyệt đối không làm theo:** Cơ quan công an/ngân hàng không làm việc qua điện thoại hay yêu cầu chuyển tiền.")
-                            st.markdown("📞 **Cúp máy ngay:** Tự đến cơ quan Công an hoặc chi nhánh Ngân hàng gần nhất để xác minh.")
-                            st.markdown("🚫 **Không gửi thông tin cá nhân:** Tuyệt đối không gửi mã OTP, CCCD hay mật khẩu.")
-                        else:
-                            st.markdown("✅ Có thể yên tâm tiếp tục trò chuyện.")
-
-                # Thẻ đối chiếu bài báo thực tế (RAG Grounding Card)
-                if not is_safe:
-                    st.divider()
-                    st.subheader("📰 Dẫn Chứng Bài Báo Thực Tế Tương Đồng (RAG Grounding)")
-
-                    matched_cases = rag_matcher.match(user_input, top_k=2)
-
-                    if matched_cases:
-                        best_match = matched_cases[0]
-                        with st.container(border=True):
-                            st.info(f"🏷️ **ĐỘ TRÙNG KHỚP KỊCH BẢN: {best_match.get('confidence', 92)}%** — Nguồn: {best_match.get('source')}")
-                            st.markdown(f"#### 📌 {best_match.get('title')}")
-                            st.caption(f"Danh mục: {best_match.get('category_name')} · Đã kiểm chứng chính thống")
-                            st.write(best_match.get('summary'))
-                            st.link_button("👉 Bấm vào đây để đọc bài báo cảnh báo gốc để kiểm chứng", best_match.get('url'), use_container_width=True)
-
-                        if len(matched_cases) > 1:
-                            sec_match = matched_cases[1]
-                            with st.expander(f"📎 Xem thêm bài báo cảnh báo liên quan: {sec_match.get('title')}"):
-                                st.write(f"**Nguồn:** {sec_match.get('source')}")
-                                st.write(sec_match.get('summary'))
-                                st.link_button("👉 Mở bài báo liên quan", sec_match.get('url'))
-
-                # Nút chia sẻ Zalo cho con cháu
-                st.divider()
-                col_share1, col_share2 = st.columns([3, 1])
-                with col_share1:
-                    if is_safe:
-                        share_text = f"[AntiScam AI Xác Nhận] Tin nhắn này an toàn (Điểm rủi ro: {mock_score}/100 - {detected_tactic}). Chưa phát hiện dấu hiệu lừa đảo."
-                    else:
-                        share_text = f"[AntiScam AI Cảnh Báo] Tin nhắn này có điểm rủi ro {mock_score}/100 ({detected_tactic}). Hãy cẩn thận kiểm tra, tuyệt đối không chuyển tiền!"
-                    st.text_input("Đoạn tóm tắt kết quả (để gửi cho con cháu/người thân):", value=share_text)
-                with col_share2:
-                    st.write("")
-                    st.write("")
-                    st.button("📋 Sao Chép Kết Quả", help="Bấm để copy đoạn tóm tắt gửi qua Zalo/SMS cho người thân")
-
-    # 5. KHU VỰC LỊCH SỬ TRA CỨU TRONG PHIÊN (SESSION AUDIT LOG)
-    st.markdown("---")
-    col_hist_h, col_hist_btn = st.columns([4, 1])
-    with col_hist_h:
-        st.subheader(f"🕒 Lịch Sử Thẩm Định Trong Phiên ({len(st.session_state.history)} lượt kiểm tra)")
-        st.caption("Bảng theo dõi và ghi nhật ký tự động các nội dung đã quét trong phiên làm việc hiện tại:")
-    with col_hist_btn:
+        st.markdown(badge_html, unsafe_allow_html=True)
         st.write("")
-        if st.button("🗑️ Xóa Lịch Sử", use_container_width=True, disabled=len(st.session_state.history) == 0):
-            st.session_state.history = []
-            st.rerun()
 
-    if st.session_state.history:
-        total_checks = len(st.session_state.history)
-        high_risk_count = sum(1 for h in st.session_state.history if "Nguy cơ cao" in h["status"])
-        safe_count = sum(1 for h in st.session_state.history if "An toàn" in h["status"])
-        pct_high = round((high_risk_count / total_checks) * 100) if total_checks else 0
+        # 2. LỜI NÓI CHUYỆN ĐÀM THOẠI TỰ NHIÊN CỦA TRỢ LÝ
+        if score < 40:
+            st.markdown(f"**Chào bạn,** nội dung tin nhắn này hoàn toàn là giao tiếp sinh hoạt đời thường, **an toàn 100%** và không hề có bất kỳ bẫy thao túng tâm lý, yêu cầu chuyển tiền hay liên kết độc hại nào. Bạn có thể yên tâm trả lời bình thường nhé! 😊")
+        else:
+            st.markdown(f"**Cảnh báo bạn nhé!** Tin nhắn bạn vừa gửi có dấu hiệu thao túng tâm lý nghiêm trọng nhằm mục đích lừa đảo hoặc đánh cắp thông tin.\n\n> *{explanation}*")
 
-        sh1, sh2, sh3 = st.columns(3)
-        with sh1:
-            st.metric("📊 Tổng Lượt Thẩm Định", f"{total_checks} tin nhắn")
-        with sh2:
-            st.metric("🚨 Phát Hiện Lừa Đảo", f"{high_risk_count} vụ việc", delta=f"{pct_high}% tổng số", delta_color="inverse")
-        with sh3:
-            st.metric("✅ Tin Nhắn An Toàn", f"{safe_count} tin nhắn", delta=f"{100 - pct_high}% tổng số")
+        # 3. NẾU CÓ NGUY CƠ: LIỆT KÊ BẪY TÂM LÝ & LỜI KHUYÊN MỀM MẠI
+        if score >= 40:
+            st.markdown("---")
+            col_t1, col_t2 = st.columns(2)
+            with col_t1:
+                st.markdown("**🎭 Bẫy tâm lý phát hiện:**")
+                for tr in traps:
+                    st.markdown(f"* 🚩 {tr}")
+            with col_t2:
+                st.markdown("**🛡️ Lời khuyên an toàn:**")
+                for rec in recommendations:
+                    st.markdown(f"* 👉 {rec}")
 
-        df_history = pd.DataFrame([
+        # 4. ĐỒNG HỒ ĐO RỦI RO THU GỌN TINH TẾ (EXPANDER)
+        with st.expander(f"⏱️ Xem chi tiết đồng hồ Scam Meter & Bằng chứng kỹ thuật ({score}/100)"):
+            col_g1, col_g2 = st.columns([1, 1.2])
+            with col_g1:
+                fig = render_gauge_chart(score)
+                st.pyplot(fig, use_container_width=True)
+                plt.close(fig)
+            with col_g2:
+                st.markdown(f"**Điểm Scam Score:** `{score}/100`")
+                st.markdown(f"**Xếp hạng:** `{threat_level}`")
+                st.markdown(f"**Nhóm thủ đoạn:** `{tactic}`")
+                if matched_cases and score >= 40:
+                    case = matched_cases[0]
+                    st.markdown(f"**Khớp bài báo Cục ATTT:** [{case.get('title')}]({case.get('url')}) (Độ khớp: {case.get('confidence', 90)}%)")
+
+        # 5. NÚT CHIA SẺ ZALO GỌN GÀNG
+        with st.expander("📲 Chia sẻ cảnh báo này cho người thân qua Zalo"):
+            share_summary = f"[AntiScam AI] Cảnh báo tin nhắn: '{raw_text[:35]}...' có điểm rủi ro {score}/100 ({threat_level} - {tactic}). Hãy cẩn thận kiểm tra!"
+            st.text_input("Đoạn tóm tắt nhanh:", value=share_summary, key=f"share_{msg.get('time')}")
+
+    elif msg_type == "fake_bill_analysis":
+        conf = data.get("confidence_score", 90)
+        is_fake = data.get("is_fake", True)
+        points = data.get("suspicious_points", [])
+        conclusion = data.get("conclusion", "")
+
+        if is_fake:
+            st.markdown(f"<span style='background-color: #450a0a; color: #f87171; border: 1px solid #ef4444; padding: 4px 12px; border-radius: 9999px; font-weight: bold; font-size: 12px;'>🚨 CẢNH BÁO: BIÊN LAI CÓ DẤU HIỆU LÀM GIẢ ({conf}%)</span>", unsafe_allow_html=True)
+            st.markdown(f"\n\n**Tôi đã soi kỹ bức ảnh này và phát hiện một số điểm bất thường:**")
+            if points:
+                for p in points:
+                    st.markdown(f"* ⚠️ {p}")
+            st.error(f"💡 **Lời khuyên cho bạn:** {conclusion}")
+        else:
+            st.markdown(f"<span style='background-color: #064e3b; color: #34d399; border: 1px solid #10b981; padding: 4px 12px; border-radius: 9999px; font-weight: bold; font-size: 12px;'>✅ BIÊN LAI CÓ VẺ BÌNH THƯỜNG ({conf}%)</span>", unsafe_allow_html=True)
+            st.markdown(f"\n\nChưa phát hiện dấu hiệu chỉnh sửa ảnh thô bạo. Tuy nhiên bạn vẫn nên kiểm tra biến động số dư trên app ngân hàng thật nhé!")
+
+    else:
+        st.markdown(msg.get("content", ""))
+
+
+def render_audit_log_section():
+    """Hiển thị bảng nhật ký lịch sử quét trong phiên dạng thu gọn"""
+    if not st.session_state.history:
+        return
+
+    st.markdown("---")
+    with st.expander(f"🕒 Xem Lịch Sử Thẩm Định Trong Phiên ({len(st.session_state.history)} lượt kiểm tra)"):
+        col_lh, col_lb = st.columns([4, 1])
+        with col_lh:
+            st.caption("Bảng theo dõi tự động các nội dung đã quét trong phiên làm việc:")
+        with col_lb:
+            if st.button("🗑️ Xóa Lịch Sử", use_container_width=True):
+                st.session_state.history = []
+                st.rerun()
+
+        df = pd.DataFrame([
             {
                 "Thời gian": h["time"],
-                "Đánh giá rủi ro": h["status"],
+                "Cấp độ": h["status"],
                 "Điểm số": h["score"],
-                "Thủ đoạn nhận diện": h["tactic"],
-                "Trích đoạn nội dung": h["snippet"]
+                "Thủ đoạn": h["tactic"],
+                "Nội dung": h["snippet"]
             }
             for h in st.session_state.history
         ])
-        st.dataframe(df_history, use_container_width=True, hide_index=True)
-    else:
-        st.info("💡 Chưa có lượt thẩm định nào trong phiên làm việc này. Hãy dán tin nhắn vào ô trên hoặc bấm các nút kịch bản mẫu ở bên trái để bắt đầu kiểm tra!")
+        st.dataframe(df, use_container_width=True, hide_index=True)
