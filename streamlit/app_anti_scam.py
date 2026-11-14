@@ -1,21 +1,12 @@
 """
 AntiScam AI - Hệ Thống Trợ Lý Tác Chiến Phòng Chống Lừa Đảo Trực Tuyến Đa Phương Thức
-Phiên bản: Modular Cyber SOC Command Center & Conversational AI Chatbot (v4.0)
+Phiên bản: Giao diện Sáng / Dịu / Tối, Tabs bo tròn hình Pill, Nút cấp cứu đỏ rực ghim góc (v5.0)
 Phụ trách: Thành viên 3 (Frontend & UX Developer)
-Cấu trúc module hóa:
-- styles.py: Quản lý Dark Cyber Theme & CSS Phóng đại Người lớn tuổi
-- components/:
-    - gauge.py: Đồng hồ kim quét bán nguyệt Matplotlib Neon
-    - sidebar.py: Thanh công cụ trợ năng & kịch bản mẫu
-    - emergency_banner.py: Tiêu đề SOC & Nút cấp cứu khẩn cấp 1-chạm
-- views/:
-    - tab_chat.py: Tab 1 (Chatbot, Gauge, Telemetry, Audit Log)
-    - tab_fake_bill.py: Tab 2 (Forensic Vision Lab Fake Bill)
-    - tab_library.py: Tab 3 (Thư viện 20 bài báo Cục ATTT & Hotline)
 """
 
 import os
 import sys
+import importlib
 import streamlit as st
 
 # Thêm các thư mục liên quan vào system path để import modules
@@ -23,8 +14,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.dirname(current_dir)
 backend_dir = os.path.join(root_dir, "backend")
 
-# Đảm bảo root_dir luôn đứng đầu sys.path để 'backend' được nhận diện chuẩn là package
-for p in [backend_dir, current_dir, root_dir]:
+for p in [backend_dir, root_dir, current_dir]:
     while p in sys.path:
         sys.path.remove(p)
     sys.path.insert(0, p)
@@ -34,12 +24,31 @@ try:
 except ImportError:
     from backend.modules.rag_case_matcher import RAGCaseMatcher
 
-# Import các components và views được tách module
-from styles import BASE_CSS, get_elderly_css
+# =============================================================================
+# CƠ CHẾ NẠP LẠI (AUTO-RELOAD) 100% CÁC MODULE CON ĐỂ TRÁNH BỊ LỖI CACHE IN-MEMORY
+# =============================================================================
+import styles
+importlib.reload(styles)
+from styles import get_theme_css, get_elderly_css, BASE_CSS
+
+import components.sidebar as sidebar_mod
+importlib.reload(sidebar_mod)
 from components.sidebar import render_sidebar
+
+import components.emergency_banner as emergency_mod
+importlib.reload(emergency_mod)
 from components.emergency_banner import render_header_and_emergency
+
+import views.tab_chat as tab_chat_mod
+importlib.reload(tab_chat_mod)
 from views.tab_chat import render_tab_chat
+
+import views.tab_fake_bill as tab_fake_bill_mod
+importlib.reload(tab_fake_bill_mod)
 from views.tab_fake_bill import render_tab_fake_bill
+
+import views.tab_library as tab_library_mod
+importlib.reload(tab_library_mod)
 from views.tab_library import render_tab_library
 
 # Khởi tạo RAG Matcher với Cache bộ nhớ để tăng tốc tối đa
@@ -49,20 +58,22 @@ def get_rag_matcher():
 
 rag_matcher = get_rag_matcher()
 
-# Cấu hình trang Streamlit
+# Cấu hình trang Streamlit: Căn giữa đối xứng, thu gọn sidebar mặc định
 st.set_page_config(
-    page_title="AntiScam AI - Cyber SOC Command",
+    page_title="Hệ thống hỗ trợ chống lừa đảo online",
     page_icon="🛡️",
-    layout="wide",
-    initial_sidebar_state="expanded"
+    layout="centered",
+    initial_sidebar_state="collapsed"
 )
 
 # Khởi tạo trạng thái phiên làm việc (Session State)
 for key, default in [
+    ("theme_mode", "Dịu"),           # Mặc định giao diện "Dịu" (#D3DCE8)
     ("input_text", ""),
     ("show_emergency", False),
+    ("elderly_mode", False),
     ("has_analyzed", False),
-    ("demo_fake_bill", False),
+    ("demo_fake_bill", True),
     ("history", []),
     ("trigger_animation", False),
     ("chat_history", [])
@@ -70,22 +81,27 @@ for key, default in [
     if key not in st.session_state:
         st.session_state[key] = default
 
-# 1. Hiển thị Sidebar & lấy cấu hình Trợ năng
-elderly_mode, selected_zoom = render_sidebar()
+if st.session_state.get("theme_mode") not in ["Dịu", "Sáng", "Tối"]:
+    st.session_state["theme_mode"] = "Dịu"
 
-# 2. Áp dụng CSS Cyber SOC & Trợ năng người lớn tuổi
-st.markdown(BASE_CSS, unsafe_allow_html=True)
-if elderly_mode:
-    st.markdown(get_elderly_css(selected_zoom), unsafe_allow_html=True)
+# 1. Áp dụng CSS Giao diện theo Theme (Dịu / Sáng / Tối) & Chế độ Chữ to
+active_theme = st.session_state.get("theme_mode", "Dịu")
+st.markdown(get_theme_css(active_theme), unsafe_allow_html=True)
+if st.session_state.get("elderly_mode", False):
+    font_zoom = st.session_state.get("font_zoom_level", "1.20")
+    st.markdown(get_elderly_css(font_zoom), unsafe_allow_html=True)
 
-# 3. Hiển thị Header & Bảng Cấp cứu khẩn cấp Giờ Vàng
+# 2. Hiển thị Sidebar rút gọn (Đã loại bỏ trùng lặp kịch bản mẫu)
+render_sidebar()
+
+# 3. Hiển thị Header chuẩn UX (Logo + Tiêu đề + Nút cấp cứu đỏ rực + Bộ chọn theme)
 render_header_and_emergency()
 
-# 4. Hiển thị 3 Tabs chức năng chính
+# 4. Hiển thị 3 Tabs chức năng chính dạng nút Pill bo tròn chuẩn Image 3
 tab_chat, tab_bill, tab_guide = st.tabs([
-    "💬 1. Trợ Lý Tác Chiến Đàm Thoại (Cyber Chatbot & Gauge)",
-    "🧾 2. Phòng Lab Soi Fake Bill (Forensic Vision Lab)",
-    "📚 3. Cẩm Nang & Thư Viện 20 Bài Báo Cục ATTT"
+    "Kiểm tra tin nhắn",
+    "Soi bill giả",
+    "Thư viện cảnh báo"
 ])
 
 with tab_chat:

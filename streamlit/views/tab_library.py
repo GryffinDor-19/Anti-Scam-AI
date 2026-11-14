@@ -1,15 +1,17 @@
 """
 View: tab_library.py
 Tab 3: Cẩm Nang & Thư Viện 20 Bài Báo Cảnh Báo Chính Thống Cục An Toàn Thông Tin.
+Đồng bộ bảng màu đề xuất mới (#0F1B33, #374662, #B8C5D6) và cỡ chữ chuẩn Accessibility.
+Phụ trách: Thành viên 3 (Frontend & UX Developer)
 """
 
 import streamlit as st
 
 
 def render_tab_library(rag_matcher):
-    """Hiển thị toàn bộ nội dung Tab 3: Thư viện 20 bài báo chính thống & Tra cứu"""
-    st.subheader("📚 Thư Viện 20 Bài Báo Cảnh Báo Chính Thống & Hotline")
-    st.caption("Bộ dữ liệu RAG Grounding đối soát được thu thập từ Cục An toàn thông tin (Bộ TT&TT), Bộ Công an và các Cơ quan báo chí chính thống:")
+    """Hiển thị nội dung Tab 3: Thư viện bài báo cảnh báo & hotline"""
+    st.markdown("<div style='font-size: 1.25rem; font-weight: 800; color: var(--text-primary, #0F1B33); margin-bottom: 2px;'>📚 Thư viện bài báo cảnh báo & hotline hỗ trợ</div>", unsafe_allow_html=True)
+    st.caption("Dữ liệu cảnh báo được tổng hợp từ Cục An toàn thông tin (Bộ TT&TT), Cục A05 (Bộ Công An) và cơ quan báo chí chính thống:")
 
     # KHỐI HOTLINE & NGUYÊN TẮC VÀNG
     col_hl1, col_hl2 = st.columns(2)
@@ -28,7 +30,7 @@ def render_tab_library(rag_matcher):
             st.markdown("4. **Không tin vào bất kỳ công việc 'việc nhẹ lương cao'** hay làm nhiệm vụ nạp tiền nhận hoa hồng.")
 
     st.markdown("---")
-    st.subheader("📑 Danh Mục Toàn Văn 20 Bài Báo Cảnh Báo (Được sắp xếp theo Thủ Đoạn)")
+    st.markdown("<div style='font-size: 1.15rem; font-weight: 700; color: var(--text-primary, #0F1B33); margin-top: 6px; margin-bottom: 4px;'>📑 Danh mục 20 bài báo cảnh báo chính thống</div>", unsafe_allow_html=True)
 
     all_cases = rag_matcher.get_all_cases()
 
