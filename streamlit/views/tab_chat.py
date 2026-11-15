@@ -94,7 +94,7 @@ def render_tab_chat(rag_matcher):
                     highlighted_html = highlight_dangerous_keywords(raw_content)
                     user_font_color = "#FFFFFF" if is_dark else "#0F1B33"
                     st.markdown(
-                        f"<div style='font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; font-size: 17px; line-height: 1.7; color: {user_font_color} !important; -webkit-text-fill-color: {user_font_color} !important; font-weight: 600; letter-spacing: 0.2px;'>"
+                        f"<div style='font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; font-size: 18px; line-height: 1.75; color: {user_font_color} !important; -webkit-text-fill-color: {user_font_color} !important; font-weight: 600; letter-spacing: 0.2px;'>"
                         f"{highlighted_html}"
                         f"</div>",
                         unsafe_allow_html=True
@@ -144,15 +144,15 @@ def render_welcome_screen():
     with st.container():
         # 1. TIÊU ĐỀ & LỜI CHÀO
         st.markdown(f"""
-        <div style='background-color: {card_bg}; border: 1.5px solid {border_col}; border-radius: 14px; padding: 18px 22px; margin-bottom: 16px;'>
-            <div style='display: flex; align-items: center; gap: 10px; margin-bottom: 8px;'>
-                <span style='font-size: 26px;'>🛡️</span>
+        <div style='background-color: {card_bg}; border: 1.5px solid {border_col}; border-radius: 14px; padding: 20px 24px; margin-bottom: 16px;'>
+            <div style='display: flex; align-items: center; gap: 12px; margin-bottom: 10px;'>
+                <span style='font-size: 30px;'>🛡️</span>
                 <div>
-                    <div style='font-size: 18px; font-weight: 800; color: #2563EB;'>Trợ Lý Phòng Chống Lừa Đảo Trực Tuyến AntiScam AI</div>
-                    <div style='font-size: 14px; color: {text_sub};'>Sẵn sàng đối soát tin nhắn, phát hiện bẫy tâm lý và giám định hóa đơn chuyển khoản tức thì</div>
+                    <div style='font-size: 20px; font-weight: 800; color: #2563EB;'>Trợ Lý Phòng Chống Lừa Đảo Trực Tuyến AntiScam AI</div>
+                    <div style='font-size: 15px; font-weight: 500; color: {text_sub}; margin-top: 2px;'>Sẵn sàng đối soát tin nhắn, phát hiện bẫy tâm lý và giám định hóa đơn chuyển khoản tức thì</div>
                 </div>
             </div>
-            <div style='font-size: 14.5px; color: {text_main}; line-height: 1.6; margin-top: 10px;'>
+            <div style='font-size: 15.5px; color: {text_main}; line-height: 1.7; margin-top: 10px;'>
                 Bạn có thể <strong>dán trực tiếp tin nhắn nghi vấn</strong> vào ô chat ở đáy màn hình, bấm <strong>📎 Tải ảnh bill</strong> để soi biên lai, hoặc <strong>chọn nhanh các kịch bản lừa đảo thực tế</strong> được đề xuất bên dưới để trải nghiệm:
             </div>
         </div>
@@ -160,39 +160,39 @@ def render_welcome_screen():
 
         # 2. KHỐI HIỂN THỊ CƠ CHẾ PHÒNG THỦ 3 LỚP RÕ RÀNG
         st.markdown(f"""
-        <div style='background-color: {card_bg}; border: 1px solid {border_col}; border-radius: 12px; padding: 12px 18px; margin-bottom: 16px;'>
-            <div style='font-size: 13.5px; font-weight: 800; color: #2563EB; margin-bottom: 8px;'>
+        <div style='background-color: {card_bg}; border: 1px solid {border_col}; border-radius: 12px; padding: 14px 20px; margin-bottom: 16px;'>
+            <div style='font-size: 14.5px; font-weight: 800; color: #2563EB; margin-bottom: 10px;'>
                 ⚡ CHUỖI PHÒNG THỦ ĐA LỚP TỰ ĐỘNG (MULTI-LAYER DEFENSE PIPELINE):
             </div>
-            <div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; font-size: 13px; color: {text_main};'>
-                <div style='background: {card_inner}; padding: 8px 12px; border-radius: 8px; border-left: 3.5px solid #10B981;'>
-                    <strong>Lớp 1: Bộ Lọc Nhanh (< 0.05s)</strong><br/>
-                    <span style='color: {text_sub}; font-size: 12.5px;'>Quét lập tức từ khóa đe dọa, bắt bớ, cọc tiền, rửa tiền.</span>
+            <div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; font-size: 14px; color: {text_main};'>
+                <div style='background: {card_inner}; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #10B981;'>
+                    <strong style='font-size: 14.5px;'>Lớp 1: Bộ Lọc Nhanh (< 0.05s)</strong><br/>
+                    <span style='color: {text_sub}; font-size: 13.5px; line-height: 1.5;'>Quét lập tức từ khóa đe dọa, bắt bớ, cọc tiền, rửa tiền.</span>
                 </div>
-                <div style='background: {card_inner}; padding: 8px 12px; border-radius: 8px; border-left: 3.5px solid #3B82F6;'>
-                    <strong>Lớp 2: RAG Đối Soát Tri Thức</strong><br/>
-                    <span style='color: {text_sub}; font-size: 12.5px;'>Đối chiếu 20+ bài báo và hồ sơ lừa đảo từ Cục An toàn thông tin.</span>
+                <div style='background: {card_inner}; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #3B82F6;'>
+                    <strong style='font-size: 14.5px;'>Lớp 2: RAG Đối Soát Tri Thức</strong><br/>
+                    <span style='color: {text_sub}; font-size: 13.5px; line-height: 1.5;'>Đối chiếu 20+ bài báo và hồ sơ lừa đảo từ Cục An toàn thông tin.</span>
                 </div>
-                <div style='background: {card_inner}; padding: 8px 12px; border-radius: 8px; border-left: 3.5px solid #8B5CF6;'>
-                    <strong>Lớp 3: AI Phân Tích Bẫy Tâm Lý</strong><br/>
-                    <span style='color: {text_sub}; font-size: 12.5px;'>Bóc trần kịch bản thao túng uy quyền, ép thời gian, dọa phong tỏa.</span>
+                <div style='background: {card_inner}; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #8B5CF6;'>
+                    <strong style='font-size: 14.5px;'>Lớp 3: AI Phân Tích Bẫy Tâm Lý</strong><br/>
+                    <span style='color: {text_sub}; font-size: 13.5px; line-height: 1.5;'>Bóc trần kịch bản thao túng uy quyền, ép thời gian, dọa phong tỏa.</span>
                 </div>
             </div>
         </div>
         """, unsafe_allow_html=True)
 
         # 3. MÀN HÌNH ĐỀ XUẤT CÁC TIN NHẮN MẪU DỄ THAO TÁC (1-CLICK PROMPT CARDS)
-        st.markdown(f"<div style='font-size: 15px; font-weight: 800; color: {text_main}; margin-bottom: 10px;'>💡 Đề xuất các kịch bản lừa đảo phổ biến để thử nhanh (1-Click):</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='font-size: 16px; font-weight: 800; color: {text_main}; margin-bottom: 12px;'>💡 Đề xuất các kịch bản lừa đảo phổ biến để thử nhanh (1-Click):</div>", unsafe_allow_html=True)
 
         col_c1, col_c2 = st.columns(2, gap="medium")
 
         # Kịch bản 1: Giả danh công an
         with col_c1:
             with st.container(border=True):
-                st.markdown("<div style='font-weight: 800; font-size: 14.5px; color: #DC2626;'>🚨 1. Giả danh Công an điều tra rửa tiền</div>", unsafe_allow_html=True)
+                st.markdown("<div style='font-weight: 800; font-size: 16px; color: #DC2626;'>🚨 1. Giả danh Công an điều tra rửa tiền</div>", unsafe_allow_html=True)
                 st.caption("Dọa bắt giam, mạo danh cán bộ Cục Cảnh sát hình sự để ép chuyển tiền vào tài khoản an toàn.")
                 st.markdown(
-                    "<div style='background: rgba(220,38,38,0.06); padding: 8px 10px; border-radius: 6px; font-size: 13px; font-style: italic; margin-bottom: 8px;'>"
+                    "<div style='background: rgba(220,38,38,0.06); padding: 10px 12px; border-radius: 8px; font-size: 14.5px; line-height: 1.6; font-style: italic; margin-bottom: 10px;'>"
                     "\"Tôi là Đại úy Nguyễn Văn Hùng Cục CSHS. Tài khoản anh liên quan rửa tiền 40 tỷ, yêu cầu chuyển 150 triệu vào tài khoản an toàn gấp!\""
                     "</div>",
                     unsafe_allow_html=True
@@ -204,10 +204,10 @@ def render_welcome_screen():
         # Kịch bản 2: Tuyển CTV Shopee/TikTok
         with col_c2:
             with st.container(border=True):
-                st.markdown("<div style='font-weight: 800; font-size: 14.5px; color: #D97706;'>💼 2. Tuyển CTV việc nhẹ lương cao</div>", unsafe_allow_html=True)
+                st.markdown("<div style='font-weight: 800; font-size: 16px; color: #D97706;'>💼 2. Tuyển CTV việc nhẹ lương cao</div>", unsafe_allow_html=True)
                 st.caption("Lừa làm nhiệm vụ xem video, hưởng hoa hồng khủng 30-50%, mồi nạp cọc nhỏ rồi siết tiền.")
                 st.markdown(
-                    "<div style='background: rgba(217,119,6,0.06); padding: 8px 10px; border-radius: 6px; font-size: 13px; font-style: italic; margin-bottom: 8px;'>"
+                    "<div style='background: rgba(217,119,6,0.06); padding: 10px 12px; border-radius: 8px; font-size: 14.5px; line-height: 1.6; font-style: italic; margin-bottom: 10px;'>"
                     "\"Tuyển CTV làm nhiệm vụ xem video Shopee/TikTok hoa hồng 30-50% mỗi ngày, nạp cọc 200k rút ngay 350k!\""
                     "</div>",
                     unsafe_allow_html=True
@@ -221,10 +221,10 @@ def render_welcome_screen():
         # Kịch bản 3: Shipper giục nạp tiền / link độc
         with col_c3:
             with st.container(border=True):
-                st.markdown("<div style='font-weight: 800; font-size: 14.5px; color: #EA580C;'>📦 3. Shipper giao hàng gửi link độc</div>", unsafe_allow_html=True)
+                st.markdown("<div style='font-weight: 800; font-size: 16px; color: #EA580C;'>📦 3. Shipper giao hàng gửi link độc</div>", unsafe_allow_html=True)
                 st.caption("Mạo danh shipper giao kiện hàng giả vờ, giục chuyển khoản cọc hoặc bấm link tra cứu giả.")
                 st.markdown(
-                    "<div style='background: rgba(234,88,12,0.06); padding: 8px 10px; border-radius: 6px; font-size: 13px; font-style: italic; margin-bottom: 8px;'>"
+                    "<div style='background: rgba(234,88,12,0.06); padding: 10px 12px; border-radius: 8px; font-size: 14.5px; line-height: 1.6; font-style: italic; margin-bottom: 10px;'>"
                     "\"Em là shipper GHTK giao đơn Shopee 240k, anh chị đi vắng vui lòng bấm tra-cuu-don.xyz chuyển khoản để em giữ hàng!\""
                     "</div>",
                     unsafe_allow_html=True
@@ -236,10 +236,10 @@ def render_welcome_screen():
         # Kịch bản 4: Phạt nguội giao thông
         with col_c4:
             with st.container(border=True):
-                st.markdown("<div style='font-weight: 800; font-size: 14.5px; color: #7C3AED;'>🚗 4. Phạt nguội vi phạm giao thông</div>", unsafe_allow_html=True)
+                st.markdown("<div style='font-weight: 800; font-size: 16px; color: #7C3AED;'>🚗 4. Phạt nguội vi phạm giao thông</div>", unsafe_allow_html=True)
                 st.caption("SMS mạo danh Cục CSGT thông báo xe vi phạm, dụ dỗ truy cập trang web giả mạo nộp phạt.")
                 st.markdown(
-                    "<div style='background: rgba(124,58,237,0.06); padding: 8px 10px; border-radius: 6px; font-size: 13px; font-style: italic; margin-bottom: 8px;'>"
+                    "<div style='background: rgba(124,58,237,0.06); padding: 10px 12px; border-radius: 8px; font-size: 14.5px; line-height: 1.6; font-style: italic; margin-bottom: 10px;'>"
                     "\"CUC CSGT THONG BAO: Phuong tien 29A-888.88 vi pham toc do. Truy cap ngay tra-cuu-phat-nguoi.csgt-online.xyz de nop phat!\""
                     "</div>",
                     unsafe_allow_html=True
@@ -426,15 +426,15 @@ def render_conversational_assistant_response(msg, rag_matcher):
 
         st.markdown(f"""
         <div style='display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;'>
-            <div style='background-color: {badge_bg}; color: {badge_color}; border: 1.5px solid {badge_border}; padding: 7px 16px; border-radius: 9999px; font-weight: 800; font-size: 15px;'>
+            <div style='background-color: {badge_bg}; color: {badge_color}; border: 1.5px solid {badge_border}; padding: 8px 18px; border-radius: 9999px; font-weight: 800; font-size: 16.5px;'>
                 {status_text}
             </div>
-            <div style='display: flex; align-items: center; gap: 8px; min-width: 150px;'>
-                <span style='font-size: 14.5px; font-weight: 600; color: var(--text-secondary, #374662);'>Mức rủi ro:</span>
-                <div style='flex: 1; background-color: #CBD6E6; border-radius: 9999px; height: 9px; width: 80px; overflow: hidden;'>
-                    <div style='background-color: {bar_color}; height: 9px; width: {score}%; border-radius: 9999px;'></div>
+            <div style='display: flex; align-items: center; gap: 8px; min-width: 160px;'>
+                <span style='font-size: 15px; font-weight: 600; color: var(--text-secondary, #374662);'>Mức rủi ro:</span>
+                <div style='flex: 1; background-color: #CBD6E6; border-radius: 9999px; height: 10px; width: 85px; overflow: hidden;'>
+                    <div style='background-color: {bar_color}; height: 10px; width: {score}%; border-radius: 9999px;'></div>
                 </div>
-                <span style='font-size: 15px; font-weight: 800; color: {bar_color};'>{score}%</span>
+                <span style='font-size: 16px; font-weight: 800; color: {bar_color};'>{score}%</span>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -452,36 +452,36 @@ def render_conversational_assistant_response(msg, rag_matcher):
                 "Cúp máy ngay lập tức, không làm theo các yêu cầu chuyển khoản hoặc cài app lạ.",
                 "Gọi ngay tổng đài 156 hoặc Hotline A05 (069 234 8560) để xác minh vụ việc."
             ]
-            recs_html = "".join([f"<li style='margin-bottom: 5px; color: {rec_list_color} !important; -webkit-text-fill-color: {rec_list_color} !important; font-size: 15px; line-height: 1.7;'>{r}</li>" for r in rec_items])
+            recs_html = "".join([f"<li style='margin-bottom: 6px; color: {rec_list_color} !important; -webkit-text-fill-color: {rec_list_color} !important; font-size: 17px; line-height: 1.8;'>{r}</li>" for r in rec_items])
 
             st.markdown(f"""
-            <div style='background-color: {rec_card_bg}; border: 1.5px solid {rec_card_border}; border-radius: 12px; padding: 14px 18px; margin-bottom: 14px;'>
-                <div style='display: flex; align-items: center; gap: 8px; margin-bottom: 8px;'>
-                    <span style='font-size: 18px;'>🚨</span>
-                    <span class='rec-urgent-title' style='color: {rec_title_color} !important; -webkit-text-fill-color: {rec_title_color} !important; font-weight: 800; font-size: 16px; letter-spacing: 0.3px;'>VIỆC BẠN CẦN LÀM NGAY LẬP TỨC:</span>
+            <div style='background-color: {rec_card_bg}; border: 1.5px solid {rec_card_border}; border-radius: 12px; padding: 16px 20px; margin-bottom: 14px;'>
+                <div style='display: flex; align-items: center; gap: 10px; margin-bottom: 10px;'>
+                    <span style='font-size: 20px;'>🚨</span>
+                    <span class='rec-urgent-title' style='color: {rec_title_color} !important; -webkit-text-fill-color: {rec_title_color} !important; font-weight: 900; font-size: 18px; letter-spacing: 0.3px;'>VIỆC BẠN CẦN LÀM NGAY LẬP TỨC:</span>
                 </div>
-                <ul style='color: {rec_list_color} !important; -webkit-text-fill-color: {rec_list_color} !important; font-size: 15px; line-height: 1.7; margin: 0; padding-left: 22px; font-weight: 600;'>
+                <ul style='color: {rec_list_color} !important; -webkit-text-fill-color: {rec_list_color} !important; font-size: 17px; line-height: 1.8; margin: 0; padding-left: 24px; font-weight: 600;'>
                     {recs_html}
                 </ul>
             </div>
             """, unsafe_allow_html=True)
 
-        # 3. PHÂN TÍCH CHI TIẾT & BẪY TÂM LÝ (CỠ CHỮ TĂNG 1-2 SIZE THEO YÊU CẦU UX)
-        st.markdown(f"<div style='font-size: 16px; line-height: 1.75; color: var(--text-primary, #0F1B33);'>{explanation}</div>", unsafe_allow_html=True)
+        # 3. PHÂN TÍCH CHI TIẾT & BẪY TÂM LÝ (CỠ CHỮ TO RÕ RÀNG >= 17.5PX THEO YÊU CẦU UX)
+        st.markdown(f"<div style='font-size: 17.5px; line-height: 1.8; color: var(--text-primary, #0F1B33); font-weight: 500;'>{explanation}</div>", unsafe_allow_html=True)
 
         if traps and score >= 40:
             st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
             traps_html = f"""
-            <div style='background-color: var(--card-inner-bg, #DFE7F2); border: 1px solid var(--border-color, #B8C5D6); border-radius: 10px; padding: 12px 16px; margin-bottom: 12px;'>
-                <div style='color: var(--text-primary, #0F1B33); font-weight: 700; font-size: 15px; margin-bottom: 6px;'>Bẫy tâm lý nhận diện:</div>
-                <div style='color: var(--text-secondary, #374662); font-size: 14.5px; line-height: 1.7;'>
-                    {''.join([f"<div style='margin-bottom: 3px;'>🚩 {t}</div>" for t in traps])}
+            <div style='background-color: var(--card-inner-bg, #DFE7F2); border: 1px solid var(--border-color, #B8C5D6); border-radius: 10px; padding: 14px 18px; margin-bottom: 12px;'>
+                <div style='color: var(--text-primary, #0F1B33); font-weight: 800; font-size: 16.5px; margin-bottom: 8px;'>Bẫy tâm lý nhận diện:</div>
+                <div style='color: var(--text-secondary, #374662); font-size: 16px; line-height: 1.8; font-weight: 500;'>
+                    {''.join([f"<div style='margin-bottom: 4px;'>🚩 {t}</div>" for t in traps])}
                 </div>
             </div>
             """
             st.markdown(traps_html, unsafe_allow_html=True)
 
-        # 4. NGUỒN PHÂN TÍCH MINH BẠCH - VIẾT GỌN GÀNG, FONT >= 14PX, ĐỔI 0.0s THÀNH < 0.1s
+        # 4. NGUỒN PHÂN TÍCH MINH BẠCH - VIẾT GỌN GÀNG, FONT >= 15PX, ĐỔI 0.0s THÀNH < 0.1s
         if "Gemini" in model_source or "gemini" in model_source.lower():
             source_label = f"Phân tích bởi {model_source} · Đối chiếu 20 bài báo"
         else:
@@ -490,12 +490,12 @@ def render_conversational_assistant_response(msg, rag_matcher):
         time_label = "< 0.1s" if elapsed_time < 0.1 else f"{elapsed_time}s"
 
         meta_html = f"""
-        <div style='display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 14px; color: var(--text-secondary, #374662); padding-top: 10px; border-top: 1px solid var(--border-color, #B8C5D6); margin-top: 12px;'>
+        <div style='display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 15px; color: var(--text-secondary, #374662); padding-top: 10px; border-top: 1px solid var(--border-color, #B8C5D6); margin-top: 12px;'>
             <div>
-                <span style='color: #2563eb; font-weight: 700; font-size: 14px;'>🛡️ {source_label}</span>
+                <span style='color: #2563eb; font-weight: 700; font-size: 15px;'>🛡️ {source_label}</span>
             </div>
             <div>
-                <span style='font-size: 14px;'>⚡ Phản hồi: <strong>{time_label}</strong></span>
+                <span style='font-size: 15px; font-weight: 600;'>⚡ Phản hồi: <strong>{time_label}</strong></span>
             </div>
         </div>
         """

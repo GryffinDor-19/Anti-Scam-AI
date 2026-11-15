@@ -25,30 +25,14 @@ except ImportError:
     from backend.modules.rag_case_matcher import RAGCaseMatcher
 
 # =============================================================================
-# CƠ CHẾ NẠP LẠI (AUTO-RELOAD) 100% CÁC MODULE CON ĐỂ TRÁNH BỊ LỖI CACHE IN-MEMORY
+# NẠP CÁC MODULE GIAO DIỆN & TỐI ƯU HIỆU NĂNG TỐI ĐA (ZERO-DELAY)
 # =============================================================================
 import styles
-importlib.reload(styles)
 from styles import get_theme_css, get_elderly_css, BASE_CSS
-
-import components.sidebar as sidebar_mod
-importlib.reload(sidebar_mod)
 from components.sidebar import render_sidebar
-
-import components.emergency_banner as emergency_mod
-importlib.reload(emergency_mod)
 from components.emergency_banner import render_header_and_emergency
-
-import views.tab_chat as tab_chat_mod
-importlib.reload(tab_chat_mod)
 from views.tab_chat import render_tab_chat
-
-import views.tab_fake_bill as tab_fake_bill_mod
-importlib.reload(tab_fake_bill_mod)
 from views.tab_fake_bill import render_tab_fake_bill
-
-import views.tab_library as tab_library_mod
-importlib.reload(tab_library_mod)
 from views.tab_library import render_tab_library
 
 # Khởi tạo RAG Matcher với Cache bộ nhớ để tăng tốc tối đa
@@ -80,6 +64,16 @@ for key, default in [
 ]:
     if key not in st.session_state:
         st.session_state[key] = default
+
+# Đồng bộ theme ngay từ widget radio ở đầu chu kỳ render (loại bỏ hoàn toàn delay)
+pill_sel = st.session_state.get("sidebar_theme_pill_selector")
+if pill_sel:
+    if "Dịu" in pill_sel:
+        st.session_state["theme_mode"] = "Dịu"
+    elif "Sáng" in pill_sel:
+        st.session_state["theme_mode"] = "Sáng"
+    elif "Tối" in pill_sel:
+        st.session_state["theme_mode"] = "Tối"
 
 if st.session_state.get("theme_mode") not in ["Dịu", "Sáng", "Tối"]:
     st.session_state["theme_mode"] = "Dịu"

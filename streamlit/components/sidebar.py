@@ -10,27 +10,35 @@ Phụ trách: Thành viên 3 (Frontend & UX Developer)
 import streamlit as st
 
 
+def _on_theme_pill_change():
+    """Callback xử lý chuyển đổi giao diện tức thì, không gây trễ (zero-delay)"""
+    selected = st.session_state.get("sidebar_theme_pill_selector", "")
+    if "Dịu" in selected:
+        st.session_state["theme_mode"] = "Dịu"
+    elif "Sáng" in selected:
+        st.session_state["theme_mode"] = "Sáng"
+    elif "Tối" in selected:
+        st.session_state["theme_mode"] = "Tối"
+
+
 def render_sidebar():
     """Hiển thị Sidebar chuẩn UX tối ưu theo yêu cầu mới nhất"""
     with st.sidebar:
-        # 1. BỘ CHỌN GIAO DIỆN DẠNG CỤM 3 VIÊN THUỐC NHỎ GỌN
+        # 1. BỘ CHỌN GIAO DIỆN DẠNG CỤM 3 VIÊN THUỐC NHỎ GỌN (CHUYỂN NHANH TỨC THÌ)
         st.markdown("### 🎨 Chế Độ Giao Diện")
         current_theme = st.session_state.get("theme_mode", "Dịu")
         theme_options = ["🔵 Dịu", "⚪ Sáng", "⚫ Tối"]
         theme_index = 0 if current_theme == "Dịu" else (1 if current_theme == "Sáng" else 2)
 
-        selected_theme = st.radio(
+        st.radio(
             "Chọn giao diện:",
             options=theme_options,
             index=theme_index,
             horizontal=True,
             label_visibility="collapsed",
-            key="sidebar_theme_pill_selector"
+            key="sidebar_theme_pill_selector",
+            on_change=_on_theme_pill_change
         )
-        new_theme = "Dịu" if "Dịu" in selected_theme else ("Sáng" if "Sáng" in selected_theme else "Tối")
-        if new_theme != current_theme:
-            st.session_state.theme_mode = new_theme
-            st.rerun()
 
         st.markdown("---")
 
@@ -47,7 +55,6 @@ def render_sidebar():
         )
         if elderly_mode != current_val:
             st.session_state.elderly_mode = elderly_mode
-            st.rerun()
 
         selected_zoom = st.session_state.get("font_zoom_level", "1.20")
         if st.session_state.get("elderly_mode", False):
@@ -61,7 +68,6 @@ def render_sidebar():
             new_zoom = "1.15" if "115%" in zoom_opt else ("1.28" if "128%" in zoom_opt else "1.20")
             if new_zoom != selected_zoom:
                 st.session_state.font_zoom_level = new_zoom
-                st.rerun()
 
             st.caption(f"Đang hiển thị ở mức cỡ chữ **{zoom_opt.split(' ')[0]}** (Bố cục giao diện giữ nguyên 100%).")
 

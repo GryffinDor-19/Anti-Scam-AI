@@ -166,7 +166,7 @@ footer {{
 }}
 
 /* =========================================================================
-   4. TIÊU ĐỀ VÀ CỠ CHỮ CHUẨN TỐI THIỂU 14PX - ĐỘ TƯƠNG PHẢN CAO
+   4. TIÊU ĐỀ VÀ CỠ CHỮ CHUẨN RÕ RÀNG (>= 16PX) - ĐỘ TƯƠNG PHẢN CAO
    ========================================================================= */
 h1, h2, h3, h4, h5, h6 {{
     color: {t["text_primary"]} !important;
@@ -175,12 +175,13 @@ h1, h2, h3, h4, h5, h6 {{
 
 p, span, label, div {{
     color: {t["text_primary"]};
-    font-size: 14.5px;
+    font-size: 16px;
+    line-height: 1.65;
 }}
 
 .stCaption, caption, small, .subtext {{
     color: {t["text_secondary"]} !important;
-    font-size: 14.5px !important;
+    font-size: 15px !important;
     font-weight: 500 !important;
 }}
 
@@ -635,6 +636,13 @@ div[data-testid="stPopover"] button:hover {{
     box-shadow: {t["box_shadow"]} !important;
     padding: 16px 20px !important;
     margin-bottom: 14px !important;
+    font-size: 17.5px !important;
+    line-height: 1.75 !important;
+}}
+
+[data-testid="stChatMessage"] p {{
+    font-size: 17.5px !important;
+    line-height: 1.75 !important;
 }}
 
 /* Bỏ triệt để viền và nền lồng nhau ở các thẻ div con bên trong stChatMessage */
@@ -703,6 +711,8 @@ div[data-testid="stChatInput"] textarea,
     background: {t["chat_input_bg"]} !important;
     color: {t["text_primary"]} !important;
     -webkit-text-fill-color: {t["text_primary"]} !important;
+    font-size: 16.5px !important;
+    line-height: 1.6 !important;
 }}
 
 div[data-testid="stChatInput"],
@@ -722,7 +732,7 @@ div[data-testid="stChatInput"] textarea::placeholder,
 .stChatInput textarea::placeholder {{
     color: {t["text_secondary"]} !important;
     -webkit-text-fill-color: {t["text_secondary"]} !important;
-    font-size: 14.5px !important;
+    font-size: 16px !important;
     opacity: 1 !important;
 }}
 
