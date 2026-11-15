@@ -515,88 +515,126 @@ div[data-testid="stTabs"] [data-baseweb="tab-list"]::after {{
 }}
 
 /* =========================================================================
-   8. CỤM 3 VIÊN THUỐC BỘ CHỌN GIAO DIỆN Ở THANH BÊN (SIDEBAR)
+   8. CỤM 3 VIÊN THUỐC BỘ CHỌN GIAO DIỆN Ở THANH BÊN (SIDEBAR) - PHÓNG TO & TINH GỌN
    ========================================================================= */
 div[data-testid="stSidebar"] div[data-testid="stRadio"]:has(input[name*="sidebar_theme"]) [role="radiogroup"],
 div[data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] {{
     background-color: var(--card-bg, #EEF2F8) !important;
     border: 1.5px solid var(--border-color, #B8C5D6) !important;
     border-radius: 9999px !important;
-    padding: 3px !important;
+    padding: 4px !important;
     display: flex !important;
     flex-direction: row !important;
-    gap: 3px !important;
+    gap: 4px !important;
     width: 100% !important;
     justify-content: space-between !important;
-    box-shadow: 0 1px 4px rgba(15, 27, 51, 0.05) !important;
+    box-shadow: 0 2px 6px rgba(15, 27, 51, 0.08) !important;
 }}
 
 div[data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label {{
     background: transparent !important;
     border-radius: 9999px !important;
-    padding: 6px 10px !important;
+    padding: 9px 12px !important;
     margin: 0 !important;
     cursor: pointer !important;
     flex: 1 !important;
     text-align: center !important;
     justify-content: center !important;
+    align-items: center !important;
+    display: inline-flex !important;
+    min-height: 42px !important;
     transition: all 0.2s ease !important;
 }}
 
-div[data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label > div:first-child {{
+/* ẨN TRIỆT ĐỂ CHẤM TRÒN RADIO NGUYÊN BẢN ĐỂ KHÔNG BỊ HIỆN 2 CHẤM TRÒN */
+div[data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label input,
+div[data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label input + div,
+div[data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label > div:first-of-type,
+div[data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] [data-baseweb="radio"] > div:first-of-type,
+div[data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label [data-testid="stRadioCircle"] {{
     display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }}
 
-div[data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label div p {{
-    font-size: 13px !important;
-    font-weight: 700 !important;
+div[data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label div p,
+div[data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label span {{
+    font-size: 15.5px !important;
+    font-weight: 800 !important;
     color: var(--text-primary, #0F1B33) !important;
     margin: 0 !important;
+    white-space: nowrap !important;
 }}
 
 div[data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label:has(input:checked) {{
     background-color: #2563EB !important;
-    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3) !important;
+    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.45) !important;
 }}
 
-div[data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label:has(input:checked) div p {{
+div[data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label:has(input:checked) div p,
+div[data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label:has(input:checked) span,
+div[data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label:has(input:checked) * {{
     color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
     font-weight: 800 !important;
+    font-size: 15.5px !important;
 }}
 
 /* =========================================================================
-   9. CÔNG TẮC 'CHỮ TO, DỄ ĐỌC' VÀ DẤU '?' RÕ RÀNG TRÊN NỀN THANH BÊN
+   9. CÔNG TẮC 'CHỮ TO, DỄ ĐỌC' VÀ TRỢ NĂNG THANH BÊN (PHÓNG TO RÕ RÀNG)
    ========================================================================= */
-div[data-testid="stToggle"] [data-baseweb="checkbox"] > div:first-child {{
-    background-color: #94A3B8 !important;
-    border: 1.5px solid #64748B !important;
+div[data-testid="stSidebar"] div[data-testid="stToggle"] {{
+    padding: 4px 0 !important;
 }}
 
-div[data-testid="stToggle"]:has(input:checked) [data-baseweb="checkbox"] > div:first-child,
-div[data-testid="stToggle"] input:checked + div,
-div[data-testid="stToggle"] [aria-checked="true"] > div:first-child {{
+div[data-testid="stSidebar"] div[data-testid="stToggle"] label {{
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    cursor: pointer !important;
+}}
+
+div[data-testid="stSidebar"] div[data-testid="stToggle"] label p,
+div[data-testid="stSidebar"] div[data-testid="stToggle"] label span {{
+    color: var(--text-primary, #0F1B33) !important;
+    -webkit-text-fill-color: var(--text-primary, #0F1B33) !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    line-height: 1.5 !important;
+}}
+
+div[data-testid="stSidebar"] div[data-testid="stToggle"] [data-baseweb="checkbox"] > div:first-child {{
+    background-color: #64748B !important;
+    border: 1.5px solid #475569 !important;
+    width: 48px !important;
+    height: 26px !important;
+    min-width: 48px !important;
+    border-radius: 9999px !important;
+    transition: all 0.2s ease !important;
+}}
+
+div[data-testid="stSidebar"] div[data-testid="stToggle"]:has(input:checked) [data-baseweb="checkbox"] > div:first-child,
+div[data-testid="stSidebar"] div[data-testid="stToggle"] input:checked + div,
+div[data-testid="stSidebar"] div[data-testid="stToggle"] [aria-checked="true"] > div:first-child {{
     background-color: #2563EB !important;
     border-color: #1D4ED8 !important;
 }}
 
-div[data-testid="stToggle"] [data-baseweb="checkbox"] > div:first-child > div {{
+div[data-testid="stSidebar"] div[data-testid="stToggle"] [data-baseweb="checkbox"] > div:first-child > div {{
     background-color: #FFFFFF !important;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.35) !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3) !important;
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 50% !important;
 }}
 
-div[data-testid="stToggle"] label p,
-div[data-testid="stToggle"] label span {{
-    color: var(--text-primary, #0F1B33) !important;
-    font-weight: 700 !important;
-    font-size: 14.5px !important;
-}}
-
-div[data-testid="stToggle"] svg,
-[data-testid="stTooltipIcon"] svg {{
-    fill: {t["text_primary"]} !important;
-    color: {t["text_primary"]} !important;
-    stroke: {t["text_primary"]} !important;
-    opacity: 0.9 !important;
+/* Ẩn triệt để tooltip icon trong thanh bên nếu có để tránh đốm trắng lạ */
+div[data-testid="stSidebar"] [data-testid="stTooltipIcon"] {{
+    display: none !important;
 }}
 
 /* =========================================================================
@@ -782,7 +820,7 @@ mark.kw-danger {{
 }}
 
 /* =========================================================================
-   14. SIDEBAR GỌN GÀNG THEO BẢNG MÀU ĐỀ XUẤT ({t["sidebar_bg"]})
+   14. THANH BÊN (SIDEBAR) RỘNG RÃI & PHÔNG CHỮ TIÊU ĐỀ LỚN
    ========================================================================= */
 section[data-testid="stSidebar"],
 [data-testid="stSidebar"],
@@ -795,6 +833,22 @@ section[data-testid="stSidebar"],
     border-right: 1.5px solid {t["border_color"]} !important;
 }}
 
+section[data-testid="stSidebar"] {{
+    min-width: 335px !important;
+}}
+
+/* Tiêu đề các mục trong Sidebar: to rõ, đậm nét */
+div[data-testid="stSidebar"] h2,
+div[data-testid="stSidebar"] h3 {{
+    font-size: 19px !important;
+    font-weight: 800 !important;
+    color: {t["text_primary"]} !important;
+    -webkit-text-fill-color: {t["text_primary"]} !important;
+    margin-top: 14px !important;
+    margin-bottom: 12px !important;
+    letter-spacing: 0.2px !important;
+}}
+
 /* =========================================================================
    15. EXPANDER & DETAILS - ĐỒNG BỘ THEME TỐI/SÁNG, HẾT BỊ TRẮNG LÓA
    ========================================================================= */
@@ -804,7 +858,7 @@ div[data-testid="stExpander"] details {{
     background-color: {t["card_inner_bg"]} !important;
     background: {t["card_inner_bg"]} !important;
     border: 1.5px solid {t["border_color"]} !important;
-    border-radius: 12px !important;
+    border-radius: 14px !important;
     box-shadow: {t["box_shadow"]} !important;
     overflow: hidden !important;
     margin-bottom: 12px !important;
@@ -817,9 +871,9 @@ div[data-testid="stExpander"] summary,
     background: {t["card_inner_bg"]} !important;
     border-bottom: 1px solid {t["border_color"]} !important;
     color: {t["text_primary"]} !important;
-    padding: 10px 16px !important;
+    padding: 12px 18px !important;
     font-weight: 700 !important;
-    font-size: 14.5px !important;
+    font-size: 15.5px !important;
     cursor: pointer !important;
     transition: all 0.2s ease !important;
 }}
@@ -838,13 +892,40 @@ div[data-testid="stExpander"] summary span {{
     color: {t["text_primary"]} !important;
     -webkit-text-fill-color: {t["text_primary"]} !important;
     font-weight: 700 !important;
-    font-size: 14.5px !important;
+    font-size: 15.5px !important;
 }}
 
 div[data-testid="stExpander"] summary svg,
 .stExpander summary svg {{
     fill: {t["text_primary"]} !important;
     color: {t["text_primary"]} !important;
+}}
+
+/* Expander riêng trong Thanh bên (Sidebar) - Phóng to vừa vặn, sắc nét */
+div[data-testid="stSidebar"] div[data-testid="stExpander"] summary,
+div[data-testid="stSidebar"] .stExpander summary {{
+    padding: 13px 18px !important;
+    font-size: 15.5px !important;
+    font-weight: 800 !important;
+}}
+
+div[data-testid="stSidebar"] div[data-testid="stExpander"] summary p,
+div[data-testid="stSidebar"] div[data-testid="stExpander"] summary span {{
+    font-size: 15.5px !important;
+    font-weight: 800 !important;
+}}
+
+div[data-testid="stSidebar"] div[data-testid="stExpander"] [data-testid="stExpanderDetails"] p,
+div[data-testid="stSidebar"] div[data-testid="stExpander"] [data-testid="stExpanderDetails"] span,
+div[data-testid="stSidebar"] div[data-testid="stExpander"] [data-testid="stExpanderDetails"] label {{
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+}}
+
+div[data-testid="stSidebar"] div[data-testid="stExpander"] input {{
+    font-size: 15px !important;
+    padding: 10px 14px !important;
+    min-height: 42px !important;
 }}
 
 /* Vùng nội dung chi tiết bên trong Expander khi mở ra */

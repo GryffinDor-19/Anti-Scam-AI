@@ -51,7 +51,6 @@ def render_sidebar():
             f"Chữ to, dễ đọc: **[{status_label}]**",
             value=current_val,
             key="sidebar_elderly_toggle",
-            help="Phóng to kích thước chữ toàn diện lên >= 18px giúp người cao tuổi dễ đọc"
         )
         if elderly_mode != current_val:
             st.session_state.elderly_mode = elderly_mode
@@ -81,7 +80,6 @@ def render_sidebar():
                 value=st.session_state.get("gemini_api_key", ""),
                 type="password",
                 placeholder="AIzaSy...",
-                help="Dùng để kết nối trực tiếp mô hình gemini-3.8-flash & gemini-4 của nhóm"
             )
             if api_key_val and api_key_val.strip() != "":
                 st.session_state.gemini_api_key = api_key_val.strip()
