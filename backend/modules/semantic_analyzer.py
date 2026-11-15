@@ -1,10 +1,7 @@
 import json  # Thư viện xử lý dữ liệu định dạng JSON
-from google import genai  # Nạp thư viện Google GenAI thế hệ mới
-from google.genai import types  # Nạp bộ công cụ cấu hình tham số cho AI
-
 import os
-# Xóa key thật đi, thay bằng biến môi trường
-client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY", "YOUR_API_KEY_HERE"))
+
+client = None  # Khởi tạo lười (Lazy Client) khi có API Key thật để khởi động siêu tốc
 
 def local_fallback_6_fields(user_text: str, rag_article: dict = None) -> dict:  # Hàm dự phòng trả về đúng 6 trường của file mock
     text_lower = user_text.lower()  # Chuyển tin nhắn về chữ thường để dò từ khóa
@@ -45,6 +42,20 @@ def local_fallback_6_fields(user_text: str, rag_article: dict = None) -> dict:  
     }
 
 def analyze_scam_content(user_text: str, rag_article: dict = None, api_key: str = None) -> dict:
+    valid_key = (api_key or os.environ.get("GEMINI_API_KEY", "")).strip()
+
+    # TỐI ƯU KẾT NỐI SIÊU TỐC: Nếu không có API Key Google thật (bắt đầu bằng AIza),
+    # lập tức chạy ngay Local Fallback 6 trường (< 0.01s), không lãng phí 30 giây chờ timeout mạng
+    if not valid_key or valid_key.startswith("YOUR_") or not valid_key.startswith("AIza"):
+        return local_fallback_6_fields(user_text, rag_article)
+
+    try:
+        from google import genai
+        from google.genai import types
+        ai_client = genai.Client(api_key=valid_key)
+    except Exception:
+        return local_fallback_6_fields(user_text, rag_article)
+
     rag_context = "Không có bài báo đối chiếu trực tiếp."  # Mặc định khi không khớp từ khóa nào trong kho
     if rag_article:  # Nếu tìm thấy bài báo khớp trong scam_knowledge.json
         rag_context = f"Tiêu đề: {rag_article.get('title')} ({rag_article.get('source')}) | Thủ đoạn: {rag_article.get('category_name')} | Tóm tắt: {rag_article.get('summary')}"  # Đưa bài báo đúng vào Prompt
@@ -73,10 +84,11 @@ def analyze_scam_content(user_text: str, rag_article: dict = None, api_key: str 
     }}
     """  # Kết thúc chuỗi Prompt chuẩn 6 trường
 
-    model_list = ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemini-3.8-flash"]  # Danh sách model xoay vòng
+    # Danh sách model Google Gemini chính thức hỗ trợ phản hồi nhanh (dưới 1 giây)
+    model_list = ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-2.5-flash"]
     for model_name in model_list:  # Duyệt qua từng model
         try:  # Gửi yêu cầu lên Google Gemini
-            response = client.models.generate_content(  # Gọi hàm sinh phản hồi
+            response = ai_client.models.generate_content(  # Gọi hàm sinh phản hồi
                 model=model_name,  # Tên model
                 contents=prompt,  # Nội dung Prompt
                 config=types.GenerateContentConfig(  # Cấu hình ép kiểu JSON
