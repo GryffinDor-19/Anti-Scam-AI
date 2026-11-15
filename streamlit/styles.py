@@ -80,6 +80,7 @@ def get_theme_css(theme_mode: str = "Dịu") -> str:
     """Sinh CSS động theo chế độ màu được chọn (Mặc định Dịu theo bảng màu đề xuất)"""
     t = THEMES.get(theme_mode, THEMES["Dịu"])
     tab_hover_bg = "rgba(255, 255, 255, 0.12)" if theme_mode == "Tối" else "rgba(255, 255, 255, 0.7)"
+    link_hover_color = "#60A5FA" if theme_mode == "Tối" else "#2563EB"
 
     return f"""<style>
 /* =========================================================================
@@ -318,31 +319,76 @@ a.em-call-btn:hover {{
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.45) !important;
 }}
 
-/* Nút bấm thứ cấp */
+/* =========================================================================
+   7. NÚT BẤM THỨ CẤP & NÚT LIÊN KẾT LINK BUTTON (st.link_button)
+   TƯƠNG PHẢN CAO TRÊN CẢ CHẾ ĐỘ SÁNG, DỊU VÀ TỐI (KHÔNG BAO GIỜ BỊ CHỮ TRẮNG TRÊN NỀN TRẮNG)
+   ========================================================================= */
 button[kind="secondary"],
 button[data-testid="baseButton-secondary"],
-.stButton button:not([kind="primary"]) {{
-    background-color: {t["card_bg"]} !important;
-    background: {t["card_bg"]} !important;
-    border: 1px solid {t["border_color"]} !important;
+.stButton button:not([kind="primary"]),
+a[data-testid="baseButton-secondary"],
+a[data-testid="stLinkButton"],
+div[data-testid="stLinkButton"] a,
+.stLinkButton a,
+div.stLinkButton a {{
+    background-color: {t["card_inner_bg"]} !important;
+    background: {t["card_inner_bg"]} !important;
+    border: 1.5px solid {t["border_color"]} !important;
     color: {t["text_primary"]} !important;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
     font-size: 14px !important;
     border-radius: 10px !important;
     box-shadow: {t["box_shadow"]} !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    padding: 8px 16px !important;
 }}
 
 button[kind="secondary"] *,
 button[data-testid="baseButton-secondary"] *,
-.stButton button:not([kind="primary"]) * {{
+.stButton button:not([kind="primary"]) *,
+a[data-testid="baseButton-secondary"] *,
+a[data-testid="stLinkButton"] *,
+div[data-testid="stLinkButton"] a *,
+.stLinkButton a *,
+div.stLinkButton a * {{
     color: {t["text_primary"]} !important;
+    -webkit-text-fill-color: {t["text_primary"]} !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    text-decoration: none !important;
 }}
 
 button[kind="secondary"]:hover,
 button[data-testid="baseButton-secondary"]:hover,
-.stButton button:not([kind="primary"]):hover {{
-    background-color: {t["card_inner_bg"]} !important;
-    border-color: #94a3b8 !important;
+.stButton button:not([kind="primary"]):hover,
+a[data-testid="baseButton-secondary"]:hover,
+a[data-testid="stLinkButton"]:hover,
+div[data-testid="stLinkButton"] a:hover,
+.stLinkButton a:hover,
+div.stLinkButton a:hover {{
+    background-color: {t["card_bg"]} !important;
+    background: {t["card_bg"]} !important;
+    border-color: {link_hover_color} !important;
+    color: {link_hover_color} !important;
+    box-shadow: {t["box_shadow_hover"]} !important;
+    transform: translateY(-1px) !important;
+}}
+
+button[kind="secondary"]:hover *,
+button[data-testid="baseButton-secondary"]:hover *,
+.stButton button:not([kind="primary"]):hover *,
+a[data-testid="baseButton-secondary"]:hover *,
+a[data-testid="stLinkButton"]:hover *,
+div[data-testid="stLinkButton"] a:hover *,
+.stLinkButton a:hover *,
+div.stLinkButton a:hover * {{
+    color: {link_hover_color} !important;
+    -webkit-text-fill-color: {link_hover_color} !important;
 }}
 
 /* =========================================================================
@@ -750,11 +796,15 @@ div[data-testid="stChatInput"] textarea::placeholder,
     font-size: {input_font} !important;
 }}
 
-/* 4. Chữ bên trong các nút bấm (giữ nguyên kích thước và padding của nút, chỉ chữ to hơn) */
+/* 4. Chữ bên trong các nút bấm và nút liên kết link button */
 button p, 
 button span, 
 div.stButton button p,
-div.stButton button span {{
+div.stButton button span,
+a[data-testid="stLinkButton"] p,
+a[data-testid="baseButton-secondary"] p,
+div[data-testid="stLinkButton"] a p,
+.stLinkButton a p {{
     font-size: {button_font} !important;
     font-weight: 700 !important;
 }}
