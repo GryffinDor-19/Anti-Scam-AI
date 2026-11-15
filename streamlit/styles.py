@@ -79,6 +79,7 @@ THEMES = {
 def get_theme_css(theme_mode: str = "Dịu") -> str:
     """Sinh CSS động theo chế độ màu được chọn (Mặc định Dịu theo bảng màu đề xuất)"""
     t = THEMES.get(theme_mode, THEMES["Dịu"])
+    tab_hover_bg = "rgba(255, 255, 255, 0.12)" if theme_mode == "Tối" else "rgba(255, 255, 255, 0.7)"
 
     return f"""<style>
 /* =========================================================================
@@ -206,7 +207,11 @@ div[data-testid="element-container"]:has(#fixed-emergency-btn-anchor) + div[data
 div.element-container:has(#fixed-emergency-btn-anchor) + div.element-container button,
 div:has(> #fixed-emergency-btn-anchor) + div button,
 div.stButton:has(button[key="btn_corner_emergency"]) button,
-button[key="btn_corner_emergency"] {{
+button[key="btn_corner_emergency"],
+div[data-testid="stColumn"]:last-child div.stButton button,
+div[data-testid="column"]:last-child div.stButton button,
+button[data-testid="baseButton-primary"],
+button[kind="primary"] {{
     background-color: #dc2626 !important;
     background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
     color: #ffffff !important;
@@ -228,7 +233,9 @@ button[key="btn_corner_emergency"] {{
 div[data-testid="element-container"]:has(#fixed-emergency-btn-anchor) + div[data-testid="element-container"] button *,
 div.element-container:has(#fixed-emergency-btn-anchor) + div.element-container button *,
 div:has(> #fixed-emergency-btn-anchor) + div button *,
-button[key="btn_corner_emergency"] * {{
+button[key="btn_corner_emergency"] *,
+button[data-testid="baseButton-primary"] *,
+button[kind="primary"] * {{
     color: #ffffff !important;
     font-weight: 800 !important;
     white-space: nowrap !important;
@@ -243,8 +250,17 @@ button[key="btn_corner_emergency"]:hover {{
     box-shadow: 0 6px 22px rgba(220, 38, 38, 0.6) !important;
 }}
 
+/* Nút Gọi Ngay trong thẻ Hotline */
+a.em-call-btn:hover {{
+    filter: brightness(1.15) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.45) !important;
+}}
+
 /* Nút bấm thứ cấp */
-button[kind="secondary"] {{
+button[kind="secondary"],
+button[data-testid="baseButton-secondary"],
+.stButton button:not([kind="primary"]) {{
     background-color: {t["card_bg"]} !important;
     background: {t["card_bg"]} !important;
     border: 1px solid {t["border_color"]} !important;
@@ -255,7 +271,15 @@ button[kind="secondary"] {{
     box-shadow: {t["box_shadow"]} !important;
 }}
 
-button[kind="secondary"]:hover {{
+button[kind="secondary"] *,
+button[data-testid="baseButton-secondary"] *,
+.stButton button:not([kind="primary"]) * {{
+    color: {t["text_primary"]} !important;
+}}
+
+button[kind="secondary"]:hover,
+button[data-testid="baseButton-secondary"]:hover,
+.stButton button:not([kind="primary"]):hover {{
     background-color: {t["card_inner_bg"]} !important;
     border-color: #94a3b8 !important;
 }}
@@ -322,7 +346,7 @@ div[data-testid="stTabs"] button[role="tab"] div,
 
 div[data-testid="stTabs"] button[role="tab"]:not([aria-selected="true"]):hover,
 .stTabs button[role="tab"]:not([aria-selected="true"]):hover {{
-    background-color: rgba(255, 255, 255, 0.7) !important;
+    background-color: {tab_hover_bg} !important;
     color: {t["text_primary"]} !important;
 }}
 
@@ -436,9 +460,9 @@ div[data-testid="stToggle"] label span {{
 
 div[data-testid="stToggle"] svg,
 [data-testid="stTooltipIcon"] svg {{
-    fill: #0F1B33 !important;
-    color: #0F1B33 !important;
-    stroke: #0F1B33 !important;
+    fill: {t["text_primary"]} !important;
+    color: {t["text_primary"]} !important;
+    stroke: {t["text_primary"]} !important;
     opacity: 0.9 !important;
 }}
 

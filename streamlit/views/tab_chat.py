@@ -65,13 +65,16 @@ def render_tab_chat(rag_matcher):
         process_user_message(pending_text, rag_matcher)
 
     # 3. THANH TRẠNG THÁI GỌN GÀNG ĐẦU KHUNG CHAT
+    is_dark = (st.session_state.get("theme_mode", "Dịu") == "Tối")
+    status_text_color = "#F8FAFC" if is_dark else "#0F1B33"
+
     col_status_left, col_status_right = st.columns([4, 1])
     with col_status_left:
         st.markdown(
-            "<div style='display: flex; align-items: center; gap: 8px; padding: 4px 0;'>"
-            "<span style='width: 10px; height: 10px; border-radius: 50%; background-color: #10b981; display: inline-block;'></span>"
-            "<span style='font-size: 14.5px; font-weight: 700; color: var(--text-primary, #0F1B33);'>Trợ lý AntiScam sẵn sàng hỗ trợ</span>"
-            "</div>",
+            f"<div style='display: flex; align-items: center; gap: 8px; padding: 4px 0;'>"
+            f"<span style='width: 10px; height: 10px; border-radius: 50%; background-color: #10b981; display: inline-block;'></span>"
+            f"<span style='font-size: 14.5px; font-weight: 700; color: {status_text_color};'>Trợ lý AntiScam sẵn sàng hỗ trợ</span>"
+            f"</div>",
             unsafe_allow_html=True
         )
     with col_status_right:
@@ -133,16 +136,20 @@ def render_tab_chat(rag_matcher):
 
 def render_welcome_screen():
     """Màn hình chào mừng thân thiện tập trung toàn bộ 4 kịch bản thử nghiệm tại 1 nơi duy nhất"""
+    is_dark = (st.session_state.get("theme_mode", "Dịu") == "Tối")
+    welcome_body_color = "#F8FAFC" if is_dark else "#0F1B33"
+    welcome_guide_color = "#F8FAFC" if is_dark else "#0F1B33"
+
     with st.chat_message("assistant", avatar="🛡️"):
         st.markdown(
-            "<div style='font-size: 15px; font-weight: 700; color: #1d4ed8; margin-bottom: 6px;'>Trợ lý AntiScam</div>"
-            "<div style='font-size: 14.5px; line-height: 1.6; color: var(--text-primary, #0F1B33); margin-bottom: 12px;'>"
-            "Chào bạn! Bạn có thể dán nội dung tin nhắn, đường link nghi vấn hoặc bấm thử ngay các kịch bản thực tế bên dưới:"
-            "</div>",
+            f"<div style='font-size: 15px; font-weight: 700; color: #3b82f6; margin-bottom: 6px;'>Trợ lý AntiScam</div>"
+            f"<div style='font-size: 14.5px; line-height: 1.6; color: {welcome_body_color}; margin-bottom: 12px;'>"
+            f"Chào bạn! Bạn có thể dán nội dung tin nhắn, đường link nghi vấn hoặc bấm thử ngay các kịch bản thực tế bên dưới:"
+            f"</div>",
             unsafe_allow_html=True
         )
 
-        st.markdown("<div style='font-size: 14px; font-weight: 700; color: var(--text-primary, #0F1B33); margin-bottom: 8px;'>💡 Bấm chọn kịch bản để thử nhanh:</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='font-size: 14px; font-weight: 700; color: {welcome_guide_color}; margin-bottom: 8px;'>💡 Bấm chọn kịch bản để thử nhanh:</div>", unsafe_allow_html=True)
         
         # 4 Kịch bản thử nhanh bố trí 2 hàng 2 cột gọn gàng ngay trong khung chat
         col_btn1, col_btn2 = st.columns(2)
@@ -188,9 +195,13 @@ def process_user_message(text: str, rag_matcher):
     traps = ai_data.get("psychological_traps", [])
     recommendations = ai_data.get("action_recommendations", [])
 
-    # Xác định nguồn phân tích thực tế
-    if active_api_key and "YOUR_API" not in active_api_key and "API KEY" not in active_api_key:
-        model_source = "Google Gemini AI (gemini-3.8-flash / gemini-4)"
+    # Xác định nguồn phân tích thực tế (hỗ trợ cả trường source và layer do Backend trả về)
+    backend_source = ai_data.get("source") or ai_data.get("model_source")
+    backend_layer = ai_data.get("layer")
+    if backend_source:
+        model_source = f"{backend_source} ({backend_layer})" if backend_layer else str(backend_source)
+    elif active_api_key and "YOUR_API" not in active_api_key and "API KEY" not in active_api_key:
+        model_source = "Google Gemini AI"
     else:
         model_source = "Bộ lọc nhanh (không dùng AI)"
 
@@ -374,9 +385,9 @@ def render_conversational_assistant_response(msg, rag_matcher):
 
         # 4. NGUỒN PHÂN TÍCH MINH BẠCH - VIẾT GỌN GÀNG, FONT >= 13PX, ĐỔI 0.0s THÀNH < 0.1s
         if "Gemini" in model_source or "gemini" in model_source.lower():
-            source_label = "Phân tích bởi Google Gemini AI · Đối chiếu 20 bài báo chính thống"
+            source_label = f"Phân tích bởi {model_source} · Đối chiếu 20 bài báo"
         else:
-            source_label = "Phân tích bằng bộ lọc nhanh (không dùng AI) · Đối chiếu 20 bài báo"
+            source_label = f"Phân tích bởi {model_source} · Đối chiếu 20 bài báo"
 
         time_label = "< 0.1s" if elapsed_time < 0.1 else f"{elapsed_time}s"
 
