@@ -204,11 +204,15 @@ p, span, label, div {{
 /* =========================================================================
    6. NÚT 'TÔI LỠ BỊ LỪA!' - ĐỎ RỰC, ĐỌC TRỌN VẸN CÂU, KHÔNG BAO GIỜ BỊ CẮT CHỮ
    ========================================================================= */
+.st-key-btn_corner_emergency button,
+div.st-key-btn_corner_emergency button,
+div[data-testid="stElementContainer"]:has(#fixed-emergency-btn-anchor) + div[data-testid="stElementContainer"] button,
 div[data-testid="element-container"]:has(#fixed-emergency-btn-anchor) + div[data-testid="element-container"] button,
 div.element-container:has(#fixed-emergency-btn-anchor) + div.element-container button,
 div:has(> #fixed-emergency-btn-anchor) + div button,
 div.stButton:has(button[key="btn_corner_emergency"]) button,
 button[key="btn_corner_emergency"],
+button[data-testid="stBaseButton-primary"],
 button[data-testid="baseButton-primary"],
 button[kind="primary"] {{
     background-color: #dc2626 !important;
@@ -229,19 +233,23 @@ button[kind="primary"] {{
     justify-content: center !important;
 }}
 
+.st-key-btn_corner_emergency button *,
+div.st-key-btn_corner_emergency button *,
+div[data-testid="stElementContainer"]:has(#fixed-emergency-btn-anchor) + div[data-testid="stElementContainer"] button *,
 div[data-testid="element-container"]:has(#fixed-emergency-btn-anchor) + div[data-testid="element-container"] button *,
 div.element-container:has(#fixed-emergency-btn-anchor) + div.element-container button *,
 div:has(> #fixed-emergency-btn-anchor) + div button *,
 button[key="btn_corner_emergency"] *,
+button[data-testid="stBaseButton-primary"] *,
 button[data-testid="baseButton-primary"] *,
 button[kind="primary"] * {{
     color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
     font-weight: 800 !important;
     white-space: nowrap !important;
 }}
 
-div[data-testid="element-container"]:has(#fixed-emergency-btn-anchor) + div[data-testid="element-container"] button:hover,
-div.element-container:has(#fixed-emergency-btn-anchor) + div.element-container button:hover,
+.st-key-btn_corner_emergency button:hover,
 button[key="btn_corner_emergency"]:hover {{
     background-color: #b91c1c !important;
     background: #b91c1c !important;
@@ -252,6 +260,9 @@ button[key="btn_corner_emergency"]:hover {{
 /* =========================================================================
    6B. NÚT 'XÓA ĐOẠN CHAT' - DANGER PILL ĐỎ RỰC, CHỮ TRẮNG TINH RÕ NÉT 100%
    ========================================================================= */
+.st-key-btn_clear_chat button,
+div.st-key-btn_clear_chat button,
+div[data-testid="stElementContainer"]:has(#clear-chat-btn-anchor) + div[data-testid="stElementContainer"] button,
 div[data-testid="element-container"]:has(#clear-chat-btn-anchor) + div[data-testid="element-container"] button,
 div.element-container:has(#clear-chat-btn-anchor) + div.element-container button,
 div:has(> #clear-chat-btn-anchor) + div button,
@@ -278,12 +289,16 @@ div.stButton:has(button[key="btn_clear_chat"]) button {{
     justify-content: center !important;
 }}
 
+.st-key-btn_clear_chat button *,
+div.st-key-btn_clear_chat button *,
+.st-key-btn_clear_chat button p,
+.st-key-btn_clear_chat button span,
+div[data-testid="stElementContainer"]:has(#clear-chat-btn-anchor) + div[data-testid="stElementContainer"] button *,
 div[data-testid="element-container"]:has(#clear-chat-btn-anchor) + div[data-testid="element-container"] button *,
 div.element-container:has(#clear-chat-btn-anchor) + div.element-container button *,
 div:has(> #clear-chat-btn-anchor) + div button *,
 button[key="btn_clear_chat"] *,
 div.stButton:has(button[key="btn_clear_chat"]) button *,
-div[data-testid="element-container"]:has(#clear-chat-btn-anchor) + div[data-testid="element-container"] button p,
 button[key="btn_clear_chat"] p {{
     color: #ffffff !important;
     -webkit-text-fill-color: #ffffff !important;
@@ -294,9 +309,9 @@ button[key="btn_clear_chat"] p {{
     padding: 0 !important;
 }}
 
-div[data-testid="element-container"]:has(#clear-chat-btn-anchor) + div[data-testid="element-container"] button:hover,
-div.element-container:has(#clear-chat-btn-anchor) + div.element-container button:hover,
-div:has(> #clear-chat-btn-anchor) + div button:hover,
+.st-key-btn_clear_chat button:hover,
+div.st-key-btn_clear_chat button:hover,
+div[data-testid="stElementContainer"]:has(#clear-chat-btn-anchor) + div[data-testid="stElementContainer"] button:hover,
 button[key="btn_clear_chat"]:hover,
 div.stButton:has(button[key="btn_clear_chat"]) button:hover {{
     background-color: #b91c1c !important;
@@ -324,8 +339,10 @@ a.em-call-btn:hover {{
    TƯƠNG PHẢN CAO TRÊN CẢ CHẾ ĐỘ SÁNG, DỊU VÀ TỐI (KHÔNG BAO GIỜ BỊ CHỮ TRẮNG TRÊN NỀN TRẮNG)
    ========================================================================= */
 button[kind="secondary"],
+button[data-testid="stBaseButton-secondary"],
 button[data-testid="baseButton-secondary"],
-.stButton button:not([kind="primary"]),
+.stButton button:not([kind="primary"]):not([data-testid="stBaseButton-primary"]):not([data-testid="baseButton-primary"]),
+a[data-testid="stBaseButton-secondary"],
 a[data-testid="baseButton-secondary"],
 a[data-testid="stLinkButton"],
 div[data-testid="stLinkButton"] a,
@@ -349,8 +366,10 @@ div.stLinkButton a {{
 }}
 
 button[kind="secondary"] *,
+button[data-testid="stBaseButton-secondary"] *,
 button[data-testid="baseButton-secondary"] *,
-.stButton button:not([kind="primary"]) *,
+.stButton button:not([kind="primary"]):not([data-testid="stBaseButton-primary"]):not([data-testid="baseButton-primary"]) *,
+a[data-testid="stBaseButton-secondary"] *,
 a[data-testid="baseButton-secondary"] *,
 a[data-testid="stLinkButton"] *,
 div[data-testid="stLinkButton"] a *,
@@ -364,8 +383,10 @@ div.stLinkButton a * {{
 }}
 
 button[kind="secondary"]:hover,
+button[data-testid="stBaseButton-secondary"]:hover,
 button[data-testid="baseButton-secondary"]:hover,
 .stButton button:not([kind="primary"]):hover,
+a[data-testid="stBaseButton-secondary"]:hover,
 a[data-testid="baseButton-secondary"]:hover,
 a[data-testid="stLinkButton"]:hover,
 div[data-testid="stLinkButton"] a:hover,
@@ -380,14 +401,18 @@ div.stLinkButton a:hover {{
 }}
 
 button[kind="secondary"]:hover *,
+button[data-testid="stBaseButton-secondary"]:hover *,
 button[data-testid="baseButton-secondary"]:hover *,
 .stButton button:not([kind="primary"]):hover *,
+a[data-testid="stBaseButton-secondary"]:hover *,
 a[data-testid="baseButton-secondary"]:hover *,
 a[data-testid="stLinkButton"]:hover *,
 div[data-testid="stLinkButton"] a:hover *,
 .stLinkButton a:hover *,
 div.stLinkButton a:hover * {{
     color: {link_hover_color} !important;
+    -webkit-text-fill-color: {link_hover_color} !important;
+}}
     -webkit-text-fill-color: {link_hover_color} !important;
 }}
 
@@ -707,6 +732,17 @@ mark.kw-danger {{
     font-size: inherit !important;
     display: inline-block !important;
     line-height: 1.4 !important;
+}}
+
+/* =========================================================================
+   13B. HỘP CẢNH BÁO VIỆC CẦN LÀM NGAY LẬP TỨC - TƯƠNG PHẢN TUYỆT ĐỐI
+   ========================================================================= */
+.rec-urgent-title {{
+    color: #991b1b !important;
+    -webkit-text-fill-color: #991b1b !important;
+    font-weight: 800 !important;
+    font-size: 16px !important;
+    letter-spacing: 0.3px !important;
 }}
 
 /* =========================================================================

@@ -69,7 +69,7 @@ def render_tab_chat(rag_matcher):
         st.markdown(
             f"<div style='display: flex; align-items: center; gap: 8px; padding: 4px 0;'>"
             f"<span style='width: 10px; height: 10px; border-radius: 50%; background-color: #10b981; display: inline-block;'></span>"
-            f"<span style='font-size: 15.5px; font-weight: 700; color: {status_text_color};'>Trợ lý AntiScam sẵn sàng hỗ trợ</span>"
+            f"<span style='font-size: 15px; font-weight: 700; color: {status_text_color};'>Trợ lý AntiScam sẵn sàng · Chuỗi phòng thủ 3 lớp kích hoạt</span>"
             f"</div>",
             unsafe_allow_html=True
         )
@@ -131,39 +131,131 @@ def render_tab_chat(rag_matcher):
 
 
 def render_welcome_screen():
-    """Màn hình chào mừng thân thiện tập trung toàn bộ 4 kịch bản thử nghiệm tại 1 nơi duy nhất"""
+    """Màn hình chào mừng thông minh: Giới thiệu Chuỗi phòng thủ 3 lớp và Đề xuất các tin nhắn mẫu 1-click"""
     is_dark = (st.session_state.get("theme_mode", "Dịu") == "Tối")
-    welcome_body_color = "#F8FAFC" if is_dark else "#0F1B33"
-    welcome_guide_color = "#F8FAFC" if is_dark else "#0F1B33"
+    text_main = "#F8FAFC" if is_dark else "#0F1B33"
+    text_sub = "#CBD5E1" if is_dark else "#374662"
+    card_bg = "#1C2541" if is_dark else "#EEF2F8"
+    card_inner = "#151C33" if is_dark else "#FFFFFF"
+    border_col = "#3A506B" if is_dark else "#B8C5D6"
 
-    with st.chat_message("assistant", avatar="🛡️"):
-        st.markdown(
-            f"<div style='font-size: 15px; font-weight: 700; color: #3b82f6; margin-bottom: 6px;'>Trợ lý AntiScam</div>"
-            f"<div style='font-size: 14.5px; line-height: 1.6; color: {welcome_body_color}; margin-bottom: 12px;'>"
-            f"Chào bạn! Bạn có thể dán nội dung tin nhắn, đường link nghi vấn hoặc bấm thử ngay các kịch bản thực tế bên dưới:"
-            f"</div>",
-            unsafe_allow_html=True
-        )
+    with st.container():
+        # 1. TIÊU ĐỀ & LỜI CHÀO
+        st.markdown(f"""
+        <div style='background-color: {card_bg}; border: 1.5px solid {border_col}; border-radius: 14px; padding: 18px 22px; margin-bottom: 16px;'>
+            <div style='display: flex; align-items: center; gap: 10px; margin-bottom: 8px;'>
+                <span style='font-size: 26px;'>🛡️</span>
+                <div>
+                    <div style='font-size: 18px; font-weight: 800; color: #2563EB;'>Trợ Lý Phòng Chống Lừa Đảo Trực Tuyến AntiScam AI</div>
+                    <div style='font-size: 14px; color: {text_sub};'>Sẵn sàng đối soát tin nhắn, phát hiện bẫy tâm lý và giám định hóa đơn chuyển khoản tức thì</div>
+                </div>
+            </div>
+            <div style='font-size: 14.5px; color: {text_main}; line-height: 1.6; margin-top: 10px;'>
+                Bạn có thể <strong>dán trực tiếp tin nhắn nghi vấn</strong> vào ô chat ở đáy màn hình, bấm <strong>📎 Tải ảnh bill</strong> để soi biên lai, hoặc <strong>chọn nhanh các kịch bản lừa đảo thực tế</strong> được đề xuất bên dưới để trải nghiệm:
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
-        st.markdown(f"<div style='font-size: 14px; font-weight: 700; color: {welcome_guide_color}; margin-bottom: 8px;'>💡 Bấm chọn kịch bản để thử nhanh:</div>", unsafe_allow_html=True)
-        
-        # 4 Kịch bản thử nhanh bố trí 2 hàng 2 cột gọn gàng ngay trong khung chat
-        col_btn1, col_btn2 = st.columns(2)
-        with col_btn1:
-            if st.button("🟢 Thử tin bình thường (Rủ đi chơi)", use_container_width=True):
-                st.session_state.pending_user_query = "Tối nay rảnh không qua quán cà phê ngồi tí nhé, tao vừa nhận lương để tao bao chầu này!"
-                st.rerun()
-            if st.button("💼 Thử CTV Shopee (Hoa hồng 40%)", use_container_width=True):
-                st.session_state.pending_user_query = "Tuyển CTV làm nhiệm vụ xem video Shopee/TikTok hoa hồng 30-50% mỗi ngày, nạp cọc 200k rút ngay 350k!"
-                st.rerun()
+        # 2. KHỐI HIỂN THỊ CƠ CHẾ PHÒNG THỦ 3 LỚP RÕ RÀNG
+        st.markdown(f"""
+        <div style='background-color: {card_bg}; border: 1px solid {border_col}; border-radius: 12px; padding: 12px 18px; margin-bottom: 16px;'>
+            <div style='font-size: 13.5px; font-weight: 800; color: #2563EB; margin-bottom: 8px;'>
+                ⚡ CHUỖI PHÒNG THỦ ĐA LỚP TỰ ĐỘNG (MULTI-LAYER DEFENSE PIPELINE):
+            </div>
+            <div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; font-size: 13px; color: {text_main};'>
+                <div style='background: {card_inner}; padding: 8px 12px; border-radius: 8px; border-left: 3.5px solid #10B981;'>
+                    <strong>Lớp 1: Bộ Lọc Nhanh (< 0.05s)</strong><br/>
+                    <span style='color: {text_sub}; font-size: 12.5px;'>Quét lập tức từ khóa đe dọa, bắt bớ, cọc tiền, rửa tiền.</span>
+                </div>
+                <div style='background: {card_inner}; padding: 8px 12px; border-radius: 8px; border-left: 3.5px solid #3B82F6;'>
+                    <strong>Lớp 2: RAG Đối Soát Tri Thức</strong><br/>
+                    <span style='color: {text_sub}; font-size: 12.5px;'>Đối chiếu 20+ bài báo và hồ sơ lừa đảo từ Cục An toàn thông tin.</span>
+                </div>
+                <div style='background: {card_inner}; padding: 8px 12px; border-radius: 8px; border-left: 3.5px solid #8B5CF6;'>
+                    <strong>Lớp 3: AI Phân Tích Bẫy Tâm Lý</strong><br/>
+                    <span style='color: {text_sub}; font-size: 12.5px;'>Bóc trần kịch bản thao túng uy quyền, ép thời gian, dọa phong tỏa.</span>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
-        with col_btn2:
-            if st.button("🚨 Thử tin lừa đảo (Công an dọa bắt)", use_container_width=True):
-                st.session_state.pending_user_query = "Tôi là Đại úy Nguyễn Văn Hùng cán bộ điều tra Cục Cảnh sát hình sự. Tài khoản của anh đang liên quan đường dây rửa tiền 40 tỷ, yêu cầu chuyển 150 triệu vào tài khoản an toàn gấp!"
-                st.rerun()
-            if st.button("🚗 Thử phạt nguội link độc", use_container_width=True):
-                st.session_state.pending_user_query = "CUC CSGT THONG BAO: Phuong tien 29A-888.88 vi pham toc do. Truy cap ngay tra-cuu-phat-nguoi.csgt-online.xyz de nop phat!"
-                st.rerun()
+        # 3. MÀN HÌNH ĐỀ XUẤT CÁC TIN NHẮN MẪU DỄ THAO TÁC (1-CLICK PROMPT CARDS)
+        st.markdown(f"<div style='font-size: 15px; font-weight: 800; color: {text_main}; margin-bottom: 10px;'>💡 Đề xuất các kịch bản lừa đảo phổ biến để thử nhanh (1-Click):</div>", unsafe_allow_html=True)
+
+        col_c1, col_c2 = st.columns(2, gap="medium")
+
+        # Kịch bản 1: Giả danh công an
+        with col_c1:
+            with st.container(border=True):
+                st.markdown("<div style='font-weight: 800; font-size: 14.5px; color: #DC2626;'>🚨 1. Giả danh Công an điều tra rửa tiền</div>", unsafe_allow_html=True)
+                st.caption("Dọa bắt giam, mạo danh cán bộ Cục Cảnh sát hình sự để ép chuyển tiền vào tài khoản an toàn.")
+                st.markdown(
+                    "<div style='background: rgba(220,38,38,0.06); padding: 8px 10px; border-radius: 6px; font-size: 13px; font-style: italic; margin-bottom: 8px;'>"
+                    "\"Tôi là Đại úy Nguyễn Văn Hùng Cục CSHS. Tài khoản anh liên quan rửa tiền 40 tỷ, yêu cầu chuyển 150 triệu vào tài khoản an toàn gấp!\""
+                    "</div>",
+                    unsafe_allow_html=True
+                )
+                if st.button("🚀 Thử kịch bản Công an dọa bắt", key="demo_btn_police", use_container_width=True):
+                    st.session_state.pending_user_query = "Tôi là Đại úy Nguyễn Văn Hùng cán bộ điều tra Cục Cảnh sát hình sự. Tài khoản của anh đang liên quan đường dây rửa tiền 40 tỷ, yêu cầu chuyển 150 triệu vào tài khoản an toàn gấp!"
+                    st.rerun()
+
+        # Kịch bản 2: Tuyển CTV Shopee/TikTok
+        with col_c2:
+            with st.container(border=True):
+                st.markdown("<div style='font-weight: 800; font-size: 14.5px; color: #D97706;'>💼 2. Tuyển CTV việc nhẹ lương cao</div>", unsafe_allow_html=True)
+                st.caption("Lừa làm nhiệm vụ xem video, hưởng hoa hồng khủng 30-50%, mồi nạp cọc nhỏ rồi siết tiền.")
+                st.markdown(
+                    "<div style='background: rgba(217,119,6,0.06); padding: 8px 10px; border-radius: 6px; font-size: 13px; font-style: italic; margin-bottom: 8px;'>"
+                    "\"Tuyển CTV làm nhiệm vụ xem video Shopee/TikTok hoa hồng 30-50% mỗi ngày, nạp cọc 200k rút ngay 350k!\""
+                    "</div>",
+                    unsafe_allow_html=True
+                )
+                if st.button("🚀 Thử kịch bản Tuyển CTV nạp cọc", key="demo_btn_ctv", use_container_width=True):
+                    st.session_state.pending_user_query = "Tuyển CTV làm nhiệm vụ xem video Shopee/TikTok hoa hồng 30-50% mỗi ngày, nạp cọc 200k rút ngay 350k!"
+                    st.rerun()
+
+        col_c3, col_c4 = st.columns(2, gap="medium")
+
+        # Kịch bản 3: Shipper giục nạp tiền / link độc
+        with col_c3:
+            with st.container(border=True):
+                st.markdown("<div style='font-weight: 800; font-size: 14.5px; color: #EA580C;'>📦 3. Shipper giao hàng gửi link độc</div>", unsafe_allow_html=True)
+                st.caption("Mạo danh shipper giao kiện hàng giả vờ, giục chuyển khoản cọc hoặc bấm link tra cứu giả.")
+                st.markdown(
+                    "<div style='background: rgba(234,88,12,0.06); padding: 8px 10px; border-radius: 6px; font-size: 13px; font-style: italic; margin-bottom: 8px;'>"
+                    "\"Em là shipper GHTK giao đơn Shopee 240k, anh chị đi vắng vui lòng bấm tra-cuu-don.xyz chuyển khoản để em giữ hàng!\""
+                    "</div>",
+                    unsafe_allow_html=True
+                )
+                if st.button("🚀 Thử kịch bản Shipper giả mạo", key="demo_btn_shipper", use_container_width=True):
+                    st.session_state.pending_user_query = "Em là shipper GHTK giao đơn Shopee 240k, anh chị đi vắng vui lòng bấm tra-cuu-don.xyz chuyển khoản cọc để em giữ hàng!"
+                    st.rerun()
+
+        # Kịch bản 4: Phạt nguội giao thông
+        with col_c4:
+            with st.container(border=True):
+                st.markdown("<div style='font-weight: 800; font-size: 14.5px; color: #7C3AED;'>🚗 4. Phạt nguội vi phạm giao thông</div>", unsafe_allow_html=True)
+                st.caption("SMS mạo danh Cục CSGT thông báo xe vi phạm, dụ dỗ truy cập trang web giả mạo nộp phạt.")
+                st.markdown(
+                    "<div style='background: rgba(124,58,237,0.06); padding: 8px 10px; border-radius: 6px; font-size: 13px; font-style: italic; margin-bottom: 8px;'>"
+                    "\"CUC CSGT THONG BAO: Phuong tien 29A-888.88 vi pham toc do. Truy cap ngay tra-cuu-phat-nguoi.csgt-online.xyz de nop phat!\""
+                    "</div>",
+                    unsafe_allow_html=True
+                )
+                if st.button("🚀 Thử kịch bản Phạt nguội", key="demo_btn_traffic", use_container_width=True):
+                    st.session_state.pending_user_query = "CUC CSGT THONG BAO: Phuong tien 29A-888.88 vi pham toc do. Truy cap ngay tra-cuu-phat-nguoi.csgt-online.xyz de nop phat!"
+                    st.rerun()
+
+        # Kịch bản 5: Tin nhắn bình thường (An toàn)
+        st.markdown("<div style='height: 4px;'></div>", unsafe_allow_html=True)
+        with st.container(border=True):
+            col_safe_text, col_safe_btn = st.columns([3, 1.2], vertical_alignment="center")
+            with col_safe_text:
+                st.markdown("<span style='font-weight: 700; color: #16A34A;'>🟢 Tin nhắn sinh hoạt an toàn:</span> *\"Tối nay rảnh không qua quán cà phê ngồi tí nhé, tao vừa nhận lương để tao bao chầu này!\"*", unsafe_allow_html=True)
+            with col_safe_btn:
+                if st.button("👉 Thử tin nhắn an toàn", key="demo_btn_safe", use_container_width=True):
+                    st.session_state.pending_user_query = "Tối nay rảnh không qua quán cà phê ngồi tí nhé, tao vừa nhận lương để tao bao chầu này!"
+                    st.rerun()
 
 
 def process_user_message(text: str, rag_matcher):
@@ -348,25 +440,25 @@ def render_conversational_assistant_response(msg, rag_matcher):
         # 2. ĐẶT 'VIỆC CẦN LÀM NGAY LẬP TỨC' LÊN ĐẦU TIÊN (HÀNH ĐỘNG TRƯỚC - GIẢI THÍCH SAU)
         if score >= 40:
             is_dark = (st.session_state.get("theme_mode", "Dịu") == "Tối")
-            rec_card_bg = "#2A0A0E" if is_dark else "#FEF2F2"
+            rec_card_bg = "#2D1215" if is_dark else "#FEF2F2"
             rec_card_border = "#EF4444" if is_dark else "#F87171"
-            rec_title_color = "#FECACA" if is_dark else "#B91C1C"
-            rec_list_color = "#F1F5F9" if is_dark else "#7F1D1D"
+            rec_title_color = "#FCA5A5" if is_dark else "#991B1B"
+            rec_list_color = "#FFFFFF" if is_dark else "#7F1D1D"
 
             rec_items = recommendations if recommendations else [
                 "Tuyệt đối không chuyển tiền và không bấm vào đường link lạ trong tin nhắn.",
                 "Cúp máy ngay lập tức, không làm theo các yêu cầu chuyển khoản hoặc cài app lạ.",
                 "Gọi ngay tổng đài 156 hoặc Hotline A05 (069 234 8560) để xác minh vụ việc."
             ]
-            recs_html = "".join([f"<li style='margin-bottom: 5px; color: {rec_list_color} !important; font-size: 15px; line-height: 1.7;'>{r}</li>" for r in rec_items])
+            recs_html = "".join([f"<li style='margin-bottom: 5px; color: {rec_list_color} !important; -webkit-text-fill-color: {rec_list_color} !important; font-size: 15px; line-height: 1.7;'>{r}</li>" for r in rec_items])
 
             st.markdown(f"""
             <div style='background-color: {rec_card_bg}; border: 1.5px solid {rec_card_border}; border-radius: 12px; padding: 14px 18px; margin-bottom: 14px;'>
                 <div style='display: flex; align-items: center; gap: 8px; margin-bottom: 8px;'>
                     <span style='font-size: 18px;'>🚨</span>
-                    <span style='color: {rec_title_color} !important; font-weight: 800; font-size: 16px; letter-spacing: 0.3px;'>VIỆC BẠN CẦN LÀM NGAY LẬP TỨC:</span>
+                    <span class='rec-urgent-title' style='color: {rec_title_color} !important; -webkit-text-fill-color: {rec_title_color} !important; font-weight: 800; font-size: 16px; letter-spacing: 0.3px;'>VIỆC BẠN CẦN LÀM NGAY LẬP TỨC:</span>
                 </div>
-                <ul style='color: {rec_list_color} !important; font-size: 15px; line-height: 1.7; margin: 0; padding-left: 22px; font-weight: 600;'>
+                <ul style='color: {rec_list_color} !important; -webkit-text-fill-color: {rec_list_color} !important; font-size: 15px; line-height: 1.7; margin: 0; padding-left: 22px; font-weight: 600;'>
                     {recs_html}
                 </ul>
             </div>
