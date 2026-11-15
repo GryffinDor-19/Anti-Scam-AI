@@ -262,12 +262,19 @@ div.stButton:has(button[key="btn_clear_chat"]) button {{
     font-size: 13.5px !important;
     font-weight: 700 !important;
     padding: 6px 14px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
+    min-width: 0 !important;
     border-radius: 9999px !important;
     box-shadow: 0 2px 8px rgba(220, 38, 38, 0.35) !important;
     border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
     cursor: pointer !important;
     white-space: nowrap !important;
     transition: all 0.2s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }}
 
 div[data-testid="element-container"]:has(#clear-chat-btn-anchor) + div[data-testid="element-container"] button *,
@@ -282,6 +289,8 @@ button[key="btn_clear_chat"] p {{
     font-weight: 700 !important;
     font-size: 13.5px !important;
     white-space: nowrap !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }}
 
 div[data-testid="element-container"]:has(#clear-chat-btn-anchor) + div[data-testid="element-container"] button:hover,
@@ -644,10 +653,14 @@ div[data-testid="stChatInput"] button svg,
 mark.kw-danger {{
     background-color: #fee2e2 !important;
     color: #7f1d1d !important;
+    -webkit-text-fill-color: #7f1d1d !important;
     font-weight: 700 !important;
-    padding: 2px 6px !important;
+    padding: 1px 6px !important;
     border-radius: 4px !important;
     border: 1px solid #f87171 !important;
+    font-size: inherit !important;
+    display: inline-block !important;
+    line-height: 1.4 !important;
 }}
 
 /* =========================================================================

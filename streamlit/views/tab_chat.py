@@ -64,23 +64,23 @@ def render_tab_chat(rag_matcher):
     is_dark = (st.session_state.get("theme_mode", "Dịu") == "Tối")
     status_text_color = "#F8FAFC" if is_dark else "#0F1B33"
 
-    col_status_left, col_status_right = st.columns([4, 1])
+    col_status_left, col_status_right = st.columns([3.2, 1.4], vertical_alignment="center")
     with col_status_left:
         st.markdown(
             f"<div style='display: flex; align-items: center; gap: 8px; padding: 4px 0;'>"
             f"<span style='width: 10px; height: 10px; border-radius: 50%; background-color: #10b981; display: inline-block;'></span>"
-            f"<span style='font-size: 14.5px; font-weight: 700; color: {status_text_color};'>Trợ lý AntiScam sẵn sàng hỗ trợ</span>"
+            f"<span style='font-size: 15.5px; font-weight: 700; color: {status_text_color};'>Trợ lý AntiScam sẵn sàng hỗ trợ</span>"
             f"</div>",
             unsafe_allow_html=True
         )
     with col_status_right:
         if st.session_state.chat_messages:
             st.markdown('<div id="clear-chat-btn-anchor"></div>', unsafe_allow_html=True)
-            if st.button("🗑️ Xóa đoạn chat", key="btn_clear_chat", use_container_width=True):
+            if st.button("🗑️ Xóa đoạn chat", key="btn_clear_chat", type="primary", use_container_width=True):
                 st.session_state.chat_messages = []
                 st.rerun()
 
-    st.markdown("<div style='height: 4px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
 
     # 4. VÙNG HIỂN THỊ CÁC BONG BÓNG TIN NHẮN (PHÂN BIỆT RÕ RÀNG NGƯỜI DÙNG #DCE6F5 VS TRỢ LÝ #EEF2F8)
     if not st.session_state.chat_messages:
@@ -89,12 +89,11 @@ def render_tab_chat(rag_matcher):
         for msg in st.session_state.chat_messages:
             if msg["role"] == "user":
                 with st.chat_message("user", avatar="👤"):
-                    # Tin người dùng: Nền xanh nhạt #DCE6F5, viền xanh dịu, chữ xanh đen sang trọng #0F1B33
                     raw_content = msg.get("content", "")
                     highlighted_html = highlight_dangerous_keywords(raw_content)
                     st.markdown(
-                        f"<div style='background: var(--user-bubble-bg, #DCE6F5); border: 1.5px solid var(--user-bubble-border, #AEC3DE); border-radius: 14px; padding: 12px 16px; margin: -6px -8px; box-shadow: 0 1px 4px rgba(15,27,51,0.06);'>"
-                        f"<div style='font-size: 14.5px; line-height: 1.6; color: var(--user-bubble-text, #0F1B33); font-weight: 500;'>{highlighted_html}</div>"
+                        f"<div style='font-size: 16px; line-height: 1.7; color: var(--user-bubble-text, #0F1B33); font-weight: 500;'>"
+                        f"{highlighted_html}"
                         f"</div>",
                         unsafe_allow_html=True
                     )
@@ -333,15 +332,15 @@ def render_conversational_assistant_response(msg, rag_matcher):
 
         st.markdown(f"""
         <div style='display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;'>
-            <div style='background-color: {badge_bg}; color: {badge_color}; border: 1.5px solid {badge_border}; padding: 6px 14px; border-radius: 9999px; font-weight: 800; font-size: 13.5px;'>
+            <div style='background-color: {badge_bg}; color: {badge_color}; border: 1.5px solid {badge_border}; padding: 7px 16px; border-radius: 9999px; font-weight: 800; font-size: 15px;'>
                 {status_text}
             </div>
-            <div style='display: flex; align-items: center; gap: 8px; min-width: 140px;'>
-                <span style='font-size: 13px; font-weight: 600; color: var(--text-secondary, #374662);'>Mức rủi ro:</span>
-                <div style='flex: 1; background-color: #CBD6E6; border-radius: 9999px; height: 8px; width: 80px; overflow: hidden;'>
-                    <div style='background-color: {bar_color}; height: 8px; width: {score}%; border-radius: 9999px;'></div>
+            <div style='display: flex; align-items: center; gap: 8px; min-width: 150px;'>
+                <span style='font-size: 14.5px; font-weight: 600; color: var(--text-secondary, #374662);'>Mức rủi ro:</span>
+                <div style='flex: 1; background-color: #CBD6E6; border-radius: 9999px; height: 9px; width: 80px; overflow: hidden;'>
+                    <div style='background-color: {bar_color}; height: 9px; width: {score}%; border-radius: 9999px;'></div>
                 </div>
-                <span style='font-size: 13px; font-weight: 800; color: {bar_color};'>{score}%</span>
+                <span style='font-size: 15px; font-weight: 800; color: {bar_color};'>{score}%</span>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -351,7 +350,7 @@ def render_conversational_assistant_response(msg, rag_matcher):
             is_dark = (st.session_state.get("theme_mode", "Dịu") == "Tối")
             rec_card_bg = "#2A0A0E" if is_dark else "#FEF2F2"
             rec_card_border = "#EF4444" if is_dark else "#F87171"
-            rec_title_color = "#FECACA" if is_dark else "#991B1B"
+            rec_title_color = "#FECACA" if is_dark else "#B91C1C"
             rec_list_color = "#F1F5F9" if is_dark else "#7F1D1D"
 
             rec_items = recommendations if recommendations else [
@@ -359,36 +358,36 @@ def render_conversational_assistant_response(msg, rag_matcher):
                 "Cúp máy ngay lập tức, không làm theo các yêu cầu chuyển khoản hoặc cài app lạ.",
                 "Gọi ngay tổng đài 156 hoặc Hotline A05 (069 234 8560) để xác minh vụ việc."
             ]
-            recs_html = "".join([f"<li style='margin-bottom: 4px; color: {rec_list_color} !important;'>{r}</li>" for r in rec_items])
+            recs_html = "".join([f"<li style='margin-bottom: 5px; color: {rec_list_color} !important; font-size: 15px; line-height: 1.7;'>{r}</li>" for r in rec_items])
 
             st.markdown(f"""
-            <div style='background-color: {rec_card_bg}; border: 1.5px solid {rec_card_border}; border-radius: 12px; padding: 12px 16px; margin-bottom: 14px;'>
-                <div style='display: flex; align-items: center; gap: 6px; margin-bottom: 6px;'>
-                    <span style='font-size: 16px;'>🚨</span>
-                    <span style='color: {rec_title_color} !important; font-weight: 800; font-size: 14.5px; letter-spacing: 0.3px;'>VIỆC BẠN CẦN LÀM NGAY LẬP TỨC:</span>
+            <div style='background-color: {rec_card_bg}; border: 1.5px solid {rec_card_border}; border-radius: 12px; padding: 14px 18px; margin-bottom: 14px;'>
+                <div style='display: flex; align-items: center; gap: 8px; margin-bottom: 8px;'>
+                    <span style='font-size: 18px;'>🚨</span>
+                    <span style='color: {rec_title_color} !important; font-weight: 800; font-size: 16px; letter-spacing: 0.3px;'>VIỆC BẠN CẦN LÀM NGAY LẬP TỨC:</span>
                 </div>
-                <ul style='color: {rec_list_color} !important; font-size: 14px; line-height: 1.6; margin: 0; padding-left: 20px; font-weight: 600;'>
+                <ul style='color: {rec_list_color} !important; font-size: 15px; line-height: 1.7; margin: 0; padding-left: 22px; font-weight: 600;'>
                     {recs_html}
                 </ul>
             </div>
             """, unsafe_allow_html=True)
 
-        # 3. PHÂN TÍCH CHI TIẾT & BẪY TÂM LÝ
-        st.markdown(f"<div style='font-size: 14.5px; line-height: 1.65; color: var(--text-primary, #0F1B33);'>{explanation}</div>", unsafe_allow_html=True)
+        # 3. PHÂN TÍCH CHI TIẾT & BẪY TÂM LÝ (CỠ CHỮ TĂNG 1-2 SIZE THEO YÊU CẦU UX)
+        st.markdown(f"<div style='font-size: 16px; line-height: 1.75; color: var(--text-primary, #0F1B33);'>{explanation}</div>", unsafe_allow_html=True)
 
         if traps and score >= 40:
             st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
             traps_html = f"""
-            <div style='background-color: var(--card-inner-bg, #DFE7F2); border: 1px solid var(--border-color, #B8C5D6); border-radius: 10px; padding: 10px 14px; margin-bottom: 12px;'>
-                <div style='color: var(--text-primary, #0F1B33); font-weight: 700; font-size: 14px; margin-bottom: 4px;'>Bẫy tâm lý nhận diện:</div>
-                <div style='color: var(--text-secondary, #374662); font-size: 13.5px; line-height: 1.6;'>
-                    {''.join([f"<div>🚩 {t}</div>" for t in traps])}
+            <div style='background-color: var(--card-inner-bg, #DFE7F2); border: 1px solid var(--border-color, #B8C5D6); border-radius: 10px; padding: 12px 16px; margin-bottom: 12px;'>
+                <div style='color: var(--text-primary, #0F1B33); font-weight: 700; font-size: 15px; margin-bottom: 6px;'>Bẫy tâm lý nhận diện:</div>
+                <div style='color: var(--text-secondary, #374662); font-size: 14.5px; line-height: 1.7;'>
+                    {''.join([f"<div style='margin-bottom: 3px;'>🚩 {t}</div>" for t in traps])}
                 </div>
             </div>
             """
             st.markdown(traps_html, unsafe_allow_html=True)
 
-        # 4. NGUỒN PHÂN TÍCH MINH BẠCH - VIẾT GỌN GÀNG, FONT >= 13PX, ĐỔI 0.0s THÀNH < 0.1s
+        # 4. NGUỒN PHÂN TÍCH MINH BẠCH - VIẾT GỌN GÀNG, FONT >= 14PX, ĐỔI 0.0s THÀNH < 0.1s
         if "Gemini" in model_source or "gemini" in model_source.lower():
             source_label = f"Phân tích bởi {model_source} · Đối chiếu 20 bài báo"
         else:
@@ -397,12 +396,12 @@ def render_conversational_assistant_response(msg, rag_matcher):
         time_label = "< 0.1s" if elapsed_time < 0.1 else f"{elapsed_time}s"
 
         meta_html = f"""
-        <div style='display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 13.5px; color: var(--text-secondary, #374662); padding-top: 10px; border-top: 1px solid var(--border-color, #B8C5D6); margin-top: 12px;'>
+        <div style='display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 14px; color: var(--text-secondary, #374662); padding-top: 10px; border-top: 1px solid var(--border-color, #B8C5D6); margin-top: 12px;'>
             <div>
-                <span style='color: #2563eb; font-weight: 700;'>🛡️ {source_label}</span>
+                <span style='color: #2563eb; font-weight: 700; font-size: 14px;'>🛡️ {source_label}</span>
             </div>
             <div>
-                <span>⚡ Phản hồi: <strong>{time_label}</strong></span>
+                <span style='font-size: 14px;'>⚡ Phản hồi: <strong>{time_label}</strong></span>
             </div>
         </div>
         """
