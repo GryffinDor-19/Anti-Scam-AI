@@ -625,32 +625,58 @@ div[data-testid="stPopover"] button:hover {{
 
 /* =========================================================================
    11. PHÂN BIỆT RÕ RÀNG: TIN NGƯỜI DÙNG ({t["user_bubble_bg"]}) VS TRỢ LÝ ({t["assistant_bubble_bg"]})
+   (LOẠI BỎ TRIỆT ĐỂ VIỀN & NỀN LỒNG NHAU / DOUBLE BORDER EFFECT)
    ========================================================================= */
-[data-testid="stChatMessage"],
-[data-testid="stChatMessage"] > div {{
+[data-testid="stChatMessage"] {{
     background-color: {t["assistant_bubble_bg"]} !important;
     background: {t["assistant_bubble_bg"]} !important;
-    border: 1px solid {t["assistant_bubble_border"]} !important;
+    border: 1.5px solid {t["assistant_bubble_border"]} !important;
     border-radius: 16px !important;
     box-shadow: {t["box_shadow"]} !important;
-}}
-
-[data-testid="stChatMessage"] {{
     padding: 16px 20px !important;
     margin-bottom: 14px !important;
 }}
 
-div[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]),
-div[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) > div {{
+/* Bỏ triệt để viền và nền lồng nhau ở các thẻ div con bên trong stChatMessage */
+[data-testid="stChatMessage"] > div,
+[data-testid="stChatMessageContent"],
+div[data-testid="stChatMessageContent"] {{
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}}
+
+/* Bong bóng tin nhắn người dùng: 1 khối mượt mà, không lồng hộp */
+div[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) {{
     background-color: {t["user_bubble_bg"]} !important;
     background: {t["user_bubble_bg"]} !important;
     border: 1.5px solid {t["user_bubble_border"]} !important;
     border-radius: 16px !important;
-    box-shadow: 0 2px 8px rgba(15, 27, 51, 0.08) !important;
+    box-shadow: 0 2px 10px rgba(15, 27, 51, 0.12) !important;
+}}
+
+div[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) > div,
+div[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) [data-testid="stChatMessageContent"] {{
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
 }}
 
 div[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) * {{
     color: {t["user_bubble_text"]} !important;
+    -webkit-text-fill-color: {t["user_bubble_text"]} !important;
+}}
+
+/* Giữ màu chữ và nền nổi bật cho nhãn nguy hiểm mark.kw-danger trong tin nhắn user */
+div[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) mark.kw-danger,
+div[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) mark.kw-danger * {{
+    color: #7f1d1d !important;
+    -webkit-text-fill-color: #7f1d1d !important;
+    background-color: #fee2e2 !important;
 }}
 
 /* =========================================================================

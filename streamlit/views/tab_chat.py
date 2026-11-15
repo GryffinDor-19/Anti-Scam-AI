@@ -36,12 +36,13 @@ except ImportError:
 
 
 def highlight_dangerous_keywords(text: str) -> str:
-    """Tô sáng các cụm từ đe dọa, ép buộc, rửa tiền, tài khoản an toàn trong tin nhắn của người dùng."""
+    """Tô sáng các cụm từ đe dọa, ép buộc, rửa tiền, CSGT, phạt nguội, tài khoản an toàn trong tin nhắn của người dùng."""
     keywords = [
         r"rửa tiền", r"công an", r"cảnh sát hình sự", r"bắt tạm giam",
         r"tài khoản an toàn", r"chuyển tiền", r"giữ bí mật", r"lệnh bắt",
         r"viện kiểm sát", r"nạp tiền", r"hoa hồng", r"nhiệm vụ", r"40 tỷ", r"150 triệu",
-        r"đường dây ma túy", r"thanh tra tài chính", r"phạt nguội", r"mã otp"
+        r"đường dây ma túy", r"thanh tra tài chính", r"phạt nguội", r"mã otp",
+        r"cuc csgt", r"csgt", r"phat nguoi", r"phat-nguoi", r"nop phat", r"vi pham toc do", r"tra-cuu"
     ]
     pattern = re.compile(f"({'|'.join(keywords)})", re.IGNORECASE)
     return pattern.sub(r'<mark class="kw-danger">\1</mark>', text)
@@ -91,8 +92,9 @@ def render_tab_chat(rag_matcher):
                 with st.chat_message("user", avatar="👤"):
                     raw_content = msg.get("content", "")
                     highlighted_html = highlight_dangerous_keywords(raw_content)
+                    user_font_color = "#FFFFFF" if is_dark else "#0F1B33"
                     st.markdown(
-                        f"<div style='font-size: 16px; line-height: 1.7; color: var(--user-bubble-text, #0F1B33); font-weight: 500;'>"
+                        f"<div style='font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; font-size: 17px; line-height: 1.7; color: {user_font_color} !important; -webkit-text-fill-color: {user_font_color} !important; font-weight: 600; letter-spacing: 0.2px;'>"
                         f"{highlighted_html}"
                         f"</div>",
                         unsafe_allow_html=True
