@@ -67,7 +67,7 @@ if __name__ == "__main__":
     # === KHU VỰC TEST NHANH DÀNH CHO BẠN ===
     
     # 1. Điền API Key của bạn vào đây (Nhớ xóa đi trước khi push lên GitHub để khỏi lộ Key)
-    TEST_API_KEY = "API KEY cua bon m" 
+    api_key = os.environ.get("GEMINI_API_KEY")
     
     # 2. Khởi tạo class
     detector = FakeBillDetector(api_key=TEST_API_KEY)

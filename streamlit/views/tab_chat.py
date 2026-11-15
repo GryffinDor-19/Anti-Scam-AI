@@ -20,15 +20,11 @@ import matplotlib.pyplot as plt
 from components.gauge import render_gauge_chart
 
 # Nạp bộ não Backend AI (Hỗ trợ Gateway, Pipeline 3 lớp và Dynamic Scorer)
+# Nạp bộ não Backend AI (Hỗ trợ Gateway, Pipeline 3 lớp và Dynamic Scorer)
 try:
-    from backend.gateway.backend import analyze_scam
+    from backend.gateway.pipeline import run_pipeline as analyze_scam  # Đổi tên run_pipeline thành analyze_scam để khớp biến của TV3 ở dưới
 except ImportError:
-    try:
-        from backend.backend import analyze_scam
-    except ImportError:
-        from backend.modules.semantic_analyzer import analyze_scam_content
-        def analyze_scam(t, api_key=None):
-            return analyze_scam_content(t, api_key=api_key)
+    from gateway.pipeline import run_pipeline as analyze_scam
 
 try:
     from backend.engines.fake_bill_detector import FakeBillDetector

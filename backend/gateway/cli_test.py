@@ -15,7 +15,7 @@ for p in [CURRENT_DIR, BACKEND_DIR, ROOT_DIR]:
     if p not in sys.path:
         sys.path.insert(0, p)
 
-from .backend import analyze_scam
+from gateway.backend import analyze_scam
 
 
 def run_cli():

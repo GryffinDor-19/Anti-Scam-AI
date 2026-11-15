@@ -1,0 +1,76 @@
+[
+  {
+    "test_id": 1,
+    "input_text": "Cuối tuần này rảnh không, anh em mình làm chầu bia nhé!",
+    "ai_result": {
+      "risk_score": 0,
+      "threat_level": "An toàn",
+      "detected_tactic": "Không phát hiện thủ đoạn lừa đảo",
+      "explanation": "Tin nhắn mang tính chất giao tiếp xã hội thông thường, rủ rê đi uống bia giữa bạn bè hoặc người quen, không chứa các dấu hiệu lừa đảo trực tuyến, yêu cầu cung cấp thông tin cá nhân hay chuyển tiền.",
+      "psychological_traps": [
+        "Không phát hiện dấu hiệu thao túng tâm lý"
+      ],
+      "action_recommendations": [
+        "Có thể phản hồi tin nhắn bình thường nếu biết rõ người gửi.",
+        "Luôn giữ cảnh giác nếu sau đó cuộc trò chuyện chuyển hướng sang vay tiền hoặc đầu tư."
+      ]
+    }
+  },
+  {
+    "test_id": 2,
+    "input_text": "Tuyển CTV làm nhiệm vụ xem video Shopee/TikTok hoa hồng 30-50% mỗi ngày, nạp cọc 200k rút ngay 350k!",
+    "ai_result": {
+      "risk_score": 95,
+      "threat_level": "Nguy cơ cao",
+      "detected_tactic": "Tuyển CTV Việc Nhẹ Lương Cao (Làm nhiệm vụ Shopee/TikTok nhận hoa hồng)",
+      "explanation": "Tin nhắn mang đầy đủ dấu hiệu của chiêu trò lừa đảo 'việc nhẹ lương cao' được Cục An toàn thông tin cảnh báo. Kẻ gian dụ dỗ nạn nhân nạp tiền làm nhiệm vụ xem video với mức hoa hồng siêu lợi nhuận (30-50%) để chiếm đoạt tài sản, tương tự các vụ việc nạn nhân mất hàng tỷ đồng.",
+      "psychological_traps": [
+        "Hám lợi với mức hoa hồng siêu cao trong thời gian ngắn",
+        "Tạo lòng tin ban đầu bằng cách cho rút tiền ngay ở các giao dịch nhỏ (nạp 200k rút 350k)"
+      ],
+      "action_recommendations": [
+        "Tuyệt đối không chuyển tiền hoặc nạp tiền cọc vào bất kỳ tài khoản nào theo yêu cầu của đối tượng.",
+        "Chặn ngay số điện thoại, tài khoản mạng xã hội hoặc nhóm chat của kẻ lừa đảo.",
+        "Báo cáo sự việc cho cơ quan chức năng hoặc nền tảng bảo cybersecurity (như canhbao.ncsc.gov.vn) nếu đã lỡ chuyển tiền."
+      ]
+    }
+  },
+  {
+    "test_id": 3,
+    "input_text": "Tôi là Đại úy Nguyễn Văn Hùng cán bộ điều tra. Tài khoản của anh đang liên quan đường dây rửa tiền, yêu cầu chuyển 150 triệu vào tài khoản an toàn gấp!",
+    "ai_result": {
+      "risk_score": 98,
+      "threat_level": "Nguy cơ cao",
+      "detected_tactic": "Giả danh Cơ quan Công quyền (Công an/Viện kiểm sát/Tòa án)",
+      "explanation": "Tin nhắn mang đầy đủ dấu hiệu của tội phạm mạng giả danh cơ quan công an để hù dọa nạn nhân liên quan đến đường dây rửa tiền nhằm chiếm đoạt tài sản. Điều này hoàn toàn trùng khớp với cảnh báo từ Cục An toàn thông tin về thủ đoạn gọi điện giả danh cán bộ công an đe dọa liên quan án ma túy/rửa tiền.",
+      "psychological_traps": [
+        "Sử dụng danh xưng quyền lực (Đại úy, cán bộ điều tra) để tạo sự sợ hãi và áp lực tâm lý",
+        "Tạo tình huống khẩn cấp, ép thời gian ('gấp') và yêu cầu chuyển tiền vào 'tài khoản an toàn'"
+      ],
+      "action_recommendations": [
+        "Tuyệt đối không chuyển tiền hoặc cung cấp thông tin cá nhân, mã OTP cho đối tượng",
+        "Không thực hiện theo bất kỳ yêu cầu nào qua điện thoại hay tin nhắn từ những người tự nhận là công an",
+        "Trình báo ngay sự việc cho cơ quan công an địa phương hoặc cơ quan chức năng để được hỗ trợ"
+      ]
+    }
+  },
+  {
+    "test_id": 4,
+    "input_text": "Chuc mung ban da trung thuong Iphone 15 Pro Max. Vui long click vao link: nhan-thuong-apple.xyz de nhan!",
+    "ai_result": {
+      "risk_score": 95,
+      "threat_level": "Nguy cơ cao",
+      "detected_tactic": "Đường Link Độc Hại & Phishing",
+      "explanation": "Tin nhắn thông báo trúng thưởng iPhone 15 Pro Max kết hợp với đường dẫn lạ 'nhan-thuong-apple.xyz' là thủ đoạn rải link phishing phổ biến nhằm đánh cắp thông tin cá nhân, tài khoản đăng nhập hoặc chiếm đoạt tài sản của nạn nhân.",
+      "psychological_traps": [
+        "Hám lợi (lòng tham) với phần thưởng có giá trị cao",
+        "Tạo sự phấn khích giả tạo để nạn nhân mất cảnh giác"
+      ],
+      "action_recommendations": [
+        "Tuyệt đối không bấm vào đường link lạ trong tin nhắn",
+        "Không cung cấp thông tin cá nhân, mật khẩu hay mã OTP cho bất kỳ ai",
+        "Báo cáo và chặn số điện thoại hoặc tài khoản gửi tin nhắn lừa đảo"
+      ]
+    }
+  }
+]

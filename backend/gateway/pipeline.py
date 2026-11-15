@@ -75,7 +75,7 @@ class AntiScamPipeline:
         # BƯỚC 2: ĐỐI SOÁT BÀI BÁO CHÍNH THỐNG (RAG Retriever)
         matched_article = find_matching_article(clean_text)
 
-        # BƯỚC 3: PHÂN TÍCH NGỮ NGHĨA & CHẤM ĐIỂM RỦI RO (Semantic Analyzer LLM)
+        # BƯỚC 3: PHÂN TÍCH NGỮ NGHĨA & CHẤM ĐIỂM RỦI RO
         ai_result = analyze_scam_content(
             user_text=clean_text,
             rag_article=matched_article,
@@ -83,8 +83,67 @@ class AntiScamPipeline:
         )
 
         # BƯỚC 4: ĐÓNG GÓI CHUẨN HÓA 6 TRƯỜNG DỮ LIỆU
-        return format_scam_response(ai_result)
-
+        final_response = format_scam_response(ai_result)
+        # ---------------------------------------------------------
+        # ---------------------------------------------------------
+        # BƯỚC 5 (BỌC THÉP): TỰ ĐỘNG HỌC MỌI THỨ CHƯA BIẾT (OMNI-LEARNING)
+        # ---------------------------------------------------------
+        if not matched_article:
+            try:
+                import json
+                import os
+                
+                # 1. Tự động mò đường dẫn tuyệt đối (Chống lỗi thiếu biến BACKEND_DIR)
+                current_dir = os.path.dirname(os.path.abspath(__file__))
+                backend_dir = os.path.dirname(current_dir)
+                data_dir = os.path.join(backend_dir, "data")
+                knowledge_path = os.path.join(data_dir, "scam_knowledge.json")
+                
+                # 2. Tự động tạo thư mục 'data' nếu chưa có (Chống lỗi FileNotFoundError)
+                if not os.path.exists(data_dir):
+                    os.makedirs(data_dir)
+                
+                # 3. Đọc dữ liệu cũ
+                db = []
+                if os.path.exists(knowledge_path):
+                    with open(knowledge_path, "r", encoding="utf-8") as f:
+                        try:
+                            db = json.load(f)
+                        except Exception:
+                            pass
+                
+                # 4. Gắn nhãn
+                is_scam = final_response.get("risk_score", 0) >= 50
+                prefix = "🚨 Mẫu lừa đảo" if is_scam else "✅ Mẫu an toàn"
+                
+                # Lấy text an toàn (nếu bạn dùng 'user_text' thay vì 'clean_text' ở trên)
+                text_to_extract = locals().get('clean_text', locals().get('user_text', ''))
+                
+                new_item = {
+                    "id": len(db) + 1,
+                    "title": f"{prefix}: {final_response.get('detected_tactic', 'Phân tích mới')}",
+                    "source": "Hệ thống tự học toàn diện (Omni-Learn)",
+                    "url": "",
+                    "category_name": final_response.get('detected_tactic', 'Giao tiếp thông thường'),
+                    "summary": final_response.get('explanation', ''),
+                    "keywords": [w for w in text_to_extract.lower().split() if len(w) > 3][:8]
+                }
+                
+                db.append(new_item)
+                
+                # 5. Ghi file JSON
+                with open(knowledge_path, "w", encoding="utf-8") as f:
+                    json.dump(db, f, ensure_ascii=False, indent=4)
+                
+                # In thông báo thành công ra Terminal để bạn dễ theo dõi
+                print(f"\n[AUTO-LEARN] ✅ Đã học kịch bản mới và lưu vào: {knowledge_path}\n")
+                    
+            except Exception as e:
+                # THAY VÌ GIẤU LỖI (PASS), BÂY GIỜ HỆ THỐNG SẼ HÉT LÊN NẾU CÓ LỖI
+                print(f"\n[AUTO-LEARN] ❌ LỖI LƯU DATA: {e}\n")
+        # ---------------------------------------------------------
+        # BƯỚC 6: TRẢ KẾT QUẢ VỀ CHO WEB (Dòng này cực kỳ quan trọng, đừng để mất nhé!)
+        return final_response
 
 # Khởi tạo singleton instance tiện dụng
 pipeline_instance = AntiScamPipeline()
