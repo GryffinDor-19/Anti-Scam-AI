@@ -509,9 +509,18 @@ def render_conversational_assistant_response(msg, rag_matcher):
                 st.pyplot(fig, use_container_width=True)
                 plt.close(fig)
             with col_g2:
-                st.markdown(f"**Điểm Scam Score:** `{score}/100`")
-                st.markdown(f"**Xếp hạng:** `{threat_level}`")
-                st.markdown(f"**Nhóm thủ đoạn:** `{tactic}`")
+                badge_color = "#ef4444" if score >= 70 else ("#f59e0b" if score >= 40 else "#10b981")
+                badge_bg = "rgba(239, 68, 68, 0.15)" if score >= 70 else ("rgba(245, 158, 11, 0.15)" if score >= 40 else "rgba(16, 185, 129, 0.15)")
+                badge_border = "#ef4444" if score >= 70 else ("#f59e0b" if score >= 40 else "#10b981")
+
+                st.markdown(
+                    f"<div style='display: flex; flex-direction: column; gap: 8px; font-size: 14.5px;'>"
+                    f"<div><strong>Điểm Scam Score:</strong> <span style='background: {badge_bg}; color: {badge_color}; border: 1px solid {badge_border}; padding: 2px 10px; border-radius: 6px; font-weight: 800; font-size: 15px;'>{score}/100</span></div>"
+                    f"<div><strong>Xếp hạng:</strong> <span style='background: {badge_bg}; color: {badge_color}; border: 1px solid {badge_border}; padding: 2px 10px; border-radius: 6px; font-weight: 700; font-size: 14px;'>{threat_level}</span></div>"
+                    f"<div><strong>Nhóm thủ đoạn:</strong> <div style='margin-top: 4px; background: var(--card-inner-bg, #DFE7F2); color: var(--text-primary, #0F1B33); border: 1px solid var(--border-color, #B8C5D6); padding: 5px 10px; border-radius: 6px; font-weight: 600; font-size: 13.5px; line-height: 1.5;'>{tactic}</div></div>"
+                    f"</div>",
+                    unsafe_allow_html=True
+                )
                 if matched_cases and score >= 40:
                     case = matched_cases[0]
                     st.markdown(f"**Khớp bài báo Cục ATTT:** [{case.get('title')}]({case.get('url')}) (Độ khớp: {case.get('confidence', 90)}%)")

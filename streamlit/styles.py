@@ -784,6 +784,136 @@ section[data-testid="stSidebar"],
     background: {t["sidebar_bg"]} !important;
     border-right: 1.5px solid {t["border_color"]} !important;
 }}
+
+/* =========================================================================
+   15. EXPANDER & DETAILS - ĐỒNG BỘ THEME TỐI/SÁNG, HẾT BỊ TRẮNG LÓA
+   ========================================================================= */
+div[data-testid="stExpander"],
+.stExpander,
+div[data-testid="stExpander"] details {{
+    background-color: {t["card_inner_bg"]} !important;
+    background: {t["card_inner_bg"]} !important;
+    border: 1.5px solid {t["border_color"]} !important;
+    border-radius: 12px !important;
+    box-shadow: {t["box_shadow"]} !important;
+    overflow: hidden !important;
+    margin-bottom: 12px !important;
+}}
+
+/* Header của Expander (Thanh tiêu đề bấm mở/đóng) */
+div[data-testid="stExpander"] summary,
+.stExpander summary {{
+    background-color: {t["card_inner_bg"]} !important;
+    background: {t["card_inner_bg"]} !important;
+    border-bottom: 1px solid {t["border_color"]} !important;
+    color: {t["text_primary"]} !important;
+    padding: 10px 16px !important;
+    font-weight: 700 !important;
+    font-size: 14.5px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}}
+
+div[data-testid="stExpander"] summary:hover,
+.stExpander summary:hover {{
+    background-color: {t["card_bg"]} !important;
+    background: {t["card_bg"]} !important;
+    color: #2563eb !important;
+}}
+
+div[data-testid="stExpander"] summary *,
+.stExpander summary *,
+div[data-testid="stExpander"] summary p,
+div[data-testid="stExpander"] summary span {{
+    color: {t["text_primary"]} !important;
+    -webkit-text-fill-color: {t["text_primary"]} !important;
+    font-weight: 700 !important;
+    font-size: 14.5px !important;
+}}
+
+div[data-testid="stExpander"] summary svg,
+.stExpander summary svg {{
+    fill: {t["text_primary"]} !important;
+    color: {t["text_primary"]} !important;
+}}
+
+/* Vùng nội dung chi tiết bên trong Expander khi mở ra */
+div[data-testid="stExpanderDetails"],
+div[data-testid="stExpander"] [data-testid="stExpanderDetails"],
+div[data-testid="stExpander"] details > div:last-child {{
+    background-color: {t["card_bg"]} !important;
+    background: {t["card_bg"]} !important;
+    padding: 14px 18px !important;
+    color: {t["text_primary"]} !important;
+}}
+
+/* =========================================================================
+   16. THẺ MÃ CODE INLINE - HÀI HÒA THEME, KHÔNG BỊ TRẮNG LÓA
+   ========================================================================= */
+code, 
+.stMarkdown code, 
+span code, 
+p code, 
+li code {{
+    background-color: {t["card_inner_bg"]} !important;
+    background: {t["card_inner_bg"]} !important;
+    color: {t["text_primary"]} !important;
+    -webkit-text-fill-color: {t["text_primary"]} !important;
+    border: 1px solid {t["border_color"]} !important;
+    border-radius: 6px !important;
+    padding: 2px 8px !important;
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    display: inline-block !important;
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+}}
+
+/* =========================================================================
+   17. Ô NHẬP LIỆU TEXT INPUT & PASSWORD (SIDEBAR & NỘI DUNG)
+   ========================================================================= */
+div[data-testid="stTextInput"] input,
+div[data-testid="stTextInput"] [data-baseweb="input"],
+div[data-testid="stTextInput"] [data-baseweb="base-input"] {{
+    background-color: {t["card_inner_bg"]} !important;
+    background: {t["card_inner_bg"]} !important;
+    border: 1.5px solid {t["border_color"]} !important;
+    color: {t["text_primary"]} !important;
+    -webkit-text-fill-color: {t["text_primary"]} !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+}}
+
+div[data-testid="stTextInput"] input::placeholder {{
+    color: {t["text_secondary"]} !important;
+    -webkit-text-fill-color: {t["text_secondary"]} !important;
+    opacity: 0.7 !important;
+}}
+
+div[data-testid="stTextInput"] input:focus,
+div[data-testid="stTextInput"] [data-baseweb="input"]:focus-within {{
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25) !important;
+}}
+
+/* Biểu tượng con mắt / nút phụ trong ô mật khẩu */
+div[data-testid="stTextInput"] button svg,
+div[data-testid="stTextInput"] button {{
+    color: {t["text_secondary"]} !important;
+    fill: {t["text_secondary"]} !important;
+    background: transparent !important;
+}}
+
+/* Tooltip trợ giúp (icon hỏi chấm ?) không bị trắng lóa */
+div[data-testid="stTooltipIcon"] button svg,
+div[data-testid="stTooltipIcon"] svg,
+div[data-testid="stTooltipIcon"] button {{
+    color: {t["text_secondary"]} !important;
+    fill: {t["text_secondary"]} !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}}
 </style>"""
 
 
