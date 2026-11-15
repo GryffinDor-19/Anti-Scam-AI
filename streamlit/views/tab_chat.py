@@ -75,7 +75,8 @@ def render_tab_chat(rag_matcher):
         )
     with col_status_right:
         if st.session_state.chat_messages:
-            if st.button("🗑️ Xóa đoạn chat", use_container_width=True):
+            st.markdown('<div id="clear-chat-btn-anchor"></div>', unsafe_allow_html=True)
+            if st.button("🗑️ Xóa đoạn chat", key="btn_clear_chat", use_container_width=True):
                 st.session_state.chat_messages = []
                 st.rerun()
 
@@ -181,7 +182,8 @@ def process_user_message(text: str, rag_matcher):
 
     # 2. Gọi bộ não Backend AI phân tích
     active_api_key = st.session_state.get("gemini_api_key", os.environ.get("GEMINI_API_KEY", None))
-    ai_data = analyze_scam(text, api_key=active_api_key)
+    with st.spinner("🔍 Đang kích hoạt chuỗi phòng thủ 3 lớp (Lọc nhanh · RAG Đối soát · AI Phân tích)..."):
+        ai_data = analyze_scam(text, api_key=active_api_key)
     elapsed_time = round(time.time() - start_time, 2)
 
     score = int(ai_data.get("risk_score", 12))
@@ -346,19 +348,26 @@ def render_conversational_assistant_response(msg, rag_matcher):
 
         # 2. ĐẶT 'VIỆC CẦN LÀM NGAY LẬP TỨC' LÊN ĐẦU TIÊN (HÀNH ĐỘNG TRƯỚC - GIẢI THÍCH SAU)
         if score >= 40:
+            is_dark = (st.session_state.get("theme_mode", "Dịu") == "Tối")
+            rec_card_bg = "#2A0A0E" if is_dark else "#FEF2F2"
+            rec_card_border = "#EF4444" if is_dark else "#F87171"
+            rec_title_color = "#FECACA" if is_dark else "#991B1B"
+            rec_list_color = "#F1F5F9" if is_dark else "#7F1D1D"
+
             rec_items = recommendations if recommendations else [
                 "Tuyệt đối không chuyển tiền và không bấm vào đường link lạ trong tin nhắn.",
                 "Cúp máy ngay lập tức, không làm theo các yêu cầu chuyển khoản hoặc cài app lạ.",
                 "Gọi ngay tổng đài 156 hoặc Hotline A05 (069 234 8560) để xác minh vụ việc."
             ]
-            recs_html = "".join([f"<li style='margin-bottom: 4px;'>{r}</li>" for r in rec_items])
+            recs_html = "".join([f"<li style='margin-bottom: 4px; color: {rec_list_color} !important;'>{r}</li>" for r in rec_items])
 
             st.markdown(f"""
-            <div style='background-color: #fef2f2; border: 1.5px solid #f87171; border-radius: 12px; padding: 12px 16px; margin-bottom: 14px;'>
-                <div style='color: #991b1b; font-weight: 800; font-size: 14.5px; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;'>
-                    <span>🚨</span> <span>VIỆC BẠN CẦN LÀM NGAY LẬP TỨC:</span>
+            <div style='background-color: {rec_card_bg}; border: 1.5px solid {rec_card_border}; border-radius: 12px; padding: 12px 16px; margin-bottom: 14px;'>
+                <div style='display: flex; align-items: center; gap: 6px; margin-bottom: 6px;'>
+                    <span style='font-size: 16px;'>🚨</span>
+                    <span style='color: {rec_title_color} !important; font-weight: 800; font-size: 14.5px; letter-spacing: 0.3px;'>VIỆC BẠN CẦN LÀM NGAY LẬP TỨC:</span>
                 </div>
-                <ul style='color: #7f1d1d; font-size: 14px; line-height: 1.6; margin: 0; padding-left: 20px; font-weight: 600;'>
+                <ul style='color: {rec_list_color} !important; font-size: 14px; line-height: 1.6; margin: 0; padding-left: 20px; font-weight: 600;'>
                     {recs_html}
                 </ul>
             </div>

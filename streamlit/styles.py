@@ -208,8 +208,6 @@ div.element-container:has(#fixed-emergency-btn-anchor) + div.element-container b
 div:has(> #fixed-emergency-btn-anchor) + div button,
 div.stButton:has(button[key="btn_corner_emergency"]) button,
 button[key="btn_corner_emergency"],
-div[data-testid="stColumn"]:last-child div.stButton button,
-div[data-testid="column"]:last-child div.stButton button,
 button[data-testid="baseButton-primary"],
 button[kind="primary"] {{
     background-color: #dc2626 !important;
@@ -250,7 +248,61 @@ button[key="btn_corner_emergency"]:hover {{
     box-shadow: 0 6px 22px rgba(220, 38, 38, 0.6) !important;
 }}
 
+/* =========================================================================
+   6B. NÚT 'XÓA ĐOẠN CHAT' - DANGER PILL ĐỎ RỰC, CHỮ TRẮNG TINH RÕ NÉT 100%
+   ========================================================================= */
+div[data-testid="element-container"]:has(#clear-chat-btn-anchor) + div[data-testid="element-container"] button,
+div.element-container:has(#clear-chat-btn-anchor) + div.element-container button,
+div:has(> #clear-chat-btn-anchor) + div button,
+button[key="btn_clear_chat"],
+div.stButton:has(button[key="btn_clear_chat"]) button {{
+    background-color: #dc2626 !important;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    color: #ffffff !important;
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    padding: 6px 14px !important;
+    border-radius: 9999px !important;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.35) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    transition: all 0.2s ease !important;
+}}
+
+div[data-testid="element-container"]:has(#clear-chat-btn-anchor) + div[data-testid="element-container"] button *,
+div.element-container:has(#clear-chat-btn-anchor) + div.element-container button *,
+div:has(> #clear-chat-btn-anchor) + div button *,
+button[key="btn_clear_chat"] *,
+div.stButton:has(button[key="btn_clear_chat"]) button *,
+div[data-testid="element-container"]:has(#clear-chat-btn-anchor) + div[data-testid="element-container"] button p,
+button[key="btn_clear_chat"] p {{
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 13.5px !important;
+    white-space: nowrap !important;
+}}
+
+div[data-testid="element-container"]:has(#clear-chat-btn-anchor) + div[data-testid="element-container"] button:hover,
+div.element-container:has(#clear-chat-btn-anchor) + div.element-container button:hover,
+div:has(> #clear-chat-btn-anchor) + div button:hover,
+button[key="btn_clear_chat"]:hover,
+div.stButton:has(button[key="btn_clear_chat"]) button:hover {{
+    background-color: #b91c1c !important;
+    background: #b91c1c !important;
+    box-shadow: 0 4px 14px rgba(220, 38, 38, 0.55) !important;
+    transform: translateY(-1px) !important;
+}}
+
 /* Nút Gọi Ngay trong thẻ Hotline */
+a.em-call-btn,
+a.em-call-btn * {{
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    text-decoration: none !important;
+}}
+
 a.em-call-btn:hover {{
     filter: brightness(1.15) !important;
     transform: translateY(-1px) !important;
