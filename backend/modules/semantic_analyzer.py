@@ -1,9 +1,21 @@
 import json  # Thư viện xử lý dữ liệu định dạng JSON
 import os
+import sys
 
 client = None  # Khởi tạo lười (Lazy Client) khi có API Key thật để khởi động siêu tốc
 
+try:
+    from backend.engines.dynamic_scorer import calculate_dynamic_risk
+except ImportError:
+    try:
+        from engines.dynamic_scorer import calculate_dynamic_risk
+    except ImportError:
+        calculate_dynamic_risk = None
+
 def local_fallback_6_fields(user_text: str, rag_article: dict = None) -> dict:  # Hàm dự phòng trả về đúng 6 trường của file mock
+    if calculate_dynamic_risk:
+        return calculate_dynamic_risk(user_text, rag_article)
+
     text_lower = user_text.lower()  # Chuyển tin nhắn về chữ thường để dò từ khóa
     traps = []  # Khởi tạo danh sách bẫy tâm lý
     score = 20  # Điểm rủi ro mặc định ban đầu

@@ -62,4 +62,8 @@ def render_tab_library(rag_matcher):
             st.markdown(f"**Nguồn bài viết:** *{case.get('source')}*")
             st.write(case.get('summary'))
             st.markdown(f"**Từ khóa nhận diện:** `{'`, `'.join(case.get('keywords', []))}`")
-            st.link_button("👉 Mở bài báo gốc trên báo chí chính thống để đọc", case.get('url'), use_container_width=True)
+            case_url = (case.get('url') or "").strip()
+            if case_url.startswith(("http://", "https://")):
+                st.link_button("👉 Mở bài báo gốc trên báo chí chính thống để đọc", case_url, use_container_width=True)
+            else:
+                st.info("ℹ️ Dữ liệu cảnh báo được cập nhật trực tiếp từ hệ thống phòng thủ AntiScam AI.")

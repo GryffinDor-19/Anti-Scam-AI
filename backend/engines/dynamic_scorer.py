@@ -26,7 +26,10 @@ def calculate_dynamic_risk(user_text: str, rag_article: Optional[dict] = None) -
     authority_kw = [
         "công an", "vneid", "tòa án", "cảnh sát", "viện kiểm sát", "bộ công an",
         "csgt", "lệnh bắt", "phạt nguội", "rửa tiền", "khóa thẻ", "khóa cccd",
-        "phong tỏa", "bị khởi tố", "định danh điện tử", "cổng dịch vụ công"
+        "phong tỏa", "bị khởi tố", "định danh điện tử", "cổng dịch vụ công",
+        "vi phạm tốc độ", "vi phạm", "nộp phạt", "đóng phạt", "tra cứu phạt nguội",
+        "ngân hàng", "vietcombank", "bidv", "techcombank", "mbbank", "agribank", "vietinbank",
+        "đại úy", "cán bộ điều tra", "cục cảnh sát", "thông báo vi phạm"
     ]
     auth_matches = [
         kw for kw in authority_kw
@@ -36,12 +39,18 @@ def calculate_dynamic_risk(user_text: str, rag_article: Optional[dict] = None) -
         score += min(35, 18 + len(auth_matches) * 5)
         traps.append("Bẫy Uy Quyền / Sợ Hãi: Mạo danh cơ quan nhà nước đe dọa bắt giữ hoặc dọa khóa tài khoản/CCCD")
         if not rag_article:
-            tactic = "Giả Danh Cơ Quan Công Quyền & Dịch Vụ Công"
+            if any(k in text_lower or remove_diacritics(k) in text_unaccented for k in ["csgt", "phat nguoi", "vi pham", "nop phat"]):
+                tactic = "Mạo Danh Cục CSGT Báo Phạt Nguội & Link Độc Hại"
+            elif any(k in text_lower or remove_diacritics(k) in text_unaccented for k in ["ngan hang", "vietcombank", "bidv", "techcombank", "khoa the"]):
+                tactic = "Mạo Danh Ngân Hàng Báo Khóa Thẻ & Chiếm Quyền"
+            else:
+                tactic = "Giả Danh Cơ Quan Công Quyền & Dịch Vụ Công"
 
     # 2. BẪY CẤP BÁCH & ÉP THỜI GIAN (+14 đến +25 điểm)
     urgency_kw = [
         "15 phút", "24 giờ", "trong ngày", "khẩn cấp", "gấp", "ngay lập tức",
-        "khóa ngay", "nếu không sẽ", "hết hạn", "nhanh chóng", "trễ hạn", "tức thì"
+        "khóa ngay", "nếu không sẽ", "hết hạn", "nhanh chóng", "trễ hạn", "tức thì",
+        "mở khóa ngay", "xác minh ngay", "chuyển khoản gấp"
     ]
     urg_matches = [
         kw for kw in urgency_kw
@@ -54,8 +63,9 @@ def calculate_dynamic_risk(user_text: str, rag_article: Optional[dict] = None) -
     # 3. BẪY TÀI CHÍNH, CHUYỂN TIỀN, MÃ OTP & HOA HỒNG (+16 đến +30 điểm)
     finance_kw = [
         "chuyển tiền", "tài khoản an toàn", "mã otp", "mật khẩu", "cộng tác viên",
-        "hoa hồng", "nạp cọc", "nhiệm vụ", "shopee", "rút tiền", "trúng thưởng",
-        "nhận quà", "tiền thưởng", "hoàn tiền", "chốt đơn", "nạp tiền"
+        "hoa hồng", "nạp cọc", "nhiệm vụ", "shopee", "tiktok", "rút tiền", "trúng thưởng",
+        "nhận quà", "tiền thưởng", "hoàn tiền", "chốt đơn", "nạp tiền", "nộp phạt",
+        "đóng phạt", "giao dịch bất thường", "khóa thẻ", "mở khóa", "đăng nhập để mở khóa"
     ]
     fin_matches = [
         kw for kw in finance_kw
@@ -63,20 +73,23 @@ def calculate_dynamic_risk(user_text: str, rag_article: Optional[dict] = None) -
     ]
     if fin_matches:
         score += min(30, 16 + len(fin_matches) * 4)
-        if any(k in text_lower or remove_diacritics(k) in text_unaccented for k in ["hoa hồng", "nhiệm vụ", "cộng tác viên", "trúng thưởng", "chốt đơn"]):
+        if any(k in text_lower or remove_diacritics(k) in text_unaccented for k in ["hoa hồng", "nhiệm vụ", "cộng tác viên", "trúng thưởng", "chốt đơn", "iphone"]):
             traps.append("Bẫy Hám Lợi: Mồi chài hoa hồng cao hoặc nhận tiền thưởng làm nhiệm vụ ảo")
             if not rag_article:
-                tactic = "Tuyển CTV Việc Nhẹ Lương Cao / Làm Nhiệm Vụ Ảo"
+                if "iphone" in text_lower or "trúng thưởng" in text_lower:
+                    tactic = "Giả Mạo Trúng Thưởng & Chiếm Đoạt Tài Sản"
+                else:
+                    tactic = "Tuyển CTV Việc Nhẹ Lương Cao / Làm Nhiệm Vụ Ảo"
         else:
             traps.append("Bẫy Chiếm Đoạt Tài Sản: Yêu cầu chuyển tiền vào tài khoản lạ hoặc đánh cắp mã OTP/mật khẩu")
 
-    # 4. DẤU HIỆU LINK LẠ (+22 điểm)
+    # 4. DẤU HIỆU LINK LẠ (+25 điểm)
     has_suspicious_link = bool(re.search(
-        r"https?://|[a-z0-9\-]+\.(top|xyz|site|vip|cc|online|work|cfd|click|live|club)",
+        r"https?://|[a-z0-9\-]+\.(top|xyz|site|vip|cc|online|work|cfd|click|live|club|icu|link|buzz)",
         text_lower
     ))
     if has_suspicious_link:
-        score += 22
+        score += 25
         traps.append("Dấu Hiệu Kỹ Thuật: Đính kèm đường link khả nghi hoặc tên miền không chính thống để đánh cắp thông tin")
 
     # 5. CỘNG HƯỞNG TỪ BÀI BÁO RAG ĐỐI SOÁT

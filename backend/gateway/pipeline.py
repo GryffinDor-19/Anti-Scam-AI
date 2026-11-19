@@ -86,61 +86,49 @@ class AntiScamPipeline:
         final_response = format_scam_response(ai_result)
         # ---------------------------------------------------------
         # ---------------------------------------------------------
-        # BƯỚC 5 (BỌC THÉP): TỰ ĐỘNG HỌC MỌI THỨ CHƯA BIẾT (OMNI-LEARNING)
+        # BƯỚC 5 (BỌC THÉP): TỰ ĐỘNG HỌC KỊCH BẢN MỚI NGUY HIỂM VÀO CACHE RIÊNG
+        # (KHÔNG LÀM BẨN KHO 20 BÀI BÁO CHÍNH THỐNG SCAM_KNOWLEDGE.JSON)
         # ---------------------------------------------------------
-        if not matched_article:
+        if not matched_article and final_response.get("risk_score", 0) >= 70:
             try:
                 import json
                 import os
                 
-                # 1. Tự động mò đường dẫn tuyệt đối (Chống lỗi thiếu biến BACKEND_DIR)
                 current_dir = os.path.dirname(os.path.abspath(__file__))
                 backend_dir = os.path.dirname(current_dir)
                 data_dir = os.path.join(backend_dir, "data")
-                knowledge_path = os.path.join(data_dir, "scam_knowledge.json")
+                cache_path = os.path.join(data_dir, "scam_learned_cache.json")
                 
-                # 2. Tự động tạo thư mục 'data' nếu chưa có (Chống lỗi FileNotFoundError)
                 if not os.path.exists(data_dir):
                     os.makedirs(data_dir)
                 
-                # 3. Đọc dữ liệu cũ
                 db = []
-                if os.path.exists(knowledge_path):
-                    with open(knowledge_path, "r", encoding="utf-8") as f:
+                if os.path.exists(cache_path):
+                    with open(cache_path, "r", encoding="utf-8") as f:
                         try:
                             db = json.load(f)
                         except Exception:
                             pass
                 
-                # 4. Gắn nhãn
-                is_scam = final_response.get("risk_score", 0) >= 50
-                prefix = "🚨 Mẫu lừa đảo" if is_scam else "✅ Mẫu an toàn"
-                
-                # Lấy text an toàn (nếu bạn dùng 'user_text' thay vì 'clean_text' ở trên)
                 text_to_extract = locals().get('clean_text', locals().get('user_text', ''))
-                
-                new_item = {
-                    "id": len(db) + 1,
-                    "title": f"{prefix}: {final_response.get('detected_tactic', 'Phân tích mới')}",
-                    "source": "Hệ thống tự học toàn diện (Omni-Learn)",
-                    "url": "",
-                    "category_name": final_response.get('detected_tactic', 'Giao tiếp thông thường'),
-                    "summary": final_response.get('explanation', ''),
-                    "keywords": [w for w in text_to_extract.lower().split() if len(w) > 3][:8]
-                }
-                
-                db.append(new_item)
-                
-                # 5. Ghi file JSON
-                with open(knowledge_path, "w", encoding="utf-8") as f:
-                    json.dump(db, f, ensure_ascii=False, indent=4)
-                
-                # In thông báo thành công ra Terminal để bạn dễ theo dõi
-                print(f"\n[AUTO-LEARN] ✅ Đã học kịch bản mới và lưu vào: {knowledge_path}\n")
+                if len(text_to_extract) >= 15:
+                    new_item = {
+                        "id": len(db) + 1,
+                        "title": f"🚨 Mẫu cảnh báo mới: {final_response.get('detected_tactic', 'Kịch bản nghi vấn')}",
+                        "source": "Hệ thống tự học phòng thủ (Omni-Learn)",
+                        "url": "https://canhbao.khonggianmang.vn",
+                        "category_name": final_response.get('detected_tactic', 'Lừa đảo trực tuyến'),
+                        "summary": final_response.get('explanation', ''),
+                        "keywords": [w for w in text_to_extract.lower().split() if len(w) > 3][:8]
+                    }
                     
+                    db.append(new_item)
+                    with open(cache_path, "w", encoding="utf-8") as f:
+                        json.dump(db, f, ensure_ascii=False, indent=4)
+                    print(f"\n[AUTO-LEARN] ✅ Đã lưu kịch bản rủi ro cao vào cache: {cache_path}\n")
+                        
             except Exception as e:
-                # THAY VÌ GIẤU LỖI (PASS), BÂY GIỜ HỆ THỐNG SẼ HÉT LÊN NẾU CÓ LỖI
-                print(f"\n[AUTO-LEARN] ❌ LỖI LƯU DATA: {e}\n")
+                print(f"\n[AUTO-LEARN] ⚠️ Lỗi ghi cache tự học: {e}\n")
         # ---------------------------------------------------------
         # BƯỚC 6: TRẢ KẾT QUẢ VỀ CHO WEB (Dòng này cực kỳ quan trọng, đừng để mất nhé!)
         return final_response

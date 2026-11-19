@@ -87,8 +87,33 @@ def render_tab_fake_bill():
     # 4. CHIA 2 CỘT CHÍNH: BÊN TRÁI LÀ ẢNH BIÊN LAI THỰC TẾ, BÊN PHẢI LÀ KẾT QUẢ GIÁM ĐỊNH 2 LỚP
     col_card, col_verdict = st.columns([1.1, 1], gap="medium")
 
-    is_fake = (st.session_state.bill_sample_type == "fake")
     custom_img = st.session_state.get("uploaded_bill_img", None)
+    custom_analysis = None
+
+    if custom_img is not None:
+        try:
+            with tempfile.NamedTemporaryFile(delete=False, suffix=f".{custom_img.name.split('.')[-1]}") as tmp:
+                tmp.write(custom_img.getbuffer())
+                tmp_path = tmp.name
+            
+            if FakeBillDetector:
+                active_api_key = st.session_state.get("gemini_api_key", os.environ.get("GEMINI_API_KEY", ""))
+                detector = FakeBillDetector(api_key=active_api_key)
+                custom_analysis = detector.analyze_bill(tmp_path)
+            
+            try:
+                os.unlink(tmp_path)
+            except Exception:
+                pass
+        except Exception as e:
+            st.error(f"Lỗi khi xử lý ảnh tải lên: {e}")
+
+    if custom_analysis:
+        is_fake = bool(custom_analysis.get("is_fake", True))
+        conf_pct = int(custom_analysis.get("confidence_score", 92))
+    else:
+        is_fake = (st.session_state.bill_sample_type == "fake")
+        conf_pct = 94 if is_fake else 5
 
     # Đường dẫn ảnh mẫu test_bill.jpg trong repo
     sample_bill_path = os.path.abspath(
@@ -104,7 +129,7 @@ def render_tab_fake_bill():
 
             if custom_img:
                 st.image(custom_img, caption="Ảnh biên lai bạn tải lên", use_container_width=True)
-                st.caption("ℹ️ Hệ thống đang đối soát bức ảnh này với tiêu chuẩn phông chữ của các ngân hàng Việt Nam.")
+                st.caption("ℹ️ Hệ thống đã đối soát bức ảnh này với tiêu chuẩn phông chữ của các ngân hàng Việt Nam.")
             else:
                 if is_fake and os.path.exists(sample_bill_path):
                     st.image(sample_bill_path, caption="Mẫu biên lai Vietcombank Digibank thực tế (Mẫu nghi ngờ giả mạo)", use_container_width=True)
@@ -147,45 +172,62 @@ def render_tab_fake_bill():
 
                 # Thước đo rủi ro
                 st.markdown(
-                    "<div style='display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; color: #DC2626; margin-bottom: 4px;'>"
-                    "<span>Xác suất ảnh đã bị chỉnh sửa:</span>"
-                    "<span style='font-size: 16px; font-weight: 900;'>94.2%</span>"
-                    "</div>",
+                    f"<div style='display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; color: #DC2626; margin-bottom: 4px;'>"
+                    f"<span>Xác suất ảnh đã bị chỉnh sửa:</span>"
+                    f"<span style='font-size: 16px; font-weight: 900;'>{conf_pct}%</span>"
+                    f"</div>",
                     unsafe_allow_html=True
                 )
-                st.progress(0.94)
+                st.progress(min(1.0, max(0.0, conf_pct / 100.0)))
 
                 st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
 
-                # CHI TIẾT LỚP 1: THỊ GIÁC & TYPOGRAPHY
-                with st.container(border=True):
-                    st.markdown("<div style='font-weight: 800; font-size: 14px; color: #1D4ED8; margin-bottom: 6px;'>🔍 Lớp 1: Giám định Thị giác & Typography</div>", unsafe_allow_html=True)
-                    st.markdown("""
-                    - ❌ **Lệch phông chữ số tiền:** Phông chữ dãy số `50,000,000` có độ dày và tỷ lệ nét không khớp với phông *Vietcombank Sans Serif* chuẩn (độ bất thường 98%).
-                    - ❌ **Lệch trục căn lề (Baseline):** Dòng số tiền bị trồi lên 2.4 pixel so với trục chữ VND bên cạnh.
-                    - ⚠️ **Màu sắc thương hiệu:** Tông màu xanh logo Vietcombank bị sai lệch hệ màu HEX (#047857 thay vì chuẩn #005A36).
-                    - ⚠️ **Định dạng thời gian:** Định dạng ngày tháng không đúng cú pháp hiển thị trên app VCB Digibank thế hệ mới.
-                    """)
-
-                # CHI TIẾT LỚP 2: CẤU TRÚC PIXEL & VẾT NÉN ELA
-                with st.container(border=True):
-                    st.markdown("<div style='font-weight: 800; font-size: 14px; color: #7C3AED; margin-bottom: 6px;'>🔬 Lớp 2: Giám định Cấu trúc Pixel & Vết nén ELA</div>", unsafe_allow_html=True)
-                    st.markdown("""
-                    - ❌ **Bất thường mức nén ELA:** Vùng chứa số tiền và tên người thụ hưởng có mức chênh lệch nén JPEG cao hơn 82% so với nền, dấu hiệu rõ ràng của việc chèn nội dung khác đè lên.
-                    - ⚠️ **Hiện tượng nhòe viền điểm ảnh (Pixel Artifacts):** Xuất hiện quầng mờ quanh các con số do sử dụng công cụ tẩy xóa (Clone Stamp/Brush) trên phần mềm sửa ảnh.
-                    - ⚠️ **Metadata tệp ảnh:** Không tìm thấy chữ ký mã hóa gốc của ứng dụng ngân hàng, có dấu vết xuất file từ công cụ đồ họa trực tuyến.
-                    """)
-
-                # KHUYẾN NGHỊ HÀNH ĐỘNG DỨT KHOÁT
-                st.markdown("""
-                <div style='background: #FEF2F2; border: 1.5px solid #EF4444; border-radius: 10px; padding: 12px 16px; margin-top: 10px;'>
-                    <div style='font-size: 14px; font-weight: 800; color: #991B1B;'>🚨 KHUYẾN NGHỊ AN TOÀN CHO NGƯỜI BÁN HÀNG:</div>
-                    <div style='font-size: 13.5px; color: #7F1D1D; margin-top: 4px; line-height: 1.6; font-weight: 600;'>
-                        Tuyệt đối <strong>KHÔNG giao hàng, gửi mã thẻ hoặc chuyển tiền hoàn lại</strong> chỉ vì nhìn thấy ảnh chụp này. 
-                        Kẻ gian thường tạo bill giả để hối thúc giao hàng. Hãy <strong>tự mở ứng dụng ngân hàng của bạn</strong> để xác nhận tiền đã thực sự về tài khoản hay chưa!
+                if custom_analysis and custom_analysis.get("suspicious_points"):
+                    dynamic_points = custom_analysis.get("suspicious_points", [])
+                    custom_conclusion = custom_analysis.get("conclusion", "Cảnh báo nguy cơ biên lai giả mạo.")
+                    with st.container(border=True):
+                        st.markdown("<div style='font-weight: 800; font-size: 14px; color: #DC2626; margin-bottom: 6px;'>⚠️ Dấu hiệu bất thường phát hiện từ ảnh của bạn:</div>", unsafe_allow_html=True)
+                        for pt in dynamic_points:
+                            st.markdown(f"- ❌ {pt}")
+                    
+                    st.markdown(f"""
+                    <div style='background: #FEF2F2; border: 1.5px solid #EF4444; border-radius: 10px; padding: 12px 16px; margin-top: 10px;'>
+                        <div style='font-size: 14px; font-weight: 800; color: #991B1B;'>🚨 KHUYẾN NGHỊ AN TOÀN CHO BẠN:</div>
+                        <div style='font-size: 13.5px; color: #7F1D1D; margin-top: 4px; line-height: 1.6; font-weight: 600;'>
+                            {custom_conclusion}
+                        </div>
                     </div>
-                </div>
-                """, unsafe_allow_html=True)
+                    """, unsafe_allow_html=True)
+                else:
+                    # CHI TIẾT LỚP 1: THỊ GIÁC & TYPOGRAPHY
+                    with st.container(border=True):
+                        st.markdown("<div style='font-weight: 800; font-size: 14px; color: #1D4ED8; margin-bottom: 6px;'>🔍 Lớp 1: Giám định Thị giác & Typography</div>", unsafe_allow_html=True)
+                        st.markdown("""
+                        - ❌ **Lệch phông chữ số tiền:** Phông chữ dãy số `50,000,000` có độ dày và tỷ lệ nét không khớp với phông *Vietcombank Sans Serif* chuẩn (độ bất thường 98%).
+                        - ❌ **Lệch trục căn lề (Baseline):** Dòng số tiền bị trồi lên 2.4 pixel so với trục chữ VND bên cạnh.
+                        - ⚠️ **Màu sắc thương hiệu:** Tông màu xanh logo Vietcombank bị sai lệch hệ màu HEX (#047857 thay vì chuẩn #005A36).
+                        - ⚠️ **Định dạng thời gian:** Định dạng ngày tháng không đúng cú pháp hiển thị trên app VCB Digibank thế hệ mới.
+                        """)
+
+                    # CHI TIẾT LỚP 2: CẤU TRÚC PIXEL & VẾT NÉN ELA
+                    with st.container(border=True):
+                        st.markdown("<div style='font-weight: 800; font-size: 14px; color: #7C3AED; margin-bottom: 6px;'>🔬 Lớp 2: Giám định Cấu trúc Pixel & Vết nén ELA</div>", unsafe_allow_html=True)
+                        st.markdown("""
+                        - ❌ **Bất thường mức nén ELA:** Vùng chứa số tiền và tên người thụ hưởng có mức chênh lệch nén JPEG cao hơn 82% so với nền, dấu hiệu rõ ràng của việc chèn nội dung khác đè lên.
+                        - ⚠️ **Hiện tượng nhòe viền điểm ảnh (Pixel Artifacts):** Xuất hiện quầng mờ quanh các con số do sử dụng công cụ tẩy xóa (Clone Stamp/Brush) trên phần mềm sửa ảnh.
+                        - ⚠️ **Metadata tệp ảnh:** Không tìm thấy chữ ký mã hóa gốc của ứng dụng ngân hàng, có dấu vết xuất file từ công cụ đồ họa trực tuyến.
+                        """)
+
+                    # KHUYẾN NGHỊ HÀNH ĐỘNG DỨT KHOÁT
+                    st.markdown("""
+                    <div style='background: #FEF2F2; border: 1.5px solid #EF4444; border-radius: 10px; padding: 12px 16px; margin-top: 10px;'>
+                        <div style='font-size: 14px; font-weight: 800; color: #991B1B;'>🚨 KHUYẾN NGHỊ AN TOÀN CHO NGƯỜI BÁN HÀNG:</div>
+                        <div style='font-size: 13.5px; color: #7F1D1D; margin-top: 4px; line-height: 1.6; font-weight: 600;'>
+                            Tuyệt đối <strong>KHÔNG giao hàng, gửi mã thẻ hoặc chuyển tiền hoàn lại</strong> chỉ vì nhìn thấy ảnh chụp này. 
+                            Kẻ gian thường tạo bill giả để hối thúc giao hàng. Hãy <strong>tự mở ứng dụng ngân hàng của bạn</strong> để xác nhận tiền đã thực sự về tài khoản hay chưa!
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
 
             else:
                 # KẾT LUẬN TỔNG QUAN BILL THẬT
