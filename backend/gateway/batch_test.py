@@ -25,11 +25,14 @@ def run_batch_test():
     print("🚀 BẮT ĐẦU CHẠY KIỂM THỬ HÀNG LOẠT (BATCH TEST)...")
     print("=" * 60)
     
-    # 3. Giả lập một tập dữ liệu test (Thực tế TV4 có thể dùng thư viện pandas để đọc từ file test.csv)
+    # 3. Giả lập một tập dữ liệu test đầy đủ 3 cấp độ: An toàn, Đáng ngờ, Nguy cơ cao
     test_cases = [
         "Cuối tuần này rảnh không, anh em mình làm chầu bia nhé!",
+        "Mày ơi tao đang kẹt tiền gấp, chuyển tiền cho tao mượn 2 triệu chiều tao gửi lại nhé!",
+        "Tài khoản VNeID của bạn cần cập nhật thông tin định danh điện tử mức 2 trong ngày hôm nay.",
         "Tuyển CTV làm nhiệm vụ xem video Shopee/TikTok hoa hồng 30-50% mỗi ngày, nạp cọc 200k rút ngay 350k!",
         "Tôi là Đại úy Nguyễn Văn Hùng cán bộ điều tra. Tài khoản của anh đang liên quan đường dây rửa tiền, yêu cầu chuyển 150 triệu vào tài khoản an toàn gấp!",
+        "CUC CSGT THONG BAO: Phuong tien 29A-888.88 vi pham toc do. Truy cap ngay tra-cuu-phat-nguoi.csgt-online.xyz de nop phat!",
         "Chuc mung ban da trung thuong Iphone 15 Pro Max. Vui long click vao link: nhan-thuong-apple.xyz de nhan!"
     ]
 

@@ -104,6 +104,13 @@ def calculate_dynamic_risk(user_text: str, rag_article: Optional[dict] = None) -
         exp = "Hệ thống phát hiện kịch bản thao túng tâm lý có dấu hiệu nguy cơ cao chiếm đoạt tài sản."
     elif score >= 40:
         level = "Đáng ngờ"
+        if tactic == "Giao tiếp sinh hoạt thông thường":
+            if any("tài sản" in t.lower() or "tiền" in t.lower() for t in traps):
+                tactic = "Nghi vấn mượn tiền gấp hoặc chiếm quyền tài khoản (Hack nick)"
+            elif any("link" in t.lower() for t in traps):
+                tactic = "Tin nhắn chứa đường link hoặc tiếp thị chưa xác thực"
+            else:
+                tactic = "Dấu hiệu thúc ép tâm lý hoặc thông tin chưa kiểm chứng"
         exp = "Phát hiện một số từ khóa đáng ngờ hoặc có dấu hiệu tạo áp lực, cần kiểm tra thận trọng."
     else:
         level = "An toàn"

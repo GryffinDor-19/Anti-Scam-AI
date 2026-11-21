@@ -248,7 +248,18 @@ def render_welcome_screen():
                     st.session_state.pending_user_query = "CUC CSGT THONG BAO: Phuong tien 29A-888.88 vi pham toc do. Truy cap ngay tra-cuu-phat-nguoi.csgt-online.xyz de nop phat!"
                     st.rerun()
 
-        # Kịch bản 5: Tin nhắn bình thường (An toàn)
+        # Kịch bản 5: Kịch bản Đáng ngờ (40 - 69 điểm: Nghi mượn tiền gấp / Hack nick)
+        st.markdown("<div style='height: 4px;'></div>", unsafe_allow_html=True)
+        with st.container(border=True):
+            col_sus_text, col_sus_btn = st.columns([3, 1.2], vertical_alignment="center")
+            with col_sus_text:
+                st.markdown("<span style='font-weight: 700; color: #D97706;'>🟡 Kịch bản Đáng ngờ (Nghi mượn tiền gấp / Hack nick):</span> *\"Mày ơi tao đang kẹt tiền gấp, chuyển tiền cho tao mượn 2 triệu chiều tao gửi lại nhé!\"*", unsafe_allow_html=True)
+            with col_sus_btn:
+                if st.button("⚠️ Thử kịch bản Đáng ngờ", key="demo_btn_sus", use_container_width=True):
+                    st.session_state.pending_user_query = "Mày ơi tao đang kẹt tiền gấp, chuyển tiền cho tao mượn 2 triệu chiều tao gửi lại nhé!"
+                    st.rerun()
+
+        # Kịch bản 6: Tin nhắn bình thường (An toàn)
         st.markdown("<div style='height: 4px;'></div>", unsafe_allow_html=True)
         with st.container(border=True):
             col_safe_text, col_safe_btn = st.columns([3, 1.2], vertical_alignment="center")
