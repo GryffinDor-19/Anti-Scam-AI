@@ -523,5 +523,29 @@
             "www.youtube.com",
             "https://www.youtube.com/"
         ]
+    },
+    {
+        "id": 36,
+        "title": "✅ Mẫu an toàn: Tên miền chính thống",
+        "source": "Hệ thống tự học toàn diện (Omni-Learn)",
+        "url": "https://www.google.com/",
+        "category_name": "Tên miền chính thống",
+        "summary": "Đường dẫn được phân tích là trang chủ của Google, một công cụ tìm kiếm uy tín toàn cầu. Dữ liệu quét thực tế xác nhận URL gốc và URL cuối cùng trùng khớp, không có dấu hiệu chuyển hướng độc hại hay nội dung lừa đảo.",
+        "keywords": [
+            "https://www.google.com/",
+            "www.google.com"
+        ]
+    },
+    {
+        "id": 37,
+        "title": "✅ Mẫu an toàn: Xác minh trực tiếp",
+        "source": "Hệ thống tự học toàn diện (Omni-Learn)",
+        "url": "",
+        "category_name": "Xác minh trực tiếp",
+        "summary": "Nội dung bạn cung cấp cho thấy bạn đã chủ động gọi điện để xác nhận lại thông tin, đây là một cách làm rất an toàn. Tuy nhiên, để đảm bảo tuyệt đối, bạn hãy luôn chắc chắn rằng mình đang liên hệ qua đúng số điện thoại chính thức của người quen hoặc cơ quan cần làm việc.",
+        "keywords": [
+            "nhận",
+            "điện"
+        ]
     }
 ]
