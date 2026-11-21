@@ -83,17 +83,37 @@ def calculate_dynamic_risk(user_text: str, rag_article: Optional[dict] = None) -
         else:
             traps.append("Bẫy Chiếm Đoạt Tài Sản: Yêu cầu chuyển tiền vào tài khoản lạ hoặc đánh cắp mã OTP/mật khẩu")
 
-    # 4. DẤU HIỆU LINK LẠ (+25 điểm)
-    has_suspicious_link = bool(re.search(
-        r"https?://|[a-z0-9\-]+\.(top|xyz|site|vip|cc|online|work|cfd|click|live|club|icu|link|buzz)",
-        text_lower
-    ))
-    if has_suspicious_link:
+    # 4. DẤU HIỆU LINK LẠ & ĐUÔI TÊN MIỀN ĐỘC HẠI
+    trusted_domains = [
+        "youtube.com", "youtu.be", "google.com", "facebook.com", "zalo.me",
+        "gov.vn", "edu.vn", "vnexpress.net", "tuoitre.vn", "thanhnien.vn",
+        "vtv.vn", "dantri.com.vn", "nudgecoach.com", "bocongan.gov.vn", "vnu.edu.vn"
+    ]
+    has_trusted_domain = any(td in text_lower for td in trusted_domains)
+
+    suspicious_tld_pattern = r"[a-z0-9\-]+\.(top|xyz|site|vip|cc|online|work|cfd|click|live|club|icu|buzz|tk|ml|ga|cf|devtunnels\.ms)"
+    has_suspicious_tld = bool(re.search(suspicious_tld_pattern, text_lower))
+
+    if has_suspicious_tld:
         score += 25
         traps.append("Dấu Hiệu Kỹ Thuật: Đính kèm đường link khả nghi hoặc tên miền không chính thống để đánh cắp thông tin")
+    elif ("http://" in text_lower or "https://" in text_lower) and not has_trusted_domain:
+        score += 15
+        traps.append("Dấu Hiệu Kỹ Thuật: Đính kèm đường link chưa xác thực cần cẩn trọng")
 
     # 5. CỘNG HƯỞNG TỪ BÀI BÁO RAG ĐỐI SOÁT
-    if rag_article and score > 25:
+    is_safe_article = False
+    if rag_article:
+        title_lower = rag_article.get("title", "").lower()
+        cat_lower = rag_article.get("category_name", "").lower()
+        if "an toàn" in title_lower or "chính thống" in cat_lower or "chính thống" in title_lower:
+            is_safe_article = True
+
+    if is_safe_article and not auth_matches and not fin_matches:
+        score = min(score, 12)
+        tactic = rag_article.get("category_name", "Tên miền chính thống")
+        traps = ["Không phát hiện dấu hiệu thao túng tâm lý. Đường link thuộc nền tảng uy tín."]
+    elif rag_article and score > 25:
         rag_conf = int(rag_article.get("confidence", 70))
         score = max(score, min(97, rag_conf + 4))
 

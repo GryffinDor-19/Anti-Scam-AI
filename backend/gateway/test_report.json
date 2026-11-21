@@ -96,12 +96,13 @@
     "test_id": 6,
     "input_text": "CUC CSGT THONG BAO: Phuong tien 29A-888.88 vi pham toc do. Truy cap ngay tra-cuu-phat-nguoi.csgt-online.xyz de nop phat!",
     "ai_result": {
-      "risk_score": 90,
+      "risk_score": 98,
       "threat_level": "Nguy cơ cao",
       "detected_tactic": "Mạo Danh Cục CSGT Báo Phạt Nguội & Link Độc Hại",
       "explanation": "Hệ thống phát hiện kịch bản thao túng tâm lý có dấu hiệu nguy cơ cao chiếm đoạt tài sản.",
       "psychological_traps": [
         "Bẫy Uy Quyền / Sợ Hãi: Mạo danh cơ quan nhà nước đe dọa bắt giữ hoặc dọa khóa tài khoản/CCCD",
+        "Bẫy Ép Thời Gian: Giới hạn thời gian gấp gáp ép nạn nhân hoảng loạn hành động mà không kịp kiểm chứng",
         "Bẫy Chiếm Đoạt Tài Sản: Yêu cầu chuyển tiền vào tài khoản lạ hoặc đánh cắp mã OTP/mật khẩu",
         "Dấu Hiệu Kỹ Thuật: Đính kèm đường link khả nghi hoặc tên miền không chính thống để đánh cắp thông tin"
       ],
@@ -116,11 +117,12 @@
     "test_id": 7,
     "input_text": "Chuc mung ban da trung thuong Iphone 15 Pro Max. Vui long click vao link: nhan-thuong-apple.xyz de nhan!",
     "ai_result": {
-      "risk_score": 74,
+      "risk_score": 75,
       "threat_level": "Nguy cơ cao",
       "detected_tactic": "Đường Link Độc Hại & Phishing",
       "explanation": "Hệ thống phát hiện kịch bản thao túng tâm lý có dấu hiệu nguy cơ cao chiếm đoạt tài sản. (Trùng khớp cảnh báo: Rải link phishing lừa đảo, seeding quảng cáo bẩn trên Facebook - Báo Nhân Dân (Cẩm nang 24 hình thức lừa đảo))",
       "psychological_traps": [
+        "Bẫy Ép Thời Gian: Giới hạn thời gian gấp gáp ép nạn nhân hoảng loạn hành động mà không kịp kiểm chứng",
         "Bẫy Hám Lợi: Mồi chài hoa hồng cao hoặc nhận tiền thưởng làm nhiệm vụ ảo",
         "Dấu Hiệu Kỹ Thuật: Đính kèm đường link khả nghi hoặc tên miền không chính thống để đánh cắp thông tin"
       ],
