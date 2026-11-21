@@ -9,8 +9,25 @@ from concurrent.futures import ThreadPoolExecutor, as_completed  # Thư viện c
 try:  # Thử nạp thư viện đọc file .env
     from dotenv import load_dotenv  # Import hàm load_dotenv từ gói python-dotenv
     load_dotenv()  # Tự động đọc các biến môi trường (như GEMINI_API_KEY) từ file .env ở thư mục gốc
-except ImportError:  # Nếu máy chưa cài python-dotenv thì bỏ qua để không bị sập chương trình
-    pass  # Không làm gì cả và tiếp tục chạy
+except ImportError:
+    pass
+
+# Tự động nạp trực tiếp file .env ở thư mục gốc mà không phụ thuộc thư viện python-dotenv
+_env_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+_env_path = os.path.join(_env_root, ".env")
+if os.path.exists(_env_path):
+    try:
+        with open(_env_path, "r", encoding="utf-8") as _f:
+            for _line in _f:
+                _line = _line.strip()
+                if _line and not _line.startswith("#") and "=" in _line:
+                    _k, _v = _line.split("=", 1)
+                    _k = _k.strip()
+                    _v = _v.strip().strip("'\"")
+                    if _k and (_k not in os.environ or not os.environ[_k]):
+                        os.environ[_k] = _v
+    except Exception:
+        pass
 
 try:
     from backend.engines.dynamic_scorer import calculate_dynamic_risk
@@ -197,7 +214,7 @@ def analyze_scam_content(user_text: str, rag_article: dict = None, api_key: str 
         max_output_tokens=1500  # Đủ không gian để AI trả lời trọn vẹn không bị cắt cụt JSON
     )  # Kết thúc cấu hình
 
-    race_models = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-3.5-flash"]  # Đua song song các model để lấy kết quả phân tích thật nhanh nhất
+    race_models = ["gemini-3.8-flash", "gemini-2.5-flash", "gemini-3.5-flash"]  # Đua song song các model thế hệ mới nhất
     executor = ThreadPoolExecutor(max_workers=len(race_models))  # Tạo nhóm luồng chạy song song
     futures = {  # Ánh xạ từng luồng đang chạy với tên model tương ứng
         executor.submit(_call_single_model, ai_client, m, prompt, gen_config): m  # Bắn yêu cầu đồng thời tới cả các model
