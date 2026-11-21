@@ -43,3 +43,6 @@ Desktop.ini
 # Temporary files & logs
 *.log
 scratch/
+# Chặn file .env và các file biến môi trường phụ
+.env
+.env.*
