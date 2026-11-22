@@ -51,11 +51,17 @@ try:  # Thử import hàm tìm kiếm bài báo RAG theo đường dẫn ngắn
 except ImportError:  # Nếu lỗi đường dẫn thì thử nạp từ thư mục gốc
     from backend.knowledge.retriever import find_matching_article  # Nạp hàm đối soát RAG từ backend
 
-# 2. Nạp Lớp AI: Semantic Analyzer (TV1 - Gemini)
-try:  # Thử import hàm phân tích ngữ nghĩa Gemini theo đường dẫn ngắn
-    from modules.semantic_analyzer import analyze_scam_content  # Nạp hàm gọi Gemini AI
-except ImportError:  # Nếu lỗi đường dẫn thì thử nạp từ thư mục gốc
-    from backend.modules.semantic_analyzer import analyze_scam_content  # Nạp hàm gọi Gemini AI từ backend
+# 2. Nạp Lớp AI: Semantic Analyzer (TV1 - Gemini & Multimodal Engine)
+try:
+    from backend.engines.semantic_analyzer import analyze_scam_content
+except ImportError:
+    try:
+        from engines.semantic_analyzer import analyze_scam_content
+    except ImportError:
+        try:
+            from modules.semantic_analyzer import analyze_scam_content
+        except ImportError:
+            from backend.modules.semantic_analyzer import analyze_scam_content
 
 # 3. Nạp bộ chuẩn hóa Response Formatter
 from .response_formatter import format_scam_response  # Nạp hàm đóng gói JSON chuẩn 6 trường

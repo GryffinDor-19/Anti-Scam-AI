@@ -1,6 +1,12 @@
 import os  # Thư viện xử lý đường dẫn hệ thống
 import json  # Thư viện đọc và in định dạng JSON
-from modules.semantic_analyzer import analyze_scam_content  # Nạp hàm phân tích AI từ module semantic_analyzer
+try:
+    from backend.engines.semantic_analyzer import analyze_scam_content
+except ImportError:
+    try:
+        from engines.semantic_analyzer import analyze_scam_content
+    except ImportError:
+        from modules.semantic_analyzer import analyze_scam_content
 
 # Xác định đường dẫn tới file backend/data/scam_knowledge.json
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))  # Lấy thư mục chứa file backend.py hiện tại
