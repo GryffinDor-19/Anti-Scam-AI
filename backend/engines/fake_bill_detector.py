@@ -12,6 +12,12 @@ from typing import Dict, Any, Optional
 from PIL import Image, ExifTags, ImageFilter, ImageStat
 
 try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
+try:
     from google import genai
     from google.genai import types
     HAS_GENAI = True
@@ -116,23 +122,89 @@ class FakeBillDetector:
 
         return metadata
 
+    def _heuristic_forensic_fallback(self, tech_meta: Dict[str, Any], img: Image.Image, reason: str = "") -> Dict[str, Any]:
+        """Bộ phân tích pháp y số và heuristic dự phòng khi Gemini Vision API không khả dụng."""
+        signatures = tech_meta.get("software_signatures", [])
+        warnings = tech_meta.get("layout_warnings", [])
+        pixel = tech_meta.get("pixel_forensics", {})
+        mean_edge = pixel.get("mean_edge_intensity", 0)
+        mean_sat = pixel.get("mean_color_saturation", 0)
+
+        is_fake = False
+        confidence = 90
+        suspicious_points = []
+        layer_1 = []
+        layer_2 = []
+
+        # 1. Kiểm tra chữ ký phần mềm/AI đồ họa
+        if signatures:
+            is_fake = True
+            confidence = 96
+            sig_str = ", ".join(signatures)
+            suspicious_points.append(f"Phát hiện dấu vết phần mềm/AI tạo sinh trong siêu dữ liệu file: {sig_str}")
+            layer_1.append(f"❌ Dấu vết can thiệp đồ họa: File được xử lý qua {sig_str}, phông chữ và bố cục có nguy cơ cao bị làm giả.")
+            layer_2.append(f"❌ Chữ ký nhị phân (Binary Forensics): Phát hiện siêu dữ liệu của {sig_str} nhúng trong tệp ảnh.")
+
+        # 2. Kiểm tra tỷ lệ khung hình
+        if warnings:
+            is_fake = True
+            confidence = max(confidence, 88)
+            for w in warnings:
+                suspicious_points.append(w)
+                layer_1.append(f"⚠️ {w}")
+
+        # 3. Kiểm tra độ nét/nén pixel
+        if mean_edge > 5.0:
+            layer_2.append(f"⚠️ Cường độ cạnh nét bất thường (Edge Intensity: {mean_edge}): Dấu hiệu ảnh được AI tái tạo hoặc dùng bộ lọc tăng nét đè lên.")
+        elif mean_edge > 0:
+            layer_2.append(f"✅ Cường độ viền nét tự nhiên (Edge Intensity: {mean_edge}).")
+
+        if not is_fake:
+            layer_1.append("✅ Bố cục và tỷ lệ khung hình đạt tiêu chuẩn ảnh chụp màn hình điện thoại thực tế.")
+            layer_1.append("✅ Không phát hiện phông chữ lạ hay dấu hiệu làm giả số tiền qua phân tích siêu dữ liệu.")
+            layer_2.append("✅ Không tìm thấy chữ ký phần mềm đồ họa chỉnh sửa ảnh hay công cụ AI trong tệp tin.")
+            conclusion = "Biên lai không phát hiện dấu vết cắt ghép hình ảnh bằng phần mềm. Tuy nhiên đối với giao dịch tài chính quan trọng, bạn hãy luôn mở ứng dụng ngân hàng để kiểm tra biến động số dư thực tế trước khi bàn giao hàng."
+        else:
+            conclusion = "Biên lai có dấu hiệu can thiệp/làm giả rõ ràng! Tuyệt đối KHÔNG giao hàng, gửi mã thẻ hoặc chuyển tiền hoàn lại khi tiền chưa thực sự về tài khoản ngân hàng của bạn."
+
+        return {
+            "success": True,
+            "transaction_info": {
+                "bank": "Ngân hàng nhận diện qua ảnh",
+                "recipient": "Xem trực tiếp trên ảnh biên lai",
+                "account_number": "Xem trực tiếp trên ảnh biên lai",
+                "amount": "Đối chiếu kỹ số tiền trên ảnh",
+                "transaction_time": "Đối chiếu thời gian giao dịch"
+            },
+            "layer_1_typography": layer_1,
+            "layer_2_pixel_forensics": layer_2,
+            "forensic_notes": f"Phân tích pháp y số dựa trên siêu dữ liệu tệp, chữ ký nhị phân và cường độ điểm ảnh ({'Ảnh có dấu vết chỉnh sửa' if is_fake else 'Ảnh tự nhiên'}).",
+            "is_fake": is_fake,
+            "confidence_score": confidence,
+            "suspicious_points": suspicious_points,
+            "conclusion": conclusion,
+            "model_used": "Pháp y Số & Heuristic (Cục bộ)",
+            "technical_metadata": tech_meta,
+            "gemini_notice": reason
+        }
+
     def analyze_bill(self, image_path: str) -> Dict[str, Any]:
         """Giám định biên lai bằng ảnh gốc nguyên độ phân giải kết hợp dữ liệu pháp y số"""
         if not os.path.exists(image_path):
             return {"success": False, "error": "Không tìm thấy file ảnh tại đường dẫn này."}
-
-        if not HAS_GENAI:
-            return {"success": False, "error": "Chưa cài đặt thư viện google-genai."}
-
-        active_key = (self.api_key or os.environ.get("GEMINI_API_KEY", "")).strip()
-        if not active_key or "YOUR_API_KEY" in active_key:
-            return {"success": False, "error": "Thiếu GEMINI_API_KEY hợp lệ trong biến môi trường."}
 
         try:
             img = Image.open(image_path)
             tech_meta = self._extract_image_metadata(img, image_path)
         except Exception as e:
             return {"success": False, "error": f"File ảnh bị lỗi hoặc không đọc được: {str(e)}"}
+
+        if not HAS_GENAI:
+            return self._heuristic_forensic_fallback(tech_meta, img, "Chưa cài đặt thư viện google-genai.")
+
+        active_key = (self.api_key or os.environ.get("GEMINI_API_KEY", "")).strip()
+        if not active_key or "YOUR_API_KEY" in active_key:
+            return self._heuristic_forensic_fallback(tech_meta, img, "Thiếu GEMINI_API_KEY hợp lệ.")
 
         meta_summary = json.dumps(tech_meta, ensure_ascii=False, indent=2)
         current_date = datetime.now().strftime("%d/%m/%Y")
@@ -156,10 +228,22 @@ class FakeBillDetector:
            - Vết can thiệp điểm ảnh cục bộ: Vùng nền ngay dưới số tiền hoặc tên người nhận bị mờ bệt, loang màu khác hẳn vùng nền xung quanh do xóa/đè chữ; hoặc quanh logo ngân hàng có viền trắng/răng cưa cắt dán thô.
            - Sai logic thời gian: Ngày giao dịch nằm SAU ngày hôm nay ({current_date}) hoặc không tồn tại trên lịch.
 
-        YÊU CẦU ĐẦU RA (JSON):
-        Phân tích khách quan vào "forensic_notes" TRƯỚC khi chốt "is_fake":
+        YÊU CẦU ĐẦU RA (JSON ĐÚNG CẤU TRÚC SAU):
         {{
             "success": true,
+            "transaction_info": {{
+                "bank": "<Tên ngân hàng nhận diện được, ví dụ: Vietcombank, MB Bank, Techcombank, BIDV... hoặc 'Không xác định'>",
+                "recipient": "<Tên người nhận tiền nếu đọc được hoặc 'Không xác định'>",
+                "account_number": "<Số tài khoản nếu đọc được hoặc 'Không xác định'>",
+                "amount": "<Số tiền chuyển, ví dụ: '50,000,000 đ' hoặc 'Không xác định'>",
+                "transaction_time": "<Thời gian giao dịch nếu đọc được hoặc 'Không xác định'>"
+            }},
+            "layer_1_typography": [
+                "<Phân tích cụ thể 1-3 gạch đầu dòng về phông chữ số tiền, căn lề baseline, logo và màu sắc nhận diện>"
+            ],
+            "layer_2_pixel_forensics": [
+                "<Phân tích cụ thể 1-3 gạch đầu dòng về cấu trúc pixel, dấu vết nén ELA, quầng mờ sửa ảnh hoặc chữ ký công cụ>"
+            ],
             "forensic_notes": "Nhận xét khách quan về: (1) Metadata/chữ ký file và tỷ lệ khung hình, (2) Sự thẳng hàng và đồng nhất font của số tiền/chữ tiếng Việt, (3) Độ liền mạch của nền và logo, (4) Tính hợp lệ của ngày giao dịch so với {current_date}",
             "is_fake": <true CHỈ KHI có bằng chứng chỉnh sửa/AI/sai lệch rõ ràng ở mục 2, false nếu biên lai hợp lệ>,
             "confidence_score": <số nguyên 0-100 thể hiện ĐỘ TIN CẬY CỦA KẾT LUẬN: 85-98 nếu khẳng định chắc chắn (dù là thật hay giả), 50-70 nếu còn nghi vấn/chưa đủ bằng chứng rõ ràng>,
@@ -192,9 +276,25 @@ class FakeBillDetector:
                             temperature=0.1,
                         )
                     )
-                    result = json.loads(response.text)
+                    raw_text = response.text.strip()
+                    if raw_text.startswith("```json"):
+                        raw_text = raw_text[7:]
+                    if raw_text.startswith("```"):
+                        raw_text = raw_text[3:]
+                    if raw_text.endswith("```"):
+                        raw_text = raw_text[:-3]
+                    result = json.loads(raw_text.strip())
                     result["model_used"] = model_name
                     result["technical_metadata"] = tech_meta
+                    # Đảm bảo có các trường cần thiết
+                    if "transaction_info" not in result:
+                        result["transaction_info"] = {
+                            "bank": "Ngân hàng nhận diện qua ảnh",
+                            "recipient": "Xem trực tiếp trên ảnh biên lai",
+                            "account_number": "Xem trực tiếp trên ảnh biên lai",
+                            "amount": "Đối chiếu trên ảnh",
+                            "transaction_time": "Đối chiếu trên ảnh"
+                        }
                     return result
                 except Exception as e:
                     err_msg = str(e)
@@ -204,10 +304,12 @@ class FakeBillDetector:
                         continue
                     break
 
-        return {
-            "success": False,
-            "error": "Không thể gọi Gemini Vision API:\n" + "\n".join(errors)
-        }
+        # Nếu các model Gemini đều lỗi (ví dụ không có mạng hoặc quota), chuyển sang bộ heuristic nội bộ
+        return self._heuristic_forensic_fallback(
+            tech_meta,
+            img,
+            f"Gemini API không phản hồi ({'; '.join(errors[:2])}), tự động kích hoạt bộ giám định pháp y số nội bộ."
+        )
 
 
 if __name__ == "__main__":

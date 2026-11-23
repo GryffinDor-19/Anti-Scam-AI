@@ -9,6 +9,12 @@ import sys
 import importlib
 import streamlit as st
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 # Thêm các thư mục liên quan vào system path để import modules
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.dirname(current_dir)
