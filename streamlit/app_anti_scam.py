@@ -9,6 +9,12 @@ import sys
 import importlib
 import streamlit as st
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 # Thêm các thư mục liên quan vào system path để import modules
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.dirname(current_dir)
@@ -20,9 +26,15 @@ for p in [backend_dir, root_dir, current_dir]:
     sys.path.insert(0, p)
 
 try:
-    from modules.rag_case_matcher import RAGCaseMatcher
+    from backend.engines.rag_case_matcher import RAGCaseMatcher
 except ImportError:
-    from backend.modules.rag_case_matcher import RAGCaseMatcher
+    try:
+        from engines.rag_case_matcher import RAGCaseMatcher
+    except ImportError:
+        try:
+            from modules.rag_case_matcher import RAGCaseMatcher
+        except ImportError:
+            from backend.modules.rag_case_matcher import RAGCaseMatcher
 
 # =============================================================================
 # NẠP CÁC MODULE GIAO DIỆN & TỐI ƯU HIỆU NĂNG TỐI ĐA (ZERO-DELAY)

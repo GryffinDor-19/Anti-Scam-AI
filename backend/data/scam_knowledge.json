@@ -526,38 +526,26 @@
     },
     {
         "id": 36,
-        "title": "✅ Mẫu an toàn: Giao tiếp sinh hoạt thông thường",
+        "title": "✅ Mẫu an toàn: Tên miền chính thống",
         "source": "Hệ thống tự học toàn diện (Omni-Learn)",
-        "url": "https://canhbao.khonggianmang.vn",
-        "category_name": "Giao tiếp sinh hoạt thông thường",
-        "summary": "Không phát hiện dấu hiệu lừa đảo, đe dọa hay bẫy tài chính. Tin nhắn thuộc giao tiếp sinh hoạt thường ngày.",
+        "url": "https://www.google.com/",
+        "category_name": "Tên miền chính thống",
+        "summary": "Đường dẫn được phân tích là trang chủ của Google, một công cụ tìm kiếm uy tín toàn cầu. Dữ liệu quét thực tế xác nhận URL gốc và URL cuối cùng trùng khớp, không có dấu hiệu chuyển hướng độc hại hay nội dung lừa đảo.",
         "keywords": [
-            "không,",
-            "cuối",
-            "nhé!",
-            "rảnh",
-            "tuần",
-            "mình",
-            "chầu"
+            "https://www.google.com/",
+            "www.google.com"
         ]
     },
     {
         "id": 37,
-        "title": "🚨 Mẫu lừa đảo: Mạo Danh Cục CSGT Báo Phạt Nguội & Link Độc Hại",
+        "title": "✅ Mẫu an toàn: Xác minh trực tiếp",
         "source": "Hệ thống tự học toàn diện (Omni-Learn)",
-        "url": "csgt-online.xyz",
-        "category_name": "Mạo Danh Cục CSGT Báo Phạt Nguội & Link Độc Hại",
-        "summary": "Hệ thống phát hiện kịch bản thao túng tâm lý có dấu hiệu nguy cơ cao chiếm đoạt tài sản.",
+        "url": "",
+        "category_name": "Xác minh trực tiếp",
+        "summary": "Nội dung bạn cung cấp cho thấy bạn đã chủ động gọi điện để xác nhận lại thông tin, đây là một cách làm rất an toàn. Tuy nhiên, để đảm bảo tuyệt đối, bạn hãy luôn chắc chắn rằng mình đang liên hệ qua đúng số điện thoại chính thức của người quen hoặc cơ quan cần làm việc.",
         "keywords": [
-            "29a-888.88",
-            "phuong",
-            "truy",
-            "tien",
-            "pham",
-            "thong",
-            "bao:",
-            "csgt-online.xyz",
-            "csgt"
+            "nhận",
+            "điện"
         ]
     }
 ]

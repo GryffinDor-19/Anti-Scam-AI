@@ -1,52 +1,59 @@
 """
 Module Ứng Phó Khẩn Cấp: Emergency Manager - Quy trình Giờ Vàng & Hotline cứu nguy 1-chạm.
 Phụ trách: Thành viên 3 (Frontend & Cấp cứu khẩn cấp)
+Chức năng: Cung cấp danh bạ Hotline khẩn cấp ngân hàng và Checklist 3 bước cứu tiền tức thì.
 """
 
-from typing import Dict, Any, List
+from typing import Dict, List, Any
 
 
 class EmergencyManager:
-    """Quản trị danh bạ tổng đài ngân hàng phong tỏa thẻ khẩn cấp và A05"""
+    """Quản lý các kịch bản phản ứng nhanh trong thời điểm vàng khi nạn nhân bị lừa."""
 
-    HOTLINES: List[Dict[str, str]] = [
-        {"bank": "Vietcombank", "hotline": "1900545413", "desc": "Khóa thẻ khẩn cấp & đóng dịch vụ VCB Digibank"},
-        {"bank": "BIDV", "hotline": "19009247", "desc": "Khóa tài khoản và hỗ trợ tra soát giao dịch gian lận"},
-        {"bank": "VietinBank", "hotline": "1900558868", "desc": "Khóa thẻ tức thì và chặn giao dịch Internet Banking"},
-        {"bank": "Techcombank", "hotline": "1800588822", "desc": "Hỗ trợ bảo mật và khóa khẩn cấp ứng dụng Techcombank"},
-        {"bank": "MB Bank", "hotline": "1900545426", "desc": "Khóa App MB Bank và ngừng mọi giao dịch thanh toán"}
+    BANK_HOTLINES: List[Dict[str, str]] = [
+        {"bank": "Vietcombank", "hotline": "1900545413", "desc": "Bấm phím 1 để khóa thẻ khẩn cấp"},
+        {"bank": "Techcombank", "hotline": "1800588822", "desc": "Tổng đài 24/7 khóa tài khoản tức thì"},
+        {"bank": "MB Bank", "hotline": "1900545426", "desc": "Hỗ trợ phong tỏa app và thẻ ngay lập tức"},
+        {"bank": "VietinBank", "hotline": "1900558868", "desc": "Khóa dịch vụ ngân hàng điện tử khẩn"},
+        {"bank": "BIDV", "hotline": "19009247", "desc": "Hỗ trợ khách hàng và xử lý gian lận 24/7"},
+        {"bank": "VPBank", "hotline": "1900545415", "desc": "Tự động khóa thẻ qua tổng đài IVR"},
+        {"bank": "Agribank", "hotline": "1900558818", "desc": "Trung tâm chăm sóc khách hàng khẩn cấp"},
     ]
+    # Thuộc tính tương thích ngược
+    HOTLINES = BANK_HOTLINES
 
-    POLICE_HOTLINE: str = "069.234.8560"  # Cục An ninh mạng A05 (Bộ Công an)
-    PORTAL_SPAM: str = "156"  # Tổng đài phản ánh tin nhắn rác & cuộc gọi lừa đảo
+    POLICE_HOTLINE: str = "069.234.8560 (Cục An ninh mạng A05 - Bộ Công an)"
+    PORTAL_SPAM: str = "156 (Tổng đài phản ánh tin nhắn rác & cuộc gọi lừa đảo)"
+
+    EMERGENCY_CHECKLIST: List[Dict[str, str]] = [
+        {
+            "step": "BƯỚC 1: CẮT ĐỨT KẾT NỐI NGAY LẬP TỨC",
+            "icon": "✈️",
+            "action": "Nếu vừa bấm vào link lạ hoặc tải file `.apk`: Hãy BẬT NGAY CHẾ ĐỘ MÁY BAY (Airplane Mode) hoặc TẮT NGUỒN ĐIỆN THOẠI để ngắt kết nối mạng. Kẻ gian sẽ không thể can thiệp vào máy để đọc mã OTP ngân hàng.",
+            "priority": "Khẩn cấp nhất trong 60 giây đầu"
+        },
+        {
+            "step": "BƯỚC 2: GỌI TỔNG ĐÀI NGÂN HÀNG PHONG TỎA DÒNG TIỀN",
+            "icon": "📞",
+            "action": "Bấm gọi ngay cho hotline ngân hàng của bạn bên dưới. Nói đúng 1 câu với tổng đài viên: 'Tôi vừa bị lừa đảo chuyển tiền/lộ tài khoản, yêu cầu khóa thẻ và tạm dừng mọi giao dịch khẩn cấp!'.",
+            "priority": "Thời điểm vàng: Dưới 15 phút"
+        },
+        {
+            "step": "BƯỚC 3: CHỤP MÀN HÌNH LƯU GIỮ 3 BẰNG CHỨNG",
+            "icon": "📸",
+            "action": "Trước khi kẻ gian kịp thu hồi hoặc xóa đoạn chat, hãy chụp ngay: (1) Số tài khoản và tên người nhận tiền, (2) Mã giao dịch chuyển khoản ngân hàng, (3) Toàn bộ tin nhắn đe dọa hoặc dụ dỗ.",
+            "priority": "Dùng để nộp đơn tố giác cho Cơ quan Công an"
+        }
+    ]
 
     @classmethod
     def get_emergency_payload(cls) -> Dict[str, Any]:
         """Trả về dữ liệu hiển thị cho Banner Cấp Cứu Giờ Vàng trên Streamlit"""
         return {
-            "title": "🚨 QUY TRÌNH CỨU NGUY KHẨN CẤP (THỜI ĐIỂM VÀNG 15 PHÚT ĐẦU)",
-            "subtitle": "Nếu bạn vừa lỡ chuyển tiền hoặc cung cấp mã OTP cho kẻ lạ, hãy thực hiện ngay 3 bước sau:",
-            "checklist": [
-                {
-                    "step": "BƯỚC 1: KHÓA TÀI KHOẢN & THẺ NGÂN HÀNG NGAY LẬP TỨC",
-                    "action": "Gọi ngay hotline ngân hàng của bạn bên dưới hoặc vào ứng dụng bấm 'Khóa thẻ khẩn cấp' để ngăn tiền tiếp tục bị chuyển đi.",
-                    "priority": "Khẩn cấp số 1 (Trong 5 phút đầu)",
-                    "icon": "⚡"
-                },
-                {
-                    "step": "BƯỚC 2: CHỤP ẢNH MÀN HÌNH LƯU TOÀN BỘ BẰNG CHỨNG",
-                    "action": "Lưu lại toàn bộ tin nhắn, số điện thoại, số tài khoản nhận tiền, tên ngân hàng và biên lai giao dịch.",
-                    "priority": "Quan trọng",
-                    "icon": "📸"
-                },
-                {
-                    "step": "BƯỚC 3: TRÌNH BÁO CƠ QUAN CÔNG AN & TỔNG ĐÀI 156",
-                    "action": "Gọi Tổng đài 156 hoặc liên hệ Công an phường/xã gần nhất để làm đơn tố giác tội phạm.",
-                    "priority": "Cần thiết",
-                    "icon": "🏛️"
-                }
-            ],
-            "hotlines": cls.HOTLINES,
+            "title": "🚨 QUY TRÌNH CẤP CỨU THỜI ĐIỂM VÀNG (DƯỚI 15 PHÚT)",
+            "subtitle": "Bình tĩnh! Lược bỏ lý thuyết, hãy làm đúng theo 3 bước sau để bảo toàn tài sản:",
+            "checklist": cls.EMERGENCY_CHECKLIST,
+            "hotlines": cls.BANK_HOTLINES,
             "police_hotline": cls.POLICE_HOTLINE,
             "spam_hotline": cls.PORTAL_SPAM
         }

@@ -29,7 +29,7 @@ def extract_and_analyze_urls(text: str) -> dict:  # Định nghĩa hàm quét v�
     shorteners = ('bit.ly', 'tinyurl.com', 't.co', 'goo.gl', 'shorturl.at')  # Các dịch vụ rút gọn link hay dùng để che giấu đích đến
 
     for url in urls:  # Lặp qua từng đường link tìm được
-        full_url = url if url.startswith('http') else f'http://{url}'  # Bổ sung http:// nếu link chỉ bắt đầu bằng www.
+        full_url = url if url.startswith('http') else f'https://{url}'  # Bổ sung https:// để urlparse tách đúng tên miền
         parsed = urlparse(full_url)  # Phân tách cấu trúc URL thành giao thức, tên miền, đường dẫn
         domain = parsed.netloc.lower()  # Lấy tên miền chính và chuyển thành chữ thường
 
@@ -39,68 +39,69 @@ def extract_and_analyze_urls(text: str) -> dict:  # Định nghĩa hàm quét v�
                 warnings.append(f"Tên miền {domain} dùng đuôi lạ, hay gặp trong lừa đảo")  # Thêm cảnh báo đuôi tên miền
             if any(short in domain for short in shorteners):  # Kiểm tra có phải link rút gọn không
                 warnings.append(f"Link rút gọn ({domain}) có nguy cơ che giấu trang độc hại")  # Thêm cảnh báo link rút gọn
-            if full_url.startswith('http://'):  # Kiểm tra xem đường link có dùng giao thức cũ không bảo mật không
-                warnings.append(f"Đường link {domain} không có bảo mật HTTPS")  # Thêm cảnh báo thiếu HTTPS
+            if url.lower().startswith('http://'):  # Chỉ cảnh báo thiếu HTTPS nếu link gốc người dùng gửi thực sự bắt đầu bằng http://
+                warnings.append(f"Link {domain} không có bảo mật HTTPS")  # Thêm cảnh báo thiếu HTTPS
 
-    return {  # Trả về kết quả phân tích link
-        "has_url": len(urls) > 0,  # Có chứa đường link hay không (True/False)
-        "urls": urls,  # Danh sách các link nguyên gốc
-        "domains": list(set(domains)),  # Danh sách tên miền duy nhất (đã loại bỏ trùng lặp)
-        "warnings": warnings  # Danh sách các dấu hiệu đáng ngờ của đường link
-    }
+    return {"urls": urls, "domains": list(set(domains)), "warnings": warnings}  # Trả về link, tên miền không trùng và cảnh báo
 
 
-# 2. Nạp Lớp RAG Retriever (TV2)
+# 1. Nạp Lớp RAG: Knowledge Retriever (TV2)
+try:  # Thử import hàm tìm kiếm bài báo RAG theo đường dẫn ngắn
+    from knowledge.retriever import find_matching_article  # Nạp hàm đối soát kho dữ liệu RAG
+except ImportError:  # Nếu lỗi đường dẫn thì thử nạp từ thư mục gốc
+    from backend.knowledge.retriever import find_matching_article  # Nạp hàm đối soát RAG từ backend
+
+# 2. Nạp Lớp AI: Semantic Analyzer (TV1 - Gemini & Multimodal Engine)
 try:
-    from knowledge.retriever import find_matching_article  # Thử nạp hàm tìm kiếm bài báo RAG
+    from backend.engines.semantic_analyzer import analyze_scam_content
 except ImportError:
     try:
-        from backend.knowledge.retriever import find_matching_article  # Thử nạp với tiền tố backend
+        from engines.semantic_analyzer import analyze_scam_content
     except ImportError:
-        def find_matching_article(text): return None  # Hàm giả lập trả về rỗng nếu không nạp được module RAG
+        try:
+            from modules.semantic_analyzer import analyze_scam_content
+        except ImportError:
+            from backend.modules.semantic_analyzer import analyze_scam_content
 
-# 3. Nạp Lớp Semantic Analyzer (TV1 - Gemini AI)
-try:
-    from modules.semantic_analyzer import analyze_scam_content  # Thử nạp hàm gọi Gemini AI
-except ImportError:
-    try:
-        from backend.modules.semantic_analyzer import analyze_scam_content  # Thử nạp với tiền tố backend
-    except ImportError:
-        from modules.semantic_analyzer import local_fallback_6_fields as analyze_scam_content  # Dùng hàm dự phòng nếu không nạp được
-
-# 4. Nạp bộ chuẩn hóa Response Formatter (TV1)
-from .response_formatter import format_scam_response  # Nạp hàm ép chuẩn 6 trường JSON
+# 3. Nạp bộ chuẩn hóa Response Formatter
+from .response_formatter import format_scam_response  # Nạp hàm đóng gói JSON chuẩn 6 trường
 
 
-class AntiScamPipeline:  # Lớp điều phối chuỗi xử lý phòng thủ
+class AntiScamPipeline:  # Lớp điều phối chính của hệ thống (hỗ trợ đa phương thức: chữ, link, ảnh)
     """
-    Chuỗi xử lý tinh gọn:
-    - Bỏ Fast Filter để AI tự phân tích và chấm điểm
-    - Trích xuất và mớm cảnh báo về link (domain lạ, rút gọn, thiếu HTTPS) cho Gemini
-    - Đối soát kho tri thức RAG (Cục ATTT)
-    - Gọi Gemini AI phân tích chuyên sâu
+    Chuỗi xử lý phòng thủ AI trực tiếp:
+    Bước 1: Quét & phân tích cấu trúc URL
+    Bước 2: RAG Retriever - Bốc bài báo chính thống từ Cục ATTT
+    Bước 3: Semantic LLM - Gemini phân tích chữ, link và hình ảnh
+    Bước 4: Auto-Learn - Tự động học kịch bản & tên miền mới
     """
 
-    def __init__(self):  # Hàm khởi tạo
-        pass  # Không cần khởi tạo Fast Filter nữa
+    def __init__(self):  # Hàm khởi tạo Pipeline
+        pass  # Không còn khởi tạo FastFilter nữa
 
-    def execute(self, user_text: str, api_key: Optional[str] = None) -> Dict[str, Any]:  # Hàm thực thi chính của pipeline
-        clean_text = (user_text or "").strip()  # Làm sạch khoảng trắng ở hai đầu tin nhắn
-        if not clean_text:  # Nếu người dùng để trống tin nhắn
-            return format_scam_response({  # Trả về ngay kết quả rỗng hợp lệ
-                "risk_score": 0,
-                "threat_level": "An toàn",
-                "detected_tactic": "Không có nội dung",
-                "explanation": "Vui lòng nhập nội dung cần kiểm tra.",
-                "psychological_traps": ["Không phát hiện dấu hiệu thao túng tâm lý"],
-                "action_recommendations": ["Nhập nội dung tin nhắn hoặc đường link nghi vấn để thẩm định."]
+    def execute(
+        self,
+        user_text: str = "",  # Nội dung chữ/link (cho phép rỗng nếu người dùng chỉ gửi ảnh)
+        api_key: Optional[str] = None,  # Khóa API Gemini
+        image_bytes: Optional[bytes] = None,  # Dữ liệu ảnh tải lên từ giao diện (nếu có)
+        image_mime: str = "image/jpeg"  # Định dạng ảnh (mặc định image/jpeg)
+    ) -> Dict[str, Any]:  # Hàm thực thi chuỗi phân tích
+        clean_text = (user_text or "").strip()  # Làm sạch khoảng trắng thừa và chống lỗi None
+        if not clean_text and not image_bytes:  # Chỉ báo rỗng khi KHÔNG có cả chữ lẫn ảnh
+            return format_scam_response({  # Trả về phản hồi an toàn mặc định
+                "risk_score": 0,  # Điểm rủi ro bằng 0
+                "threat_level": "An toàn",  # Mức độ an toàn
+                "detected_tactic": "Không có nội dung",  # Nhóm thủ đoạn trống
+                "explanation": "Vui lòng nhập tin nhắn, đường link hoặc tải ảnh cần kiểm tra.",  # Thông báo nhắc nhập liệu
+                "psychological_traps": ["Không phát hiện dấu hiệu thao túng tâm lý"],  # Không có bẫy tâm lý
+                "action_recommendations": ["Nhập nội dung hoặc tải ảnh nghi vấn để thẩm định."]  # Khuyến nghị hành động
             })
 
-        # BƯỚC 1: TRÍCH XUẤT & PHÂN TÍCH LINK
-        url_info = extract_and_analyze_urls(clean_text)  # Quét và kiểm tra các đường link có trong văn bản
+        # BƯỚC 1: QUÉT & PHÂN TÍCH CẤU TRÚC LINK
+        url_info = extract_and_analyze_urls(clean_text) if clean_text else {"urls": [], "domains": [], "warnings": []}  # Tách link nếu có văn bản
 
         # BƯỚC 2: ĐỐI SOÁT BÀI BÁO CHÍNH THỐNG (RAG Retriever)
-        matched_article = find_matching_article(clean_text)  # Tìm bài báo cảnh báo khớp trong kho RAG
+        matched_article = find_matching_article(clean_text) if clean_text else None  # Tìm bài báo cảnh báo khớp trong kho RAG
 
         # MỚM CẢNH BÁO LINK CHO GEMINI
         enriched_text = clean_text  # Tạo bản sao nội dung để gửi sang Gemini
@@ -108,18 +109,25 @@ class AntiScamPipeline:  # Lớp điều phối chuỗi xử lý phòng thủ
             hint = " | ".join(url_info["warnings"])  # Nối các cảnh báo thành một chuỗi ngắn gọn
             enriched_text = f"{clean_text}\n[Cảnh báo kỹ thuật từ hệ thống: {hint}]"  # Đính kèm cảnh báo vào cuối tin nhắn
 
-        # BƯỚC 3: PHÂN TÍCH NGỮ NGHĨA & CHẤM ĐIỂM RỦI RO (GEMINI / MULTI-FACTOR ENGINE)
-        ai_result = analyze_scam_content(  # Phân tích chuyên sâu
+        # BƯỚC 3: PHÂN TÍCH NGỮ NGHĨA, LINK & HÌNH ẢNH (GEMINI)
+        ai_result = analyze_scam_content(  # Gọi thẳng Gemini AI phân tích chuyên sâu
             user_text=enriched_text,  # Truyền nội dung đã đính kèm cảnh báo link
             rag_article=matched_article,  # Truyền bài báo RAG đối chiếu (nếu có)
-            api_key=api_key  # Truyền khóa API Gemini
+            api_key=api_key,  # Truyền khóa API Gemini
+            image_bytes=image_bytes,  # Truyền dữ liệu ảnh (nếu có)
+            image_mime=image_mime  # Truyền định dạng ảnh
         )
 
         # BƯỚC 4: ĐÓNG GÓI CHUẨN HÓA 6 TRƯỜNG DỮ LIỆU
         final_response = format_scam_response(ai_result)  # Chuẩn hóa kết quả đầu ra theo hợp đồng JSON
 
         # BƯỚC 5 (BỌC THÉP): TỰ ĐỘNG HỌC MỌI THỨ CHƯA BIẾT (OMNI-LEARNING)
-        if not matched_article:  # Chỉ lưu học mới khi kho RAG chưa có kịch bản này
+        risk_score = final_response.get("risk_score", 0)  # Lấy điểm rủi ro AI vừa chấm
+        tactic = final_response.get("detected_tactic", "")  # Lấy tên thủ đoạn AI vừa trả về
+        error_tactics = ("Lỗi kết nối AI", "Hệ thống AI đang bận")  # Các nhãn lỗi không được phép lưu vào kho tri thức
+        is_valid_to_learn = bool(clean_text) and (tactic not in error_tactics) and (risk_score <= 15 or risk_score >= 75)  # Chỉ học khi có văn bản, AI không lỗi và kết quả rõ ràng
+
+        if not matched_article and is_valid_to_learn:  # Chỉ lưu học mới khi kho RAG chưa có và mẫu đủ độ tin cậy
             try:  # Bọc try-except để lỗi ghi file không làm sập giao diện web
                 data_dir = os.path.join(BACKEND_DIR, "data")  # Xác định đường dẫn thư mục data
                 knowledge_path = os.path.join(data_dir, "scam_knowledge.json")  # Xác định đường dẫn file JSON tri thức
@@ -135,19 +143,17 @@ class AntiScamPipeline:  # Lớp điều phối chuỗi xử lý phòng thủ
                         except Exception:  # Nếu file rỗng hoặc lỗi cấu trúc
                             db = []  # Khởi tạo lại danh sách rỗng
 
-                is_scam = final_response.get("risk_score", 0) >= 50  # Xác định mẫu là lừa đảo nếu điểm >= 50
+                is_scam = risk_score >= 50  # Xác định mẫu là lừa đảo nếu điểm >= 50
                 prefix = "🚨 Mẫu lừa đảo" if is_scam else "✅ Mẫu an toàn"  # Gắn nhãn tiền tố tương ứng
 
                 text_keywords = [w for w in clean_text.lower().split() if len(w) > 3][:8]  # Tách tối đa 8 từ khóa từ clean_text
                 combined_keywords = list(set(text_keywords + url_info["domains"]))  # Gộp từ khóa chữ với tên miền link và lọc trùng
 
-                safe_url = url_info["urls"][0] if url_info["urls"] else "https://canhbao.khonggianmang.vn"
-
                 new_item = {  # Tạo khối dữ liệu kiến thức mới
                     "id": len(db) + 1,  # Tự động tăng ID
                     "title": f"{prefix}: {final_response.get('detected_tactic', 'Phân tích mới')}",  # Tiêu đề kèm nhãn phân loại
                     "source": "Hệ thống tự học toàn diện (Omni-Learn)",  # Ghi nhận nguồn tự học
-                    "url": safe_url,  # Lưu đường link an toàn
+                    "url": url_info["urls"][0] if url_info["urls"] else "",  # Lưu đường link đầu tiên nếu có
                     "category_name": final_response.get('detected_tactic', 'Giao tiếp thông thường'),  # Lưu tên nhóm thủ đoạn
                     "summary": final_response.get('explanation', ''),  # Lưu phần giải thích chi tiết của AI
                     "keywords": combined_keywords  # Lưu danh sách từ khóa đã bao gồm tên miền (domain)
@@ -170,6 +176,16 @@ class AntiScamPipeline:  # Lớp điều phối chuỗi xử lý phòng thủ
 pipeline_instance = AntiScamPipeline()  # Khởi tạo sẵn 1 thực thể Pipeline dùng chung (Singleton)
 
 
-def run_pipeline(user_text: str, api_key: Optional[str] = None) -> Dict[str, Any]:  # Hàm tiện ích gọi nhanh từ bên ngoài
+def run_pipeline(
+    user_text: str = "",  # Nội dung văn bản hoặc link
+    api_key: Optional[str] = None,  # Khóa API Gemini
+    image_bytes: Optional[bytes] = None,  # Dữ liệu ảnh tải lên (nếu có)
+    image_mime: str = "image/jpeg"  # Định dạng ảnh
+) -> Dict[str, Any]:  # Hàm tiện ích gọi nhanh từ bên ngoài
     """Hàm tiện ích gọi nhanh pipeline"""
-    return pipeline_instance.execute(user_text, api_key=api_key)  # Thực thi phân tích và trả kết quả
+    return pipeline_instance.execute(  # Thực thi phân tích và trả kết quả
+        user_text=user_text,  # Truyền nội dung chữ/link
+        api_key=api_key,  # Truyền API Key
+        image_bytes=image_bytes,  # Truyền dữ liệu ảnh
+        image_mime=image_mime  # Truyền định dạng ảnh
+    )

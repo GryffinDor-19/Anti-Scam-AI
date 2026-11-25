@@ -11,9 +11,15 @@ Phụ trách: Thành viên 3 (Frontend & UX Developer)
 import streamlit as st
 
 try:
-    from modules.emergency_manager import EmergencyManager
+    from backend.emergency.emergency_manager import EmergencyManager
 except ImportError:
-    from backend.modules.emergency_manager import EmergencyManager
+    try:
+        from emergency.emergency_manager import EmergencyManager
+    except ImportError:
+        try:
+            from modules.emergency_manager import EmergencyManager
+        except ImportError:
+            from backend.modules.emergency_manager import EmergencyManager
 
 
 def render_header_and_emergency():
