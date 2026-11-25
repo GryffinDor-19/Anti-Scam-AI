@@ -45,6 +45,7 @@ from components.sidebar import render_sidebar
 from components.emergency_banner import render_header_and_emergency
 from views.tab_chat import render_tab_chat
 from views.tab_fake_bill import render_tab_fake_bill
+from views.tab_scam_game import render_tab_scam_game
 from views.tab_library import render_tab_library
 
 # Khởi tạo RAG Matcher với Cache bộ nhớ để tăng tốc tối đa
@@ -64,10 +65,11 @@ st.set_page_config(
 
 # Khởi tạo trạng thái phiên làm việc (Session State)
 for key, default in [
-    ("theme_mode", "Dịu"),           # Mặc định giao diện "Dịu" (#D3DCE8)
+    ("theme_mode", "Tối"),           # Mặc định giao diện "Tối" (#0B132B)
     ("input_text", ""),
     ("show_emergency", False),
     ("elderly_mode", False),
+    ("font_zoom_level", "1.45"),
     ("has_analyzed", False),
     ("demo_fake_bill", True),
     ("history", []),
@@ -77,24 +79,20 @@ for key, default in [
     if key not in st.session_state:
         st.session_state[key] = default
 
-# Đồng bộ theme ngay từ widget radio ở đầu chu kỳ render (loại bỏ hoàn toàn delay)
+# Đồng bộ theme — chỉ dùng "Tối" (đã bỏ Dịu & Sáng)
 pill_sel = st.session_state.get("sidebar_theme_pill_selector")
 if pill_sel:
-    if "Dịu" in pill_sel:
-        st.session_state["theme_mode"] = "Dịu"
-    elif "Sáng" in pill_sel:
-        st.session_state["theme_mode"] = "Sáng"
-    elif "Tối" in pill_sel:
+    if "Tối" in pill_sel:
         st.session_state["theme_mode"] = "Tối"
 
-if st.session_state.get("theme_mode") not in ["Dịu", "Sáng", "Tối"]:
-    st.session_state["theme_mode"] = "Dịu"
+if st.session_state.get("theme_mode") not in ["Tối"]:
+    st.session_state["theme_mode"] = "Tối"
 
-# 1. Áp dụng CSS Giao diện theo Theme (Dịu / Sáng / Tối) & Chế độ Chữ to
-active_theme = st.session_state.get("theme_mode", "Dịu")
+# 1. Áp dụng CSS Giao diện theo Theme Tối & Chế độ Chữ to
+active_theme = st.session_state.get("theme_mode", "Tối")
 st.markdown(get_theme_css(active_theme), unsafe_allow_html=True)
 if st.session_state.get("elderly_mode", False):
-    font_zoom = st.session_state.get("font_zoom_level", "1.20")
+    font_zoom = st.session_state.get("font_zoom_level", "1.45")
     st.markdown(get_elderly_css(font_zoom), unsafe_allow_html=True)
 
 # 2. Hiển thị Sidebar rút gọn (Đã loại bỏ trùng lặp kịch bản mẫu)
@@ -103,10 +101,11 @@ render_sidebar()
 # 3. Hiển thị Header chuẩn UX (Logo + Tiêu đề + Nút cấp cứu đỏ rực + Bộ chọn theme)
 render_header_and_emergency()
 
-# 4. Hiển thị 3 Tabs chức năng chính dạng nút Pill bo tròn chuẩn Image 3
-tab_chat, tab_bill, tab_guide = st.tabs([
+# 4. Hiển thị 4 Tabs chức năng chính dạng nút Pill bo tròn chuẩn Image 3
+tab_chat, tab_bill, tab_game, tab_guide = st.tabs([
     "Kiểm tra tin nhắn",
     "Soi bill giả",
+    "Đấu trường lừa đảo",
     "Thư viện cảnh báo"
 ])
 
@@ -115,6 +114,9 @@ with tab_chat:
 
 with tab_bill:
     render_tab_fake_bill()
+
+with tab_game:
+    render_tab_scam_game(rag_matcher)
 
 with tab_guide:
     render_tab_library(rag_matcher)

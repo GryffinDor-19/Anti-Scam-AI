@@ -463,53 +463,46 @@ def render_conversational_assistant_response(msg, rag_matcher):
                 "Cúp máy ngay lập tức, không làm theo các yêu cầu chuyển khoản hoặc cài app lạ.",
                 "Gọi ngay tổng đài 156 hoặc Hotline A05 (069 234 8560) để xác minh vụ việc."
             ]
-            recs_html = "".join([f"<li style='margin-bottom: 6px; color: {rec_list_color} !important; -webkit-text-fill-color: {rec_list_color} !important; font-size: 17px; line-height: 1.8;'>{r}</li>" for r in rec_items])
+            import html as _html
+            recs_html = "".join([
+                f"<li style='margin-bottom: 6px; color: {rec_list_color} !important; -webkit-text-fill-color: {rec_list_color} !important; font-size: 19px; line-height: 1.8;'>{_html.escape(str(r))}</li>"
+                for r in rec_items
+            ])
 
-            st.markdown(f"""
-            <div style='background-color: {rec_card_bg}; border: 1.5px solid {rec_card_border}; border-radius: 12px; padding: 16px 20px; margin-bottom: 14px;'>
-                <div style='display: flex; align-items: center; gap: 10px; margin-bottom: 10px;'>
-                    <span style='font-size: 20px;'>🚨</span>
-                    <span class='rec-urgent-title' style='color: {rec_title_color} !important; -webkit-text-fill-color: {rec_title_color} !important; font-weight: 900; font-size: 18px; letter-spacing: 0.3px;'>VIỆC BẠN CẦN LÀM NGAY LẬP TỨC:</span>
-                </div>
-                <ul style='color: {rec_list_color} !important; -webkit-text-fill-color: {rec_list_color} !important; font-size: 17px; line-height: 1.8; margin: 0; padding-left: 24px; font-weight: 600;'>
-                    {recs_html}
-                </ul>
-            </div>
-            """, unsafe_allow_html=True)
+            urgent_html = (
+                f"<div style='background-color: {rec_card_bg}; border: 1.5px solid {rec_card_border}; border-radius: 12px; padding: 16px 20px; margin-bottom: 14px;'>"
+                f"<div style='display: flex; align-items: center; gap: 10px; margin-bottom: 10px;'>"
+                f"<span style='font-size: 21px;'>🚨</span>"
+                f"<span class='rec-urgent-title' style='color: {rec_title_color} !important; -webkit-text-fill-color: {rec_title_color} !important; font-weight: 900; font-size: 20px; letter-spacing: 0.3px;'>VIỆC BẠN CẦN LÀM NGAY LẬP TỨC:</span>"
+                f"</div>"
+                f"<ul style='color: {rec_list_color} !important; -webkit-text-fill-color: {rec_list_color} !important; font-size: 19px; line-height: 1.8; margin: 0; padding-left: 24px; font-weight: 600;'>{recs_html}</ul>"
+                f"</div>"
+            )
+            st.markdown(urgent_html, unsafe_allow_html=True)
 
-        # 3. PHÂN TÍCH CHI TIẾT & BẪY TÂM LÝ (CỠ CHỮ TO RÕ RÀNG >= 17.5PX THEO YÊU CẦU UX)
-        st.markdown(f"<div style='font-size: 17.5px; line-height: 1.8; color: var(--text-primary, #0F1B33); font-weight: 500;'>{explanation}</div>", unsafe_allow_html=True)
+        # 3. PHÂN TÍCH CHI TIẾT & BẪY TÂM LÝ (CỠ CHỮ MẶC ĐỊNH 128% RÕ RÀNG)
+        st.write(explanation)
 
         if traps and score >= 40:
-            st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
-            traps_html = f"""
-            <div style='background-color: var(--card-inner-bg, #DFE7F2); border: 1px solid var(--border-color, #B8C5D6); border-radius: 10px; padding: 14px 18px; margin-bottom: 12px;'>
-                <div style='color: var(--text-primary, #0F1B33); font-weight: 800; font-size: 16.5px; margin-bottom: 8px;'>Bẫy tâm lý nhận diện:</div>
-                <div style='color: var(--text-secondary, #374662); font-size: 16px; line-height: 1.8; font-weight: 500;'>
-                    {''.join([f"<div style='margin-bottom: 4px;'>🚩 {t}</div>" for t in traps])}
-                </div>
-            </div>
-            """
+            traps_items_html = "".join([f"<div style='margin-bottom: 4px;'>🚩 {_html.escape(str(t))}</div>" for t in traps])
+            traps_html = (
+                f"<div style='background-color: var(--card-inner-bg, #DFE7F2); border: 1px solid var(--border-color, #B8C5D6); border-radius: 10px; padding: 14px 18px; margin: 8px 0 12px 0;'>"
+                f"<div style='color: var(--text-primary, #0F1B33); font-weight: 800; font-size: 19px; margin-bottom: 8px;'>Bẫy tâm lý nhận diện:</div>"
+                f"<div style='color: var(--text-secondary, #374662); font-size: 18.5px; line-height: 1.8; font-weight: 500;'>{traps_items_html}</div>"
+                f"</div>"
+            )
             st.markdown(traps_html, unsafe_allow_html=True)
 
-        # 4. NGUỒN PHÂN TÍCH MINH BẠCH - VIẾT GỌN GÀNG, FONT >= 15PX, ĐỔI 0.0s THÀNH < 0.1s
-        if "Gemini" in model_source or "gemini" in model_source.lower():
-            source_label = f"Phân tích bởi {model_source} · Đối chiếu 20 bài báo"
-        else:
-            source_label = f"Phân tích bởi {model_source} · Đối chiếu 20 bài báo"
-
+        # 4. NGUỒN PHÂN TÍCH MINH BẠCH - VIẾT GỌN GÀNG, ĐỔI 0.0s THÀNH < 0.1s
+        source_label = f"Phân tích bởi {model_source} · Đối chiếu kho cảnh báo"
         time_label = "< 0.1s" if elapsed_time < 0.1 else f"{elapsed_time}s"
 
-        meta_html = f"""
-        <div style='display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 15px; color: var(--text-secondary, #374662); padding-top: 10px; border-top: 1px solid var(--border-color, #B8C5D6); margin-top: 12px;'>
-            <div>
-                <span style='color: #2563eb; font-weight: 700; font-size: 15px;'>🛡️ {source_label}</span>
-            </div>
-            <div>
-                <span style='font-size: 15px; font-weight: 600;'>⚡ Phản hồi: <strong>{time_label}</strong></span>
-            </div>
-        </div>
-        """
+        meta_html = (
+            f"<div style='display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 17px; color: var(--text-secondary, #374662); padding-top: 10px; border-top: 1px solid var(--border-color, #B8C5D6); margin-top: 12px;'>"
+            f"<div><span style='color: #2563eb; font-weight: 700; font-size: 17px;'>🛡️ {_html.escape(str(source_label))}</span></div>"
+            f"<div><span style='font-size: 17px; font-weight: 600;'>⚡ Phản hồi: <strong>{time_label}</strong></span></div>"
+            f"</div>"
+        )
         st.markdown(meta_html, unsafe_allow_html=True)
 
         # 5. MỤC MỞ RỘNG RÚT GỌN TÊN THÀNH: 'Xem chi tiết' (KHÔNG DÙNG THUẬT NGỮ NẶNG NỀ)

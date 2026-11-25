@@ -76,7 +76,7 @@ THEMES = {
 }
 
 
-def get_theme_css(theme_mode: str = "Dịu") -> str:
+def get_theme_css(theme_mode: str = "Tối") -> str:
     """Sinh CSS động theo chế độ màu được chọn (Mặc định Dịu theo bảng màu đề xuất)"""
     t = THEMES.get(theme_mode, THEMES["Dịu"])
     tab_hover_bg = "rgba(255, 255, 255, 0.12)" if theme_mode == "Tối" else "rgba(255, 255, 255, 0.7)"
@@ -153,10 +153,10 @@ footer {{
 }}
 
 /* =========================================================================
-   3. CĂN GIỮA NỘI DUNG CHÍNH (920px), KHÔNG BỊ LỆCH
+   3. CĂN GIỮA NỘI DUNG CHÍNH (980px), KHÔNG BỊ LỆCH
    ========================================================================= */
 .main .block-container {{
-    max-width: 920px !important;
+    max-width: 980px !important;
     padding-top: 1.25rem !important;
     padding-bottom: 5rem !important;
     padding-left: 1.25rem !important;
@@ -166,23 +166,32 @@ footer {{
 }}
 
 /* =========================================================================
-   4. TIÊU ĐỀ VÀ CỠ CHỮ CHUẨN RÕ RÀNG (>= 16PX) - ĐỘ TƯƠNG PHẢN CAO
+   4. TIÊU ĐỀ VÀ CỠ CHỮ MẶC ĐỊNH 128% (~19.5px - 20px) - ĐỘ TƯƠNG PHẢN CAO
    ========================================================================= */
-h1, h2, h3, h4, h5, h6 {{
-    color: {t["text_primary"]} !important;
-    font-weight: 800 !important;
-}}
+h1 {{ font-size: 26px !important; color: {t["text_primary"]} !important; font-weight: 800 !important; }}
+h2 {{ font-size: 23px !important; color: {t["text_primary"]} !important; font-weight: 800 !important; }}
+h3 {{ font-size: 20.5px !important; color: {t["text_primary"]} !important; font-weight: 800 !important; }}
+h4, h5, h6 {{ font-size: 18.5px !important; color: {t["text_primary"]} !important; font-weight: 800 !important; }}
 
-p, span, label, div {{
+p, span, label, div, li {{
     color: {t["text_primary"]};
-    font-size: 16px;
-    line-height: 1.65;
+    font-size: 19.5px;
+    line-height: 1.7;
 }}
 
-.stCaption, caption, small, .subtext {{
+div[data-testid="stMarkdownContainer"] p,
+div[data-testid="stMarkdownContainer"] li,
+div[data-testid="stRadio"] label p,
+div[data-testid="stRadio"] label span {{
+    font-size: 19.5px !important;
+    line-height: 1.7 !important;
+}}
+
+.stCaption, caption, small, .subtext, div[data-testid="stCaptionContainer"] p {{
     color: {t["text_secondary"]} !important;
-    font-size: 15px !important;
+    font-size: 17px !important;
     font-weight: 500 !important;
+    line-height: 1.55 !important;
 }}
 
 /* =========================================================================
@@ -354,7 +363,7 @@ div.stLinkButton a {{
     border: 1.5px solid {t["border_color"]} !important;
     color: {t["text_primary"]} !important;
     font-weight: 700 !important;
-    font-size: 14px !important;
+    font-size: 17px !important;
     border-radius: 10px !important;
     box-shadow: {t["box_shadow"]} !important;
     text-decoration: none !important;
@@ -379,7 +388,7 @@ div.stLinkButton a * {{
     color: {t["text_primary"]} !important;
     -webkit-text-fill-color: {t["text_primary"]} !important;
     font-weight: 700 !important;
-    font-size: 14px !important;
+    font-size: 17px !important;
     text-decoration: none !important;
 }}
 
@@ -414,8 +423,6 @@ div.stLinkButton a:hover * {{
     color: {link_hover_color} !important;
     -webkit-text-fill-color: {link_hover_color} !important;
 }}
-    -webkit-text-fill-color: {link_hover_color} !important;
-}}
 
 /* =========================================================================
    7. THANH TABS BO TRÒN HÌNH NÚT PILL CHUẨN SEGMENTED CONTROL (ẢNH 3)
@@ -435,6 +442,7 @@ div[data-testid="stTabs"] [data-baseweb="tab-list"],
     box-shadow: 0 2px 8px rgba(15, 27, 51, 0.06) !important;
     gap: 6px !important;
     display: inline-flex !important;
+    flex-wrap: wrap !important;
     width: auto !important;
     max-width: 100% !important;
     align-items: center !important;
@@ -447,9 +455,9 @@ div[data-testid="stTabs"] button[data-baseweb="tab"],
 .stTabs button[data-baseweb="tab"] {{
     color: {t["text_secondary"]} !important;
     font-weight: 700 !important;
-    font-size: 14px !important;
+    font-size: 16.5px !important;
     border-radius: 9999px !important;
-    padding: 8px 20px !important;
+    padding: 8px 16px !important;
     border: none !important;
     background: transparent !important;
     background-color: transparent !important;
@@ -472,7 +480,7 @@ div[data-testid="stTabs"] button[role="tab"] div,
     margin: 0 !important;
     padding: 0 !important;
     line-height: 1.4 !important;
-    font-size: 14px !important;
+    font-size: 16.5px !important;
     font-weight: 700 !important;
     color: inherit !important;
 }}
@@ -674,12 +682,13 @@ div[data-testid="stPopover"] button:hover {{
     box-shadow: {t["box_shadow"]} !important;
     padding: 16px 20px !important;
     margin-bottom: 14px !important;
-    font-size: 17.5px !important;
+    font-size: 19.5px !important;
     line-height: 1.75 !important;
 }}
 
-[data-testid="stChatMessage"] p {{
-    font-size: 17.5px !important;
+[data-testid="stChatMessage"] p,
+[data-testid="stChatMessage"] li {{
+    font-size: 19.5px !important;
     line-height: 1.75 !important;
 }}
 
@@ -749,7 +758,7 @@ div[data-testid="stChatInput"] textarea,
     background: {t["chat_input_bg"]} !important;
     color: {t["text_primary"]} !important;
     -webkit-text-fill-color: {t["text_primary"]} !important;
-    font-size: 16.5px !important;
+    font-size: 18px !important;
     line-height: 1.6 !important;
 }}
 
@@ -770,7 +779,7 @@ div[data-testid="stChatInput"] textarea::placeholder,
 .stChatInput textarea::placeholder {{
     color: {t["text_secondary"]} !important;
     -webkit-text-fill-color: {t["text_secondary"]} !important;
-    font-size: 16px !important;
+    font-size: 17.5px !important;
     opacity: 1 !important;
 }}
 
@@ -873,7 +882,7 @@ div[data-testid="stExpander"] summary,
     color: {t["text_primary"]} !important;
     padding: 12px 18px !important;
     font-weight: 700 !important;
-    font-size: 15.5px !important;
+    font-size: 17.5px !important;
     cursor: pointer !important;
     transition: all 0.2s ease !important;
 }}
@@ -892,7 +901,7 @@ div[data-testid="stExpander"] summary span {{
     color: {t["text_primary"]} !important;
     -webkit-text-fill-color: {t["text_primary"]} !important;
     font-weight: 700 !important;
-    font-size: 15.5px !important;
+    font-size: 17.5px !important;
 }}
 
 div[data-testid="stExpander"] summary svg,
@@ -1008,48 +1017,58 @@ div[data-testid="stTooltipIcon"] button {{
 </style>"""
 
 
-def get_elderly_css(zoom_level: str = "1.20") -> str:
+def get_elderly_css(zoom_level: str = "1.45") -> str:
     """
-    CSS Chế độ Chữ to, dễ đọc:
+    CSS Chế độ Người lớn tuổi (3 mức phóng đại: 140% / 145% / 150%):
     GIỮ NGUYÊN 100% BỐ CỤC / GIAO DIỆN (KHÔNG DÙNG CSS ZOOM TRÊN KHUNG CHỨA),
-    CHỈ PHÓNG TO KÍCH THƯỚC PHÔNG CHỮ ĐỂ NGƯỜI LỚN TUỔI ĐỌC DỄ DÀNG.
+    CHỈ PHÓNG TO KÍCH THƯỚC PHÔNG CHỮ SO VỚI MẶC ĐỊNH 128% ĐỂ NGƯỜI LỚN TUỔI ĐỌC DỄ DÀNG.
     """
-    level = float(zoom_level) if zoom_level in ["1.15", "1.20", "1.28"] else 1.20
+    level = float(zoom_level) if zoom_level in ["1.40", "1.45", "1.50"] else 1.45
 
-    if level <= 1.15:
-        body_font = "16.5px"
-        caption_font = "15px"
-        button_font = "15px"
-        input_font = "16px"
-        tab_font = "15px"
-        line_height = "1.6"
-    elif level >= 1.28:
-        body_font = "19.5px"
-        caption_font = "17px"
-        button_font = "17px"
-        input_font = "18px"
-        tab_font = "16.5px"
-        line_height = "1.7"
-    else:  # 1.20
-        body_font = "18px"
-        caption_font = "16px"
-        button_font = "16px"
-        input_font = "17px"
-        tab_font = "15.5px"
-        line_height = "1.65"
+    if level <= 1.40:
+        body_font = "22px"
+        caption_font = "19px"
+        button_font = "19px"
+        input_font = "20.5px"
+        tab_font = "18.5px"
+        h1_font, h2_font, h3_font, h4_font = "29px", "25px", "22px", "20px"
+        line_height = "1.75"
+    elif level >= 1.50:
+        body_font = "24px"
+        caption_font = "21px"
+        button_font = "21px"
+        input_font = "22.5px"
+        tab_font = "20.5px"
+        h1_font, h2_font, h3_font, h4_font = "33px", "28.5px", "25px", "22.5px"
+        line_height = "1.85"
+    else:  # 1.45
+        body_font = "23px"
+        caption_font = "20px"
+        button_font = "20px"
+        input_font = "21.5px"
+        tab_font = "19.5px"
+        h1_font, h2_font, h3_font, h4_font = "31px", "27px", "23.5px", "21px"
+        line_height = "1.8"
 
     return f"""<style>
 /* =========================================================================
-   CHỈ PHÓNG TO PHÔNG CHỮ - GIỮ NGUYÊN 100% GIAO DIỆN VÀ KHUNG CHỨA
+   CHỈ PHÓNG TO PHÔNG CHỮ (140% - 150%) - GIỮ NGUYÊN 100% GIAO DIỆN VÀ KHUNG CHỨA
    KHÔNG SỬ DỤNG 'zoom' TRÊN html/body/.stApp ĐỂ TRÁNH VỠ BỐ CỤC
    ========================================================================= */
 
-/* 1. Phông chữ nội dung bài viết, tin nhắn, đoạn văn, danh sách */
+/* 1. Phông chữ nội dung bài viết, tin nhắn, đoạn văn, danh sách, radio & cảnh báo */
 p, 
-div[data-testid="stMarkdownContainer"] > p,
+div[data-testid="stMarkdownContainer"] p,
 div[data-testid="stMarkdownContainer"] li,
 div[data-testid="stChatMessage"] p,
 div[data-testid="stChatMessage"] span,
+div[data-testid="stChatMessage"] li,
+div[data-testid="stAlert"] p,
+div[data-testid="stAlert"] li,
+div[data-testid="stRadio"] label p,
+div[data-testid="stRadio"] label span,
+div[data-testid="stExpander"] summary p,
+div[data-testid="stExpander"] summary span,
 label {{
     font-size: {body_font} !important;
     line-height: {line_height} !important;
@@ -1062,7 +1081,7 @@ small,
 .subtext,
 div[data-testid="stCaptionContainer"] p {{
     font-size: {caption_font} !important;
-    line-height: 1.5 !important;
+    line-height: 1.55 !important;
 }}
 
 /* 3. Ô nhập văn bản (Chat Input, Text Input, Textarea) */
@@ -1071,7 +1090,7 @@ div[data-testid="stChatInput"] textarea,
 div[data-baseweb="input"] input,
 div[data-baseweb="textarea"] textarea {{
     font-size: {input_font} !important;
-    line-height: 1.5 !important;
+    line-height: 1.55 !important;
 }}
 
 div[data-testid="stChatInput"] textarea::placeholder,
@@ -1101,10 +1120,10 @@ div[data-testid="stTabs"] button[role="tab"] span,
 }}
 
 /* 6. Tiêu đề các mục lớn */
-h1 {{ font-size: 24px !important; }}
-h2 {{ font-size: 21px !important; }}
-h3 {{ font-size: 18.5px !important; }}
-h4 {{ font-size: 17px !important; }}
+h1 {{ font-size: {h1_font} !important; }}
+h2 {{ font-size: {h2_font} !important; }}
+h3 {{ font-size: {h3_font} !important; }}
+h4 {{ font-size: {h4_font} !important; }}
 </style>"""
 
-BASE_CSS = get_theme_css("Dịu")
+BASE_CSS = get_theme_css("Tối")
