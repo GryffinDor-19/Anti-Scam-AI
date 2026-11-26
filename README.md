@@ -2,105 +2,125 @@
 
 > **Bài tập lớn môn Trí tuệ Nhân tạo (INT3401)**  
 > **Phân ban:** Track 1.1 Application Track  
-> **Mục tiêu:** Bảo vệ người dân và người cao tuổi trước các thủ đoạn lừa đảo tinh vi trên không gian mạng bằng mô hình suy luận đa phương thức và đối soát dữ liệu thực tế.
+> **Repository:** [GryffinDor-19/Anti-Scam-AI](https://github.com/GryffinDor-19/Anti-Scam-AI)  
+> **Mục tiêu:** Bảo vệ người dân và người cao tuổi trước các thủ đoạn lừa đảo tinh vi trên không gian mạng bằng mô hình suy luận đa phương thức, đối soát vector thực tế (RAG) và mô phỏng tình huống tương tác.
 
 ---
 
-## 🌟 Tính Năng Nổi Bật
+## 🌟 Tính Năng Nổi Bật (Khớp 100% Mã Nguồn Hiện Tại)
 
-1. **🔍 Thẩm định Tin nhắn & Phân tích Bẫy Tâm lý (Tab 1):**
-   - Đánh giá mức độ rủi ro trên thang điểm 0–100 bằng **Đồng hồ Bán nguyệt (Speedometer Gauge)** trực quan.
-   - Bóc trần các bẫy thao túng: Dọa dẫm uy quyền, ép buộc thời gian, cô lập nạn nhân, mồi chài cọc/hoa hồng ảo.
-   - Tích hợp 4 kịch bản mẫu 1-click (Phạt nguội CSGT, Giả danh công an, Tuyển CTV Shopee/TikTok, Trúng thưởng) giúp người dùng trải nghiệm nhanh chóng.
-2. **📰 RAG Grounding (Đối chiếu Dẫn chứng Thực tế - Tab 3):**
-   - Tự động đối soát nội dung nghi vấn với kho tri thức cảnh báo chính thống từ *Cục An toàn thông tin (Bộ TT&TT)*, *Bộ Công an*, *Báo Chính phủ*, *Tuổi Trẻ*, *Thanh Niên*, *VnExpress*...
-   - Cung cấp link gốc bài báo để người dùng kiểm chứng nguồn tin thực tế tức thì.
-3. **🧾 Giám định Hóa đơn Chuyển tiền Giả 2 Lớp (Tab 2 - Forensic Vision Lab):**
-   - **Lớp 1:** Thuật toán thị giác máy tính & Typography phân tích sai lệch phông chữ, phát hiện vết cắt ghép và bất thường nén pixel (< 0.05s).
-   - **Lớp 2:** Mô hình đa phương thức Gemini Vision thẩm định chuyên sâu và đưa ra kết luận chi tiết.
-   - Hỗ trợ chuyển đổi nhanh giữa mẫu hóa đơn giả và mẫu hóa đơn thật để đối chiếu trực quan.
-4. **🚨 Chế độ Cấp cứu Khẩn cấp (Thời điểm vàng):**
-   - Nút cấp cứu đỏ rực ghim cố định ở góc trên giao diện, mở ra quy trình 3 bước hành động khẩn cấp bảo vệ tài sản.
-   - Hotline khóa tài khoản/thẻ ngân hàng 1-chạm (Vietcombank, BIDV, Techcombank, Agribank, ACB, VPBank, MBBank) & Cục An ninh mạng A05.
-5. **🎨 Bộ Chọn Giao Diện 3 Theme (Dịu / Sáng / Tối) & Trợ Năng Màn Hình:**
-   - 3 chế độ màu sắc đạt chuẩn tương phản cao (≥ 7:1), chuyển đổi tức thì không gây độ trễ (Zero-delay).
-   - Chế độ Trợ năng cho người cao tuổi: Phóng to kích thước phông chữ toàn diện (115% – 128%), bảo toàn nguyên vẹn 100% bố cục giao diện.
-6. **🕒 Bảng Lịch sử Thẩm định Trong Phiên (Session Audit Log):**
-   - Tự động ghi nhật ký và thống kê các lượt kiểm tra trong phiên làm việc.
+1. **🔍 Tab 1 — Kiểm Tra Tin Nhắn, Link & Ảnh Đa Phương Thức (`tab_chat.py`):**
+   - Đánh giá mức độ rủi ro trên thang điểm **0–100** bằng **Đồng hồ Bán nguyệt (Speedometer Gauge)** trực quan.
+   - Bóc trần các bẫy tâm lý (đe dọa uy quyền, ép thời gian, mồi chài hoa hồng/việc nhẹ lương cao, chiếm đoạt OTP/tài sản) và đưa ra khuyến nghị hành động sát ngữ cảnh.
+   - Hỗ trợ phân tích **văn bản, đường link (tự động quét tiêu đề/nội dung web thực tế) và hình ảnh đính kèm** (ảnh chụp tin nhắn, mã QR, bill chuyển khoản).
+   - Tích hợp **đua đa luồng 3 mô hình Gemini** (`gemini-3.1-flash-lite`, `gemini-3.5-flash`, `gemini-3.7-flash`) qua `ThreadPoolExecutor` — mô hình nào trả JSON hợp lệ nhanh nhất sẽ được ưu tiên phản hồi ngay; tự động chuyển sang bộ chấm điểm nội bộ (`Dynamic Scorer`) khi offline hoặc thiếu API Key.
+
+2. **🧾 Tab 2 — Soi Bill Giả / Giám Định Hóa Đơn 2 Lớp (`tab_fake_bill.py`):**
+   - **Lớp 1 (Pháp y số & Pixel cục bộ):** Trích xuất EXIF, quét chữ ký nhị phân phát hiện dấu vết phần mềm/AI tạo sinh (`C2PA`, `ChatGPT`, `OpenAI`, `Photoshop`, `Canva`, `Picsart`), kiểm tra bất thường tỷ lệ khung hình (`> 0.58`) và đo cường độ cạnh nét / độ bão hòa màu HSV.
+   - **Lớp 2 (Gemini Vision ưu tiên tuần tự):** Gọi lần lượt từ model thị giác mạnh nhất xuống nhẹ hơn (`gemini-3.8-flash` → `3.7-flash` → `3.6-flash` → `3.5-flash` → `3.1-pro-preview` → `3.5-flash-lite`), tự động fallback về bộ pháp y số heuristic nội bộ nếu không có mạng/API Key.
+   - Tích hợp sẵn ảnh mẫu **bill giả** (`fake_bill.jpg`), **bill thật** (`test_bill.jpg`) và hỗ trợ tải ảnh bất kỳ từ người dùng.
+
+3. **🎮 Tab 3 — Đấu Trường Lừa Đảo (`tab_scam_game.py`):**
+   - **15 tình huống lừa đảo thực tế** (`scam_scenarios.json`), mỗi tình huống gồm **3 lượt đối thoại** tương tác liên tiếp với bot đóng vai kẻ lừa đảo.
+   - Người chơi có thể **chọn phương án phản ứng nhanh** hoặc **tự gõ câu trả lời** (hệ thống tự chấm theo từ khóa tiếng Việt có dấu & không dấu).
+   - Chấm điểm theo 3 mức: **An toàn** (`+30 điểm`), **Chưa dứt khoát** (`+10 điểm, -10 HP`), **Dính bẫy** (`0 điểm, -35 HP`), tổng kết dấu hiệu nhận diện và trích dẫn bài báo gốc.
+   - Giao diện sử dụng 100% thành phần gốc của Streamlit (không nhúng HTML thô), hiển thị sạch sẽ trên mọi kích thước chữ.
+
+4. **📚 Tab 4 — Thư Viện Cảnh Báo & RAG Grounding (`tab_library.py`):**
+   - Đối soát ngữ nghĩa bằng **FAISS Vector Search** (`IndexFlatIP` + `paraphrase-multilingual-MiniLM-L12-v2`, ngưỡng `>= 0.55`) kết hợp fallback từ khóa.
+   - Kho tri thức `scam_knowledge.json` hiện có **37 bản ghi** (gồm **20 bài báo cảnh báo chính thống** từ Cục An toàn thông tin, Bộ Công an, VnExpress, Tuổi Trẻ... và **17 mẫu tự học Omni-Learn**).
+   - Hỗ trợ tìm kiếm theo từ khóa, lọc theo nhóm thủ đoạn, kèm **Tổng đài 156**, **Hotline A05 (`069.234.8560`)** và **4 Nguyên tắc vàng**.
+
+5. **🚨 Chế Độ Cấp Cứu Khẩn Cấp (`emergency_banner.py` & `emergency_manager.py`):**
+   - Nút cấp cứu ghim nổi bật ở đầu trang, mở nhanh quy trình xử lý khẩn cấp và danh bạ hotline khóa thẻ/tài khoản các ngân hàng lớn (`Vietcombank`, `BIDV`, `Techcombank`, `Agribank`, `ACB`, `VPBank`, `MBBank`) cùng Cục An ninh mạng A05.
+
+6. **🌙 Giao Diện Tối Mặc Định & Trợ Năng Cỡ Chữ Lớn (`styles.py` & `sidebar.py`):**
+   - Thiết kế **Giao diện Tối (`#0B132B`) mặc định** (đã loại bỏ chế độ Sáng/Dịu để đồng nhất độ tương phản và bảo vệ mắt).
+   - **Cỡ chữ mặc định 128%** rõ ràng ngay khi mở ứng dụng.
+   - **Chế độ Trợ năng cho người lớn tuổi** với 3 mức phóng đại tùy chọn: **140%**, **145% (mặc định)** và **150%**.
 
 ---
 
-## 📁 Cấu Trúc Dự Án Thực Tế (Phân Tách Module Chuẩn)
+## 📁 Cấu Trúc Dự Án Thực Tế
 
 ```text
 AntiScam_AI/
 ├── .gitignore                              # Cấu hình bỏ qua file tạm, môi trường, bytecode
-├── anti_scam_core.py                       # Lõi xử lý hợp nhất AntiScam Core
-├── KE_HOACH_PHAN_CONG_NHOM_4_NGUOI.md      # Kế hoạch & bảng phân công chi tiết nhóm 4 người
-├── KE_HOACH_PHAN_CONG_NHOM_4_NGUOI.html    # Bảng phân công nhiệm vụ giao diện HTML trực quan
-├── README.md                               # Tài liệu hướng dẫn & kiến trúc hệ thống
-├── requirements.txt                        # Danh mục các thư viện phụ thuộc của dự án
-├── so_do_tuong_tac_tinh_gian.png           # Sơ đồ luồng tương tác các module hệ thống
+├── anti_scam_core.py                       # Lõi tương thích AntiScam Core
+├── KE_HOACH_PHAN_CONG_NHOM_4_NGUOI.md      # Kế hoạch phân công nhiệm vụ theo tuần (TV1–TV4)
+├── KE_HOACH_PHAN_CONG_NHOM_4_NGUOI.html    # Bản trình bày HTML kế hoạch phân công nhóm
+├── HUONG_DAN_THUYET_TRINH_NHOM.md          # Phân công nội dung ôn tập & hỏi đáp bảo vệ cho 4 thành viên
+├── README.md                               # Tài liệu tổng quan & kiến trúc khớp mã nguồn Git
+├── requirements.txt                        # Danh sách thư viện Python phụ thuộc
+├── so_do_tuong_tac_tinh_gian.png           # Sơ đồ luồng tương tác hệ thống
 │
-├── backend/                                # [Backend & AI Engines] - Bộ não phân tích AI & Dữ liệu
-│   ├── backend.py                          # Cổng tiếp nhận và điều phối tầng Backend
-│   ├── data/                               # Dữ liệu tri thức và cấu trúc phản hồi mẫu
-│   │   ├── mock_response.json              # Chuẩn hóa hợp đồng dữ liệu đầu ra 6 trường JSON
-│   │   └── scam_knowledge.json             # Kho tri thức cảnh báo lừa đảo (Cục ATTT, Bộ Công an)
-│   ├── emergency/                          # Module cấp cứu người dùng
-│   │   └── emergency_manager.py            # Danh bạ Hotline ngân hàng & quy trình cấp cứu tài chính
-│   ├── engines/                            # Các động cơ phân tích chuyên sâu (TV1 & TV2)
-│   │   ├── dynamic_scorer.py               # Thuật toán tính điểm rủi ro đa tiêu chí động (Scam Score)
-│   │   ├── fake_bill_detector.py           # Giám định hóa đơn chuyển tiền qua phông chữ & vết nén
-│   │   ├── fast_filter.py                  # Bộ lọc phản xạ siêu tốc (< 0.05s) từ khóa nóng & link lạ
-│   │   ├── llm_analyzer.py                 # Phân tích ngữ nghĩa chuyên sâu bằng mô hình Google Gemini
-│   │   ├── rag_case_matcher.py             # Động cơ RAG đối soát vector bài báo thực tế
-│   │   └── semantic_analyzer.py            # Điều phối phân tích ngữ nghĩa kết hợp Fallback nội bộ
-│   ├── gateway/                            # Cổng giao tiếp, điều phối Pipeline & Bộ công cụ test (TV1 & TV4)
-│   │   ├── backend.py                      # API Gateway chính tiếp nhận yêu cầu từ Frontend
-│   │   ├── batch_test.py                   # Script chạy kiểm thử tự động hàng loạt (Batch Testing)
-│   │   ├── cli_test.py                     # Giao diện dòng lệnh Terminal CLI Test Runner
-│   │   ├── knowledge_trainer.py            # Công cụ trích xuất và huấn luyện dữ liệu RAG
-│   │   ├── pipeline.py                     # Nhạc trưởng điều phối chuỗi 3 lớp phòng thủ liên hoàn
-│   │   ├── response_formatter.py           # Đóng gói kết quả chuẩn hóa 6 trường dữ liệu
-│   │   ├── test_report.json                # Báo cáo số liệu kiểm thử hệ thống
-│   │   └── threat_classifier.py            # Bộ phân loại mức độ đe dọa và nhóm thủ đoạn
-│   ├── knowledge/                          # Tầng truy xuất tri thức RAG
-│   │   └── retriever.py                    # Module tìm kiếm bài báo chính thống theo ngữ cảnh
-│   └── modules/                            # Các module đóng gói kế thừa & tương thích ngược
-│       ├── check_model.py                  # Script kiểm tra phiên bản Gemini API khả dụng
-│       ├── emergency_manager.py            # Module cấp cứu tương thích
-│       ├── fake_bill_detector.py           # Module soi bill tương thích
-│       ├── fast_filter.py                  # Module lọc nhanh tương thích
-│       ├── rag_case_matcher.py             # Module đối soát RAG tương thích
-│       ├── semantic_analyzer.py            # Module phân tích ngữ nghĩa tương thích
-│       └── test_bill.jpg                   # File ảnh biên lai chuyển tiền Vietcombank phục vụ test
+├── backend/                                # [Backend & AI Engines]
+│   ├── backend.py                          # Cổng tương thích tầng Backend
+│   ├── data/
+│   │   ├── mock_response.json              # Hợp đồng JSON chuẩn 6 trường đầu ra
+│   │   ├── scam_knowledge.json             # Kho tri thức RAG (37 bản ghi: 20 gốc + 17 Omni-Learn)
+│   │   ├── scam_learned_cache.json         # Bộ nhớ đệm mẫu đã học
+│   │   └── scam_scenarios.json             # 15 tình huống Đấu trường lừa đảo (3 lượt/tình huống)
+│   ├── emergency/
+│   │   └── emergency_manager.py            # Danh bạ Hotline ngân hàng & quy trình cấp cứu
+│   ├── engines/                            # Các động cơ AI & xử lý lõi (TV1 & TV2)
+│   │   ├── dynamic_scorer.py               # Thuật toán chấm điểm rủi ro đa tiêu chí (hỗ trợ teencode/không dấu)
+│   │   ├── fake_bill_detector.py           # Giám định bill 2 lớp (EXIF/C2PA/Pixel + Gemini Vision)
+│   │   ├── fast_filter.py                  # Bộ lọc từ khóa/link nhanh (kế thừa)
+│   │   ├── llm_analyzer.py                 # Giao tiếp mô hình Gemini LLM
+│   │   ├── rag_case_matcher.py             # Đối soát vector FAISS + MiniLM & fallback từ khóa
+│   │   └── semantic_analyzer.py            # Live URL Preview + Đua đa luồng 3 Gemini + Fallback Scorer
+│   ├── gateway/                            # Điều phối Pipeline & Kiểm thử (TV1 & TV4)
+│   │   ├── backend.py                      # Gateway tiếp nhận từ Frontend
+│   │   ├── batch_test.py                   # Script chạy kiểm thử hàng loạt
+│   │   ├── cli_test.py                     # Trình chạy kiểm thử dòng lệnh (CLI)
+│   │   ├── knowledge_trainer.py            # Công cụ hỗ trợ huấn luyện dữ liệu RAG
+│   │   ├── pipeline.py                     # Nhạc trưởng điều phối (URL -> RAG -> Gemini Racing -> Format -> Omni-Learn)
+│   │   ├── response_formatter.py           # Chuẩn hóa đầu ra JSON 6 trường
+│   │   ├── test_report.json                # Kết quả chạy kiểm thử mẫu
+│   │   └── threat_classifier.py            # Phân loại mức độ đe dọa & thủ đoạn
+│   ├── knowledge/
+│   │   └── retriever.py                    # Tầng truy xuất bài báo chính thống
+│   └── modules/                            # Lớp tương thích ngược (Compatibility Layer) & ảnh mẫu test
+│       ├── check_model.py                  # Kiểm tra danh sách model Gemini khả dụng
+│       ├── fake_bill.jpg                   # Ảnh hóa đơn giả mẫu
+│       ├── test_bill.jpg                   # Ảnh hóa đơn thật mẫu (Vietcombank)
+│       └── ...                             # Các wrapper trỏ về backend/engines/ & backend/emergency/
 │
-└── streamlit/                              # [Frontend & UX - TV3] Toàn bộ mã nguồn giao diện người dùng
-    ├── app_anti_scam.py                    # File chạy chính của ứng dụng Web Streamlit
-    ├── styles.py                           # Hệ thống CSS Design System (Theme Dịu / Sáng / Tối)
+└── streamlit/                              # [Frontend & UX - TV3]
+    ├── app_anti_scam.py                    # Điểm khởi chạy chính Streamlit (Theme Tối mặc định, 4 Tab)
+    ├── styles.py                           # Hệ thống CSS (Theme Tối, chữ mặc định 128%, trợ năng 140–150%)
     ├── .streamlit/
-    │   └── config.toml                     # File cấu hình Streamlit (Màu sắc, Font chữ, Cổng chạy)
-    ├── components/                         # Các linh kiện giao diện tái sử dụng
-    │   ├── emergency_banner.py             # Nút cấp cứu đỏ rực ghim góc & Hotline 1-chạm
-    │   ├── gauge.py                        # Đồng hồ bán nguyệt đo độ rủi ro (Speedometer Gauge Chart)
-    │   └── sidebar.py                      # Thanh bên: Đổi 3 theme tức thì, Trợ năng chữ to, Cài đặt API
-    └── views/                              # 3 Tab chức năng chính của giao diện Web
-        ├── tab_chat.py                     # Tab 1: Khung chat thẩm định tin nhắn & 4 kịch bản mẫu 1-click
-        ├── tab_fake_bill.py                # Tab 2: Phòng Lab Giám định Hóa đơn chuyển tiền 2 lớp
-        └── tab_library.py                  # Tab 3: Thư viện tra cứu bài báo cảnh báo chính thống
+    │   └── config.toml                     # Cấu hình nền tối (#0B132B) & server
+    ├── components/
+    │   ├── emergency_banner.py             # Banner & nút cấp cứu khẩn cấp
+    │   ├── gauge.py                        # Đồng hồ bán nguyệt đo điểm rủi ro (0–100)
+    │   └── sidebar.py                      # Thanh bên: Trạng thái Giao diện Tối, Trợ năng 140–150%, API Key
+    └── views/                              # 4 Tab chức năng theo đúng thứ tự hiển thị
+        ├── tab_chat.py                     # Tab 1: Kiểm tra tin nhắn (Chat + Upload ảnh + Lịch sử)
+        ├── tab_fake_bill.py                # Tab 2: Soi bill giả (2 lớp giám định)
+        ├── tab_scam_game.py                # Tab 3: Đấu trường lừa đảo (15 tình huống, 3 lượt)
+        └── tab_library.py                  # Tab 4: Thư viện cảnh báo (37 bản ghi + Hotline)
+```
 
 ---
 
 ## 🚀 Hướng Dẫn Cài Đặt & Khởi Chạy
 
-### 1. Cài đặt các thư viện cần thiết
+### 1. Cài đặt thư viện phụ thuộc
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Khởi chạy ứng dụng
+### 2. Cấu hình Gemini API Key (khuyến nghị)
+Tạo file `.env` ở thư mục gốc dự án hoặc nhập trực tiếp trong **Sidebar → Cài đặt nâng cao** trên web:
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+```
+*(Nếu không nhập API Key, hệ thống vẫn chạy ổn định ở chế độ dự phòng cục bộ với `Dynamic Scorer`, `FAISS/Keyword RAG` và `Heuristic Forensics`.)*
+
+### 3. Khởi chạy ứng dụng
 ```bash
 streamlit run streamlit/app_anti_scam.py
 ```
-Ứng dụng sẽ tự động mở trên trình duyệt tại địa chỉ: `http://localhost:8501`.
+Ứng dụng mở tại địa chỉ: `http://localhost:8501`.

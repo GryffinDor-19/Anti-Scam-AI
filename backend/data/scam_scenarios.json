@@ -1,0 +1,1859 @@
+{
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "ctv_danh_gia_5_sao",
+      "icon": "🛒",
+      "title": "CTV Shopee đánh giá 5 sao",
+      "subtitle": "Việc nhẹ lương cao, nạp cọc làm nhiệm vụ",
+      "category_name": "Tuyển CTV Việc Nhẹ Lương Cao",
+      "difficulty": "Dễ",
+      "persona": "Tuyển dụng việc làm online",
+      "persona_avatar": "🕵️",
+      "brief": "Bạn nhận tin nhắn từ người tự xưng là tuyển dụng của sàn thương mại điện tử, mời làm cộng tác viên đánh giá 5 sao với thu nhập 300.000đ/ngày.",
+      "source_ids": [
+        1,
+        2
+      ],
+      "stages": [
+        {
+          "scammer": "Chào bạn! Mình là tuyển dụng của sàn TMĐT. Chỉ cần đánh giá 5 sao sản phẩm, mỗi lượt nhận 15.000đ, làm 10 phút/ngày là kiếm 300.000đ. Bạn tham gia không?",
+          "options": [
+            {
+              "text": "Bạn gửi giấy phép kinh doanh, mã số thuế và hợp đồng chính thức qua email công ty mình xem trước đã.",
+              "level": "safe",
+              "feedback": "Chuẩn! Sàn thật tuyển dụng qua kênh chính thức, có hợp đồng và pháp nhân rõ ràng, không tuyển qua tin nhắn cá nhân.",
+              "red_flag": "Tuyển dụng qua tin nhắn cá nhân, không có hợp đồng hay pháp nhân"
+            },
+            {
+              "text": "Cho mình hỏi công ty tên gì, làm ở đâu?",
+              "level": "neutral",
+              "feedback": "Hỏi đúng hướng nhưng chưa đủ. Kẻ gian sẽ ngay lập tức gửi website giả và giục bạn làm nhiệm vụ."
+            },
+            {
+              "text": "Được, hướng dẫn mình cách làm luôn đi!",
+              "level": "risky",
+              "feedback": "Nguy hiểm! Đồng ý tham gia quá nhanh là bước đầu tiên của chuỗi bẫy nạp tiền làm nhiệm vụ."
+            }
+          ],
+          "safe_keywords": [
+            "giấy phép",
+            "hợp đồng",
+            "mã số thuế",
+            "pháp nhân",
+            "xác minh",
+            "không tham gia"
+          ],
+          "risky_keywords": [
+            "đồng ý",
+            "hướng dẫn",
+            "tham gia",
+            "làm luôn",
+            "ok bạn",
+            "được luôn"
+          ],
+          "hint": "Sàn thương mại điện tử thật không bao giờ tuyển cộng tác viên đánh giá 5 sao qua tin nhắn cá nhân."
+        },
+        {
+          "scammer": "Bên em là đối tác Shopee/TikTok nè. Để nhận nhiệm vụ, bạn nạp 500.000đ tiền cọc vào tài khoản hệ thống. Làm xong 3 đơn sẽ hoàn cọc kèm hoa hồng 150.000đ. Chuyển khoản số này nha!",
+          "options": [
+            {
+              "text": "Mình không nạp tiền để nhận việc. Việc làm thật không bao giờ bắt người lao động ứng tiền trước.",
+              "level": "safe",
+              "feedback": "Chính xác! Người lao động nhận lương, không phải nộp tiền. Đòi cọc là dấu hiệu lừa đảo kinh điển.",
+              "red_flag": "Bắt nạp cọc/ứng tiền trước để nhận việc"
+            },
+            {
+              "text": "Sao phải nạp cọc? Có điều khoản nào ghi không?",
+              "level": "neutral",
+              "feedback": "Bạn đang nghi ngờ đúng, nhưng kẻ gian sẽ gửi 'điều khoản' giả và tiếp tục thuyết phục."
+            },
+            {
+              "text": "500k thôi hả, mình chuyển luôn, gửi số tài khoản đi.",
+              "level": "risky",
+              "feedback": "Sai rồi! Tiền cọc đầu tiên chỉ là mồi, sau đó chúng sẽ đòi thêm nhiều lần nữa."
+            }
+          ],
+          "safe_keywords": [
+            "không nạp",
+            "không cọc",
+            "không ứng tiền",
+            "không chuyển",
+            "việc thật",
+            "lừa đảo"
+          ],
+          "risky_keywords": [
+            "chuyển luôn",
+            "nạp cọc",
+            "gửi số tài khoản",
+            "chuyển khoản",
+            "500k"
+          ],
+          "hint": "Mọi công việc yêu cầu nạp tiền trước đều là bẫy, bất kể tên sàn lớn đến đâu."
+        },
+        {
+          "scammer": "Hệ thống báo sai thao tác nên tài khoản bạn bị treo rồi! Bạn nạp thêm 3.000.000đ để mở khóa, làm xong 5 đơn là rút được cả gốc lẫn lãi 1,7 tỷ như chị A hôm qua nha!",
+          "options": [
+            {
+              "text": "Đây là bẫy nạp tiền vô hạn. Mình chặn số này và báo cáo tài khoản với sàn.",
+              "level": "safe",
+              "feedback": "Xuất sắc! 'Treo tài khoản' rồi đòi thêm tiền là chiêu cuối để hút cạn tài khoản nạn nhân.",
+              "red_flag": "Tài khoản bị 'treo' và đòi nạp thêm tiền để rút"
+            },
+            {
+              "text": "Mình hết tiền rồi, có cách nào rút vốn không?",
+              "level": "neutral",
+              "feedback": "Kẻ gian sẽ hứa hẹn và tiếp tục dụ bạn vay tiền. Đừng thương lượng với chúng."
+            },
+            {
+              "text": "Mình vay thêm 3 triệu nạp vào, làm sao để rút?",
+              "level": "risky",
+              "feedback": "Cực kỳ nguy hiểm! Đây chính là cách nạn nhân trong bài báo mất 1,7 tỷ đồng."
+            }
+          ],
+          "safe_keywords": [
+            "chặn",
+            "báo cáo",
+            "báo công an",
+            "lừa đảo",
+            "không nạp",
+            "dừng lại",
+            "tố cáo"
+          ],
+          "risky_keywords": [
+            "vay",
+            "nạp thêm",
+            "3 triệu",
+            "rút vốn",
+            "làm sao rút"
+          ],
+          "hint": "Không có hệ thống hợp pháp nào bắt nạp thêm tiền để 'mở khóa' tài khoản."
+        }
+      ],
+      "debrief": "Bài báo Tuổi Trẻ ghi nhận nạn nhân mất 1,7 tỷ đồng khi làm cộng tác viên online. Thanh Niên cảnh báo chiêu 'đánh giá 5 sao nhận 15.000đ/lượt' là hình thức lừa đảo phổ biến nhất.",
+      "golden_rule": "Việc làm thật trả lương cho bạn, không bao giờ thu tiền của bạn."
+    },
+    {
+      "id": "san_dau_tu_mr_pips",
+      "icon": "📈",
+      "title": "Sàn đầu tư 'chuyên gia đọc lệnh'",
+      "subtitle": "Lãi ảo, thuế 20% và bảo hiểm 15%",
+      "category_name": "Bẫy Sàn Đầu Tư & Forex Giả Mạo",
+      "difficulty": "Trung bình",
+      "persona": "Chuyên gia đọc lệnh",
+      "persona_avatar": "💼",
+      "brief": "Một 'chuyên gia tài chính' mời bạn vào nhóm kín Zalo, khoe lợi nhuận 20-30%/tuần và giục nạp tiền để được 'đọc lệnh'.",
+      "source_ids": [
+        3
+      ],
+      "stages": [
+        {
+          "scammer": "Chào bạn, mình là chuyên gia tài chính bên sàn ABC. Nhóm mình đang 'đọc lệnh' cho nhà đầu tư mới, lợi nhuận 20-30%/tuần. Mình có hình ảnh lãi thật của thành viên. Bạn vào nhóm Zalo kín tham khảo nhé?",
+          "options": [
+            {
+              "text": "Sàn nào cũng phải có giấy phép Ủy ban Chứng khoán Nhà nước. Bạn cho mình xem mã pháp lý và địa chỉ trụ sở.",
+              "level": "safe",
+              "feedback": "Đúng! Sàn hợp pháp có giấy phép, pháp nhân và trụ sở rõ ràng. Nhóm kín + lãi 30%/tuần là dấu hiệu bẫy.",
+              "red_flag": "Mời vào nhóm kín, không có pháp nhân hay giấy phép"
+            },
+            {
+              "text": "Lợi nhuận 20-30%/tuần có cao quá không?",
+              "level": "neutral",
+              "feedback": "Bạn nhận ra con số bất thường, nhưng kẻ gian sẽ giải thích bằng 'kèo nội bộ' để trấn an."
+            },
+            {
+              "text": "Nghe hấp dẫn đó, cho mình vào nhóm với!",
+              "level": "risky",
+              "feedback": "Sai! Vào nhóm kín là bạn bước vào 'phòng chat diễn' với hàng chục tài khoản ảo khoe lãi."
+            }
+          ],
+          "safe_keywords": [
+            "giấy phép",
+            "ủy ban chứng khoán",
+            "pháp lý",
+            "trụ sở",
+            "không vào nhóm"
+          ],
+          "risky_keywords": [
+            "vào nhóm",
+            "hấp dẫn",
+            "tham gia",
+            "cho mình vào"
+          ],
+          "hint": "Lợi nhuận 20-30%/tuần là bất khả thi trong đầu tư hợp pháp. Đó là con số để dụ."
+        },
+        {
+          "scammer": "Bạn nạp 10 triệu thử trước, bên mình đọc lệnh giúp. Hôm qua chị Lan nạp 50 triệu, sáng nay rút lãi 12 triệu rồi đó!",
+          "options": [
+            {
+              "text": "Mình chỉ đầu tư qua công ty chứng khoán có giấy phép và tài khoản đứng tên mình. Không chuyển tiền cho cá nhân.",
+              "level": "safe",
+              "feedback": "Chuẩn! Tiền đầu tư phải vào tài khoản chính danh tại công ty có giấy phép, không chuyển cho cá nhân.",
+              "red_flag": "Yêu cầu nạp tiền vào tài khoản cá nhân"
+            },
+            {
+              "text": "Cho mình xin thông tin công ty và hợp đồng đầu tư.",
+              "level": "neutral",
+              "feedback": "Hợp lý, nhưng chúng sẽ gửi hợp đồng giả và tiếp tục giục nạp tiền."
+            },
+            {
+              "text": "Ok mình nạp 10 triệu trước, gửi số tài khoản đi.",
+              "level": "risky",
+              "feedback": "Nguy hiểm! 10 triệu đầu tiên sẽ 'sinh lãi' trên màn hình để dụ bạn nạp nhiều hơn."
+            }
+          ],
+          "safe_keywords": [
+            "công ty chứng khoán",
+            "giấy phép",
+            "chính danh",
+            "không chuyển",
+            "tài khoản đứng tên"
+          ],
+          "risky_keywords": [
+            "nạp 10",
+            "chuyển khoản",
+            "số tài khoản",
+            "ok mình nạp"
+          ],
+          "hint": "Không bao giờ chuyển tiền đầu tư vào tài khoản cá nhân của người khác."
+        },
+        {
+          "scammer": "Tài khoản bạn đang lãi 28 triệu rồi! Nhưng muốn rút phải nộp 20% thuế thu nhập và 15% bảo hiểm tiền gửi, tổng 9,8 triệu. Nộp xong 5 phút tiền về liền!",
+          "options": [
+            {
+              "text": "Không sàn hợp pháp nào bắt nộp thêm tiền để rút. Mình dừng lại và báo cơ quan chức năng.",
+              "level": "safe",
+              "feedback": "Xuất sắc! Đây chính là chiêu 'thuế + bảo hiểm' đã khiến nạn nhân Mr Pips mất hơn 5.200 tỷ đồng.",
+              "red_flag": "Đòi nộp thuế/bảo hiểm để được rút tiền"
+            },
+            {
+              "text": "Sao lúc nạp không nói khoản này? Có văn bản nào quy định không?",
+              "level": "neutral",
+              "feedback": "Bạn phản biện đúng, nhưng chúng sẽ dọa 'vi phạm hợp đồng' để bạn sợ và nộp."
+            },
+            {
+              "text": "Mình nộp 9,8 triệu luôn, rút được 28 triệu là lời rồi.",
+              "level": "risky",
+              "feedback": "Bẫy! Nộp xong sẽ phát sinh thêm phí khác, và bạn không bao giờ rút được tiền."
+            }
+          ],
+          "safe_keywords": [
+            "không nộp",
+            "không có sàn",
+            "báo cơ quan",
+            "dừng lại",
+            "lừa đảo",
+            "tố cáo"
+          ],
+          "risky_keywords": [
+            "nộp 9",
+            "nộp thuế",
+            "bảo hiểm",
+            "rút được",
+            "chuyển thêm"
+          ],
+          "hint": "Phí rút tiền phát sinh sau khi 'lãi' là dấu hiệu chắc chắn của sàn giả."
+        }
+      ],
+      "debrief": "Cục An toàn thông tin phân tích vụ Mr Pips lừa hơn 5.200 tỷ: cho rút lãi nhỏ lúc đầu, sau đó ép nộp 20% 'thuế' và 15% 'bảo hiểm tiền gửi' để chiếm đoạt.",
+      "golden_rule": "Lãi cao bất thường + phí rút tiền = sàn giả mạo."
+    },
+    {
+      "id": "bay_tinh_tinder",
+      "icon": "💔",
+      "title": "Bẫy tình Tinder rồi rủ đầu tư",
+      "subtitle": "Quà tặng, kèo nội bộ, phí xác minh",
+      "category_name": "Lừa Đảo Tình Cảm & Bẫy Hẹn Hò",
+      "difficulty": "Trung bình",
+      "persona": "Người yêu qua mạng",
+      "persona_avatar": "😍",
+      "brief": "Bạn match với một người tự xưng kỹ sư ở nước ngoài, rất tâm lý, tặng quà và rủ bạn đầu tư 'kèo nội bộ'.",
+      "source_ids": [
+        4,
+        5
+      ],
+      "stages": [
+        {
+          "scammer": "Chào em, anh thấy hồ sơ em rất dễ thương. Anh đang làm kỹ sư bên Singapore, sắp về Việt Nam. Mình kết bạn làm quen nhé? Anh tặng em món quà nhỏ gửi về tận nhà.",
+          "options": [
+            {
+              "text": "Mình không nhận quà từ người chưa gặp mặt. Mình muốn trò chuyện bình thường trước đã.",
+              "level": "safe",
+              "feedback": "Đúng! Quà gửi trước thường là mồi để lấy địa chỉ, số điện thoại và tạo lòng tin.",
+              "red_flag": "Tặng quà cho người chưa từng gặp mặt"
+            },
+            {
+              "text": "Anh ở Singapore thật à? Cho mình xem ảnh đang làm việc đi.",
+              "level": "neutral",
+              "feedback": "Ảnh có thể lấy từ mạng. Hãy cảnh giác, kẻ gian luôn có sẵn 'bộ ảnh' để chứng minh."
+            },
+            {
+              "text": "Dạ anh dễ thương quá, em gửi địa chỉ nhà cho anh gửi quà nha.",
+              "level": "risky",
+              "feedback": "Nguy hiểm! Bạn vừa lộ địa chỉ nhà cho người lạ và tạo tiền đề cho các bước tiếp theo."
+            }
+          ],
+          "safe_keywords": [
+            "không nhận quà",
+            "chưa gặp mặt",
+            "không cho địa chỉ",
+            "trò chuyện bình thường"
+          ],
+          "risky_keywords": [
+            "địa chỉ nhà",
+            "gửi quà",
+            "dễ thương quá",
+            "cho anh địa chỉ"
+          ],
+          "hint": "Không cung cấp địa chỉ nhà, số điện thoại cho người mới quen trên mạng."
+        },
+        {
+          "scammer": "Anh có người chú làm giám đốc sàn tài chính, đang có kèo nội bộ lãi 15%/tuần. Anh chỉ cho em cùng đầu tư, coi như quà tặng em đó. Em nạp 5 triệu thử nhé?",
+          "options": [
+            {
+              "text": "Mình không đầu tư qua người quen trên mạng. Nếu là sàn thật, mình tự mở tài khoản chính thức.",
+              "level": "safe",
+              "feedback": "Chuẩn! 'Kèo nội bộ' từ người yêu qua mạng là chiêu kết hợp bẫy tình cảm và đầu tư.",
+              "red_flag": "Rủ đầu tư 'kèo nội bộ' sau khi tạo lòng tin"
+            },
+            {
+              "text": "Sao anh không tự đầu tư mà rủ em?",
+              "level": "neutral",
+              "feedback": "Câu hỏi hay, nhưng chúng sẽ trả lời bằng lý do tình cảm để bạn mềm lòng."
+            },
+            {
+              "text": "Anh tốt quá, em nạp 5 triệu luôn, hướng dẫn em đi.",
+              "level": "risky",
+              "feedback": "Sai! Bạn vừa biến tình cảm thành tiền, đúng kịch bản của các băng nhóm lừa đảo."
+            }
+          ],
+          "safe_keywords": [
+            "không đầu tư",
+            "tự mở tài khoản",
+            "sàn thật",
+            "không chuyển tiền"
+          ],
+          "risky_keywords": [
+            "nạp 5",
+            "hướng dẫn",
+            "ok anh",
+            "chuyển tiền"
+          ],
+          "hint": "Người thật lòng không bao giờ rủ bạn đầu tư tiền qua một sàn không rõ nguồn gốc."
+        },
+        {
+          "scammer": "Tài khoản em lãi 40 triệu rồi! Nhưng hệ thống phát hiện giao dịch bất thường, em phải đóng 50 triệu 'phí xác minh' mới rút được. Anh vừa bán xe để nộp giúp em 20 triệu rồi, em cố gắng nốt nhé!",
+          "options": [
+            {
+              "text": "Anh không cần bán xe giúp tôi. Đây là bẫy tình cảm + đầu tư, tôi dừng lại và báo công an.",
+              "level": "safe",
+              "feedback": "Xuất sắc! Kẻ gian dùng đòn tâm lý 'anh đã hy sinh vì em' để ép bạn nộp thêm.",
+              "red_flag": "Dùng đòn tâm lý và phí vô lý để ép nộp thêm"
+            },
+            {
+              "text": "Em không có 50 triệu, có cách nào rút 40 triệu trước không?",
+              "level": "neutral",
+              "feedback": "Bạn vẫn còn bám vào số 'lãi ảo'. Chúng sẽ gợi ý vay nóng, cầm đồ."
+            },
+            {
+              "text": "Em đi vay nóng 30 triệu nộp nốt, anh chờ em nha.",
+              "level": "risky",
+              "feedback": "Thảm họa! Vay nóng để nộp vào sàn giả là cách mất tiền nhanh nhất."
+            }
+          ],
+          "safe_keywords": [
+            "không cần",
+            "báo công an",
+            "dừng lại",
+            "lừa đảo",
+            "không nộp",
+            "chấm dứt"
+          ],
+          "risky_keywords": [
+            "vay nóng",
+            "nộp nốt",
+            "50 triệu",
+            "cố gắng",
+            "chờ em"
+          ],
+          "hint": "Khi 'người yêu' bắt đầu nhắc đến phí rút tiền, đó là lúc cần dừng lại ngay."
+        }
+      ],
+      "debrief": "VTV đưa tin một phụ nữ bị lừa 5,4 tỷ đồng vì hẹn hò qua Tinder. Báo Nhân Dân mô tả quy trình: tạo hồ sơ giả, xây dựng tình cảm, rồi dụ đầu tư hoặc tống tiền ảnh nhạy cảm.",
+      "golden_rule": "Không chuyển tiền cho người yêu qua mạng khi chưa gặp mặt và xác minh danh tính."
+    },
+    {
+      "id": "gia_danh_cong_an",
+      "icon": "👮",
+      "title": "Giả danh công an 'án ma túy'",
+      "subtitle": "Lệnh bắt giả, tài khoản an toàn",
+      "category_name": "Giả Danh Cơ Quan Công Quyền",
+      "difficulty": "Khó",
+      "persona": "Đại úy công an (giả)",
+      "persona_avatar": "🎖️",
+      "brief": "Bạn nhận cuộc gọi từ người tự xưng cán bộ điều tra, đọc đúng số CCCD của bạn và nói bạn liên quan đến vụ án ma túy.",
+      "source_ids": [
+        6,
+        7
+      ],
+      "stages": [
+        {
+          "scammer": "A lô, tôi là Đại úy công an Cục Cảnh sát điều tra. Anh/chị có liên quan đến vụ án ma túy và rửa tiền, số CCCD của anh/chị nằm trong danh sách. Yêu cầu hợp tác điều tra, không được nói với ai.",
+          "options": [
+            {
+              "text": "Tôi không làm việc qua điện thoại. Nếu có việc, mời anh gửi giấy triệu tập và tôi sẽ đến trụ sở công an phường.",
+              "level": "safe",
+              "feedback": "Chuẩn! Công an không bao giờ xử lý án qua điện thoại, càng không yêu cầu giữ bí mật với gia đình.",
+              "red_flag": "Công an gọi điện đòi hợp tác điều tra qua điện thoại"
+            },
+            {
+              "text": "Anh đọc lại số CCCD của tôi xem nào?",
+              "level": "neutral",
+              "feedback": "Thông tin CCCD đã bị lộ từ nhiều nguồn. Đọc đúng không chứng minh được họ là công an."
+            },
+            {
+              "text": "Dạ dạ, tôi không biết gì đâu, anh cần tôi làm gì ạ?",
+              "level": "risky",
+              "feedback": "Nguy hiểm! Tỏ ra sợ hãi là điều kiện để kẻ giả danh thao túng tâm lý bạn."
+            }
+          ],
+          "safe_keywords": [
+            "không làm việc qua điện thoại",
+            "giấy triệu tập",
+            "trụ sở",
+            "công an phường",
+            "xác minh"
+          ],
+          "risky_keywords": [
+            "dạ",
+            "tôi không biết",
+            "cần tôi làm gì",
+            "hợp tác"
+          ],
+          "hint": "Công an thật chỉ làm việc qua giấy triệu tập và tại trụ sở, không qua điện thoại."
+        },
+        {
+          "scammer": "Đây là lệnh bắt tạm giam đã ký. Nếu muốn tại ngoại, anh/chị phải mở 'tài khoản an toàn' và chuyển toàn bộ tiền tiết kiệm vào để chứng minh trong sạch, sau 24h sẽ hoàn trả.",
+          "options": [
+            {
+              "text": "Không có 'tài khoản an toàn' nào trong tố tụng hình sự. Tôi sẽ gọi 113 hoặc đến công an phường để xác minh.",
+              "level": "safe",
+              "feedback": "Xuất sắc! 'Tài khoản an toàn' là cụm từ không tồn tại trong pháp luật Việt Nam.",
+              "red_flag": "Yêu cầu mở 'tài khoản an toàn' để chứng minh trong sạch"
+            },
+            {
+              "text": "Anh gửi lệnh bắt qua Zalo cho tôi xem được không?",
+              "level": "neutral",
+              "feedback": "Kẻ gian sẽ gửi ảnh lệnh bắt giả có dấu đỏ. Ảnh giả rất dễ làm, đừng tin."
+            },
+            {
+              "text": "Dạ tôi chuyển ngay, anh đọc số tài khoản giúp tôi.",
+              "level": "risky",
+              "feedback": "Sai nghiêm trọng! Đây chính là cách nạn nhân trong bài báo mất hơn 15 tỷ đồng."
+            }
+          ],
+          "safe_keywords": [
+            "không có tài khoản an toàn",
+            "113",
+            "công an phường",
+            "xác minh",
+            "không chuyển"
+          ],
+          "risky_keywords": [
+            "chuyển ngay",
+            "số tài khoản",
+            "tài khoản an toàn",
+            "dạ tôi chuyển"
+          ],
+          "hint": "Không có khái niệm 'tài khoản an toàn' trong điều tra hình sự. Đó là bịa đặt."
+        },
+        {
+          "scammer": "Anh/chị chuyển 200 triệu rồi à? Còn thiếu 50 triệu 'phí bảo lãnh' nữa mới hoàn tất hồ sơ. Chuyển gấp trong 30 phút, nếu không sẽ có xe đến bắt.",
+          "options": [
+            {
+              "text": "Tôi đã ghi âm và báo công an. Các anh đang giả danh, tôi chấm dứt cuộc gọi.",
+              "level": "safe",
+              "feedback": "Hoàn hảo! Ghi âm, báo công an và chấm dứt liên lạc là phản ứng đúng nhất.",
+              "red_flag": "Đòi thêm 'phí bảo lãnh' và dọa bắt người"
+            },
+            {
+              "text": "Tôi không còn tiền, có thể nộp sau không?",
+              "level": "neutral",
+              "feedback": "Bạn vẫn đang đàm phán với kẻ lừa đảo. Chúng sẽ cho 'gia hạn' để tiếp tục dụ."
+            },
+            {
+              "text": "Dạ em vay thêm 50 triệu chuyển ngay, anh đừng bắt em.",
+              "level": "risky",
+              "feedback": "Cực kỳ nguy hiểm! Dọa bắt là đòn cuối, không có xe nào đến cả."
+            }
+          ],
+          "safe_keywords": [
+            "ghi âm",
+            "báo công an",
+            "chấm dứt",
+            "cúp máy",
+            "giả danh",
+            "113"
+          ],
+          "risky_keywords": [
+            "vay thêm",
+            "chuyển ngay",
+            "đừng bắt",
+            "nộp sau",
+            "50 triệu"
+          ],
+          "hint": "Công an không bao giờ đòi tiền qua điện thoại hay dọa bắt người ngay lập tức."
+        }
+      ],
+      "debrief": "Báo Chính phủ và Tuổi Trẻ đưa tin các vụ giả danh công an, kiểm sát viên đe dọa liên quan án ma túy/rửa tiền để chiếm đoạt 15 tỷ và 1,6 tỷ đồng.",
+      "golden_rule": "Công an không làm việc qua điện thoại và không có 'tài khoản an toàn'."
+    },
+    {
+      "id": "vneid_muc_2",
+      "icon": "🪪",
+      "title": "VNeID báo lỗi mức 2",
+      "subtitle": "App giả, quyền trợ năng, OTP",
+      "category_name": "Mạo Danh VNeID & Dịch Vụ Công",
+      "difficulty": "Trung bình",
+      "persona": "Cán bộ công an phường (giả)",
+      "persona_avatar": "🪪",
+      "brief": "Bạn được gọi điện thông báo tài khoản định danh điện tử VNeID mức 2 bị lỗi và phải cập nhật gấp trong ngày.",
+      "source_ids": [
+        8
+      ],
+      "stages": [
+        {
+          "scammer": "Chào anh/chị, tôi là cán bộ công an phường X. Tài khoản VNeID mức 2 của anh/chị đang bị lỗi, cần cập nhật gấp trước 17h hôm nay nếu không sẽ bị khóa.",
+          "options": [
+            {
+              "text": "Tôi sẽ ra trụ sở công an phường trực tiếp để kiểm tra, không làm qua điện thoại.",
+              "level": "safe",
+              "feedback": "Đúng! Mọi việc liên quan VNeID đều làm trực tiếp tại công an phường hoặc trên app chính thức.",
+              "red_flag": "Gọi điện thông báo lỗi VNeID và giục cập nhật gấp"
+            },
+            {
+              "text": "Lỗi gì vậy anh? Tôi mở app xem thử.",
+              "level": "neutral",
+              "feedback": "Mở app chính thức để kiểm tra là đúng, nhưng đừng làm theo hướng dẫn qua điện thoại."
+            },
+            {
+              "text": "Dạ anh hướng dẫn em sửa với, em cần gấp.",
+              "level": "risky",
+              "feedback": "Sai! Để người lạ hướng dẫn qua điện thoại là mở đường cho app giả và mã độc."
+            }
+          ],
+          "safe_keywords": [
+            "ra trụ sở",
+            "trực tiếp",
+            "công an phường",
+            "không qua điện thoại",
+            "app chính thức"
+          ],
+          "risky_keywords": [
+            "hướng dẫn",
+            "sửa giúp",
+            "cần gấp",
+            "dạ anh"
+          ],
+          "hint": "VNeID không bao giờ được xử lý qua điện thoại hay Zalo."
+        },
+        {
+          "scammer": "Anh/chị tải giúp tôi ứng dụng 'VNeID cập nhật' qua link này, cài xong đăng nhập số CCCD và mật khẩu để đồng bộ dữ liệu.",
+          "options": [
+            {
+              "text": "VNeID chỉ tải trên App Store/CH Play chính thức. Tôi không bấm link lạ.",
+              "level": "safe",
+              "feedback": "Chuẩn! Link tải app từ tin nhắn/điện thoại là con đường phổ biến của mã độc.",
+              "red_flag": "Gửi link tải app VNeID ngoài kho ứng dụng chính thức"
+            },
+            {
+              "text": "Sao không cập nhật trong app VNeID sẵn có mà phải tải app mới?",
+              "level": "neutral",
+              "feedback": "Câu hỏi đúng! Kẻ gian sẽ viện lý do 'bản cũ lỗi' để bạn tải app giả."
+            },
+            {
+              "text": "Dạ em tải rồi, đang cài đặt ạ.",
+              "level": "risky",
+              "feedback": "Nguy hiểm! App giả có thể chứa mã độc chiếm quyền điện thoại."
+            }
+          ],
+          "safe_keywords": [
+            "app store",
+            "ch play",
+            "kho ứng dụng",
+            "không bấm link",
+            "chính thức"
+          ],
+          "risky_keywords": [
+            "tải rồi",
+            "cài đặt",
+            "bấm link",
+            "dạ em tải"
+          ],
+          "hint": "Chỉ tải ứng dụng từ App Store hoặc CH Play chính thức."
+        },
+        {
+          "scammer": "App báo cần quyền 'Trợ năng' và mã OTP gửi về máy. Anh/chị bật quyền trợ năng và đọc mã cho tôi để hoàn tất.",
+          "options": [
+            {
+              "text": "Không ai được yêu cầu bật trợ năng hay đọc OTP. Tôi gỡ app và báo công an.",
+              "level": "safe",
+              "feedback": "Xuất sắc! Quyền trợ năng + OTP là bộ đôi giúp kẻ gian điều khiển điện thoại và rút tiền.",
+              "red_flag": "Yêu cầu bật quyền trợ năng và đọc mã OTP"
+            },
+            {
+              "text": "Mã OTP này dùng để làm gì vậy anh?",
+              "level": "neutral",
+              "feedback": "OTP là chìa khóa tài khoản. Không được đọc cho bất kỳ ai, dù họ nói gì."
+            },
+            {
+              "text": "Dạ mã OTP là 483920, em bật trợ năng rồi ạ.",
+              "level": "risky",
+              "feedback": "Thảm họa! Bạn vừa trao quyền điều khiển điện thoại và tài khoản ngân hàng cho kẻ gian."
+            }
+          ],
+          "safe_keywords": [
+            "không đọc otp",
+            "gỡ app",
+            "báo công an",
+            "không bật trợ năng",
+            "không cung cấp"
+          ],
+          "risky_keywords": [
+            "otp là",
+            "483920",
+            "bật trợ năng",
+            "đọc mã"
+          ],
+          "hint": "Không ứng dụng hợp pháp nào cần quyền trợ năng để cập nhật VNeID."
+        }
+      ],
+      "debrief": "Cục An toàn thông tin cảnh báo chiêu mạo danh công an thông báo lỗi VNeID mức 2, dụ tải app giả để chiếm đoạt hàng tỷ đồng.",
+      "golden_rule": "VNeID chỉ tải từ kho ứng dụng chính thức và không đọc OTP cho bất kỳ ai."
+    },
+    {
+      "id": "deepfake_nguoi_than",
+      "icon": "🎭",
+      "title": "Deepfake video call người thân",
+      "subtitle": "Mặt giống con, giọng giống con",
+      "category_name": "Deepfake AI Cắt Ghép Tống Tiền",
+      "difficulty": "Khó",
+      "persona": "Người thân (deepfake)",
+      "persona_avatar": "🎭",
+      "brief": "Bạn nhận cuộc gọi video từ số lạ, hình ảnh và giọng nói giống hệt con trai bạn, nói đang gặp tai nạn và cần tiền gấp.",
+      "source_ids": [
+        9,
+        10
+      ],
+      "stages": [
+        {
+          "scammer": "[Video call] Bố ơi con đây! Con bị tai nạn ở tỉnh, công an đang giữ con, cần 200 triệu đóng bảo lãnh gấp. Bố chuyển khoản cho chú này giúp con, đừng nói với mẹ!",
+          "options": [
+            {
+              "text": "Bố sẽ gọi lại số cũ của con và gọi cho mẹ để xác minh. Không chuyển tiền qua video call.",
+              "level": "safe",
+              "feedback": "Chuẩn! Gọi lại qua kênh khác là cách duy nhất phát hiện deepfake.",
+              "red_flag": "Gọi video từ số lạ, giục chuyển tiền và yêu cầu giữ bí mật"
+            },
+            {
+              "text": "Con đang ở bệnh viện nào? Bố gọi bác sĩ xác nhận.",
+              "level": "neutral",
+              "feedback": "Hỏi đúng hướng, nhưng kẻ gian sẽ đưa thông tin giả và tiếp tục giục."
+            },
+            {
+              "text": "Con đừng lo, bố chuyển ngay, gửi số tài khoản cho bố.",
+              "level": "risky",
+              "feedback": "Nguy hiểm! Deepfake có thể giả cả mặt và giọng, đừng tin vào video call."
+            }
+          ],
+          "safe_keywords": [
+            "gọi lại",
+            "số cũ",
+            "xác minh",
+            "không chuyển tiền",
+            "hỏi mẹ"
+          ],
+          "risky_keywords": [
+            "chuyển ngay",
+            "số tài khoản",
+            "đừng lo",
+            "bố chuyển"
+          ],
+          "hint": "Deepfake có thể giả mặt và giọng. Hãy gọi lại qua số cũ hoặc hỏi câu chỉ người thân biết."
+        },
+        {
+          "scammer": "Bố ơi nhanh lên, họ sắp đưa con đi rồi! Chú ấy bảo chuyển vào tài khoản này. Bố nhìn mặt con đây mà, con là con bố thật mà!",
+          "options": [
+            {
+              "text": "Mặt giống nhưng giọng và câu nói không đúng. Bố tắt máy, gọi trực tiếp cho con qua số cũ.",
+              "level": "safe",
+              "feedback": "Xuất sắc! Nhận ra bất thường về giọng nói/ngữ điệu là kỹ năng chống deepfake quan trọng.",
+              "red_flag": "Hình ảnh/giọng nói có dấu hiệu bất thường, không kiểm chứng được"
+            },
+            {
+              "text": "Con nói câu gì chỉ bố con mình biết đi.",
+              "level": "neutral",
+              "feedback": "Ý hay, nhưng kẻ gian có thể đã thu thập thông tin từ mạng xã hội để trả lời."
+            },
+            {
+              "text": "Bố tin con, bố chuyển 200 triệu ngay đây.",
+              "level": "risky",
+              "feedback": "Sai! Cảm xúc đang bị khai thác. Hãy dừng lại và xác minh."
+            }
+          ],
+          "safe_keywords": [
+            "tắt máy",
+            "gọi lại",
+            "số cũ",
+            "giọng không đúng",
+            "xác minh"
+          ],
+          "risky_keywords": [
+            "tin con",
+            "chuyển 200",
+            "chuyển ngay",
+            "bố chuyển"
+          ],
+          "hint": "Deepfake thường lỗi ở giọng nói, khẩu hình và ngữ điệu. Hãy gọi lại số cũ."
+        },
+        {
+          "scammer": "Nếu bố không chuyển, con sẽ tung clip nhạy cảm của con lên mạng! Bố chọn đi, 200 triệu hay cả đời con bị bêu xấu?",
+          "options": [
+            {
+              "text": "Clip cắt ghép không làm bố sợ. Bố đã lưu bằng chứng và báo công an.",
+              "level": "safe",
+              "feedback": "Hoàn hảo! Tống tiền bằng clip cắt ghép là hành vi phạm tội, cần báo cơ quan chức năng.",
+              "red_flag": "Dọa tung clip nhạy cảm cắt ghép để tống tiền"
+            },
+            {
+              "text": "Bố cần thời gian, đừng làm gì dại dột.",
+              "level": "neutral",
+              "feedback": "Bạn đang bị cuốn vào vòng xoáy cảm xúc. Đừng đàm phán với kẻ tống tiền."
+            },
+            {
+              "text": "Bố chuyển ngay, con đừng làm gì dại!",
+              "level": "risky",
+              "feedback": "Sai! Trả tiền lần đầu sẽ bị đòi tiếp mãi mãi."
+            }
+          ],
+          "safe_keywords": [
+            "báo công an",
+            "lưu bằng chứng",
+            "không sợ",
+            "clip cắt ghép",
+            "tố cáo"
+          ],
+          "risky_keywords": [
+            "chuyển ngay",
+            "đừng làm gì dại",
+            "bố chuyển",
+            "200 triệu"
+          ],
+          "hint": "Không trả tiền cho kẻ tống tiền. Lưu bằng chứng và báo công an."
+        }
+      ],
+      "debrief": "VietNamNet và Bộ KH&CN cảnh báo kẻ gian thu thập ảnh chân dung trên mạng xã hội, dùng Deepfake cắt ghép video nhạy cảm để đe dọa, tống tiền.",
+      "golden_rule": "Xác minh qua kênh khác, đừng tin mặt và giọng trong video call."
+    },
+    {
+      "id": "fake_bill_chu_shop",
+      "icon": "🧾",
+      "title": "Fake bill - chủ shop online",
+      "subtitle": "Bill giả, trừ 2 tiếng, hoàn tiền qua link",
+      "category_name": "Biên Lai Chuyển Tiền Giả (Fake Bill)",
+      "difficulty": "Dễ",
+      "persona": "Khách hàng (giả)",
+      "persona_avatar": "🛍️",
+      "brief": "Bạn là chủ shop online, một khách gửi ảnh biên lai chuyển khoản và giục giao hàng ngay cho shipper.",
+      "source_ids": [
+        11,
+        12,
+        13
+      ],
+      "stages": [
+        {
+          "scammer": "Chị ơi em đặt 2 áo, em chuyển khoản rồi nha, em gửi bill đây. Chị giao hàng cho shipper giúp em, em đang cần gấp.",
+          "options": [
+            {
+              "text": "Chị sẽ tự mở app ngân hàng kiểm tra biến động số dư, có tiền chị mới giao hàng.",
+              "level": "safe",
+              "feedback": "Chuẩn! Ảnh bill chỉ là hình ảnh, chỉ số dư trong app ngân hàng mới là bằng chứng.",
+              "red_flag": "Gửi ảnh bill và giục giao hàng ngay"
+            },
+            {
+              "text": "Em chờ chị xem app ngân hàng đã nha.",
+              "level": "neutral",
+              "feedback": "Đúng hướng, nhưng cần kiểm tra kỹ số dư thực tế chứ không chỉ nhìn bill."
+            },
+            {
+              "text": "Dạ em thấy bill rồi, chị đóng gói giao luôn cho shipper.",
+              "level": "risky",
+              "feedback": "Sai! Bill giả làm rất nhanh và giống thật, chỉ 20.000đ/lượt."
+            }
+          ],
+          "safe_keywords": [
+            "app ngân hàng",
+            "biến động số dư",
+            "kiểm tra tài khoản",
+            "có tiền mới giao"
+          ],
+          "risky_keywords": [
+            "thấy bill",
+            "giao luôn",
+            "đóng gói",
+            "ok em"
+          ],
+          "hint": "Không bao giờ giao hàng chỉ dựa trên ảnh chụp biên lai."
+        },
+        {
+          "scammer": "Ngân hàng báo chuyển thành công rồi mà chị, liên ngân hàng trừ 2 tiếng mới tới. Chị giao trước đi, em uy tín mà, em mua nhiều lần rồi.",
+          "options": [
+            {
+              "text": "Không có tiền trong tài khoản thì chị chưa giao. Em chờ 2 tiếng cũng được.",
+              "level": "safe",
+              "feedback": "Đúng! Chuyển khoản liên ngân hàng vẫn hiện ngay khi tiền vào, 'trừ 2 tiếng' là lý do bịa.",
+              "red_flag": "Viện lý do 'liên ngân hàng trừ 2 tiếng' để đòi giao trước"
+            },
+            {
+              "text": "Em gửi mã giao dịch để chị gọi tổng đài kiểm tra.",
+              "level": "neutral",
+              "feedback": "Kiểm tra qua tổng đài là tốt, nhưng mã giao dịch trên bill giả cũng là mã bịa."
+            },
+            {
+              "text": "Ừ chị giao trước, 2 tiếng sau có tiền cũng được.",
+              "level": "risky",
+              "feedback": "Sai! Đây là chiêu quen thuộc để lấy hàng mà không trả tiền."
+            }
+          ],
+          "safe_keywords": [
+            "chưa giao",
+            "chờ",
+            "không có tiền",
+            "không giao trước"
+          ],
+          "risky_keywords": [
+            "giao trước",
+            "2 tiếng",
+            "ừ chị giao",
+            "cũng được"
+          ],
+          "hint": "Tiền vào tài khoản là hiển thị ngay, không có chuyện chờ 2 tiếng."
+        },
+        {
+          "scammer": "Chị giao rồi à? Em phát hiện chuyển nhầm 2 lần, chị hoàn lại 1 lần giúp em qua link này, em nhập số tài khoản nhận hoàn tiền nha.",
+          "options": [
+            {
+              "text": "Chị không bấm link hoàn tiền. Nếu chuyển nhầm, em liên hệ ngân hàng xử lý.",
+              "level": "safe",
+              "feedback": "Xuất sắc! Link 'hoàn tiền' là trang phishing đánh cắp tài khoản và OTP.",
+              "red_flag": "Gửi link lạ để 'hoàn tiền' sau khi đã nhận hàng"
+            },
+            {
+              "text": "Em gửi số tài khoản, chị chuyển lại sau khi đối soát.",
+              "level": "neutral",
+              "feedback": "Đối soát là đúng, nhưng tuyệt đối không bấm link lạ."
+            },
+            {
+              "text": "Dạ link đây, chị bấm vào nhập tài khoản rồi.",
+              "level": "risky",
+              "feedback": "Nguy hiểm! Bạn vừa mất cả hàng lẫn tiền trong tài khoản."
+            }
+          ],
+          "safe_keywords": [
+            "không bấm link",
+            "liên hệ ngân hàng",
+            "không hoàn tiền",
+            "đối soát"
+          ],
+          "risky_keywords": [
+            "bấm link",
+            "nhập tài khoản",
+            "hoàn tiền",
+            "link đây"
+          ],
+          "hint": "Không bấm link hoàn tiền do người mua gửi. Chỉ làm việc qua app ngân hàng."
+        }
+      ],
+      "debrief": "Báo Chính phủ, Công an Hải Phòng và Thanh Niên cảnh báo dịch vụ làm giả biên lai chuyển khoản chỉ 20.000đ/lượt, kèm website giả và mã QR để lừa chủ shop.",
+      "golden_rule": "Chỉ giao hàng khi thấy tiền thật trong app ngân hàng của mình."
+    },
+    {
+      "id": "phishing_phat_nguoi",
+      "icon": "🚗",
+      "title": "Phishing 'phạt nguội'",
+      "subtitle": "Link rút gọn, trang giả, đòi OTP",
+      "category_name": "Đường Link Độc Hại & Phishing",
+      "difficulty": "Dễ",
+      "persona": "Cục CSGT (giả)",
+      "persona_avatar": "🚨",
+      "brief": "Bạn nhận SMS thông báo vi phạm giao thông kèm link rút gọn, yêu cầu nộp phạt trong 48 giờ.",
+      "source_ids": [
+        14
+      ],
+      "stages": [
+        {
+          "scammer": "【Cục CSGT】Xe 51A-xxxxx của bạn vi phạm giao thông ngày 12/11, phạt 2.000.000đ. Tra cứu và nộp phạt tại: bit.ly/xxx trước 48h để tránh bị phạt nặng.",
+          "options": [
+            {
+              "text": "Tôi tra cứu trên trang chính thức của Cục CSGT hoặc app VNeID, không bấm link lạ.",
+              "level": "safe",
+              "feedback": "Chuẩn! Cơ quan nhà nước không gửi link rút gọn qua SMS để thu phạt.",
+              "red_flag": "SMS thông báo phạt kèm link rút gọn"
+            },
+            {
+              "text": "Link này của cơ quan nào vậy? Tôi kiểm tra lại đã.",
+              "level": "neutral",
+              "feedback": "Kiểm tra là đúng, nhưng đừng bấm link để kiểm tra."
+            },
+            {
+              "text": "Để tôi bấm vào xem có đúng không.",
+              "level": "risky",
+              "feedback": "Sai! Chỉ cần bấm link là đã vào trang phishing được thiết kế giống trang nhà nước."
+            }
+          ],
+          "safe_keywords": [
+            "trang chính thức",
+            "vneid",
+            "không bấm link",
+            "cổng dịch vụ công",
+            "tra cứu"
+          ],
+          "risky_keywords": [
+            "bấm vào",
+            "bấm link",
+            "xem có đúng",
+            "mở link"
+          ],
+          "hint": "Không bấm link rút gọn trong SMS thông báo phạt nguội."
+        },
+        {
+          "scammer": "[Trang tra cứu giả] Trang yêu cầu đăng nhập bằng số điện thoại và mật khẩu Facebook/Google để xác minh danh tính.",
+          "options": [
+            {
+              "text": "Trang của nhà nước không bao giờ đòi mật khẩu Facebook/Google. Tôi đóng trang.",
+              "level": "safe",
+              "feedback": "Đúng! Đây là dấu hiệu phishing rõ ràng: lấy mật khẩu mạng xã hội.",
+              "red_flag": "Trang nhà nước yêu cầu mật khẩu Facebook/Google"
+            },
+            {
+              "text": "Sao tra cứu phạt lại cần mật khẩu Facebook?",
+              "level": "neutral",
+              "feedback": "Bạn nhận ra bất thường, nhưng đừng nhập bất kỳ thông tin gì."
+            },
+            {
+              "text": "Tôi nhập tài khoản Facebook và mật khẩu rồi.",
+              "level": "risky",
+              "feedback": "Nguy hiểm! Bạn vừa mất tài khoản Facebook và có thể bị chiếm luôn các tài khoản liên kết."
+            }
+          ],
+          "safe_keywords": [
+            "không bao giờ",
+            "đóng trang",
+            "không nhập",
+            "phishing",
+            "mật khẩu facebook"
+          ],
+          "risky_keywords": [
+            "nhập tài khoản",
+            "mật khẩu",
+            "đăng nhập facebook",
+            "nhập rồi"
+          ],
+          "hint": "Trang dịch vụ công không bao giờ yêu cầu mật khẩu mạng xã hội."
+        },
+        {
+          "scammer": "Hệ thống gửi mã OTP về máy, bạn đọc mã để hoàn tất nộp phạt. Nếu không, hồ sơ sẽ chuyển sang cơ quan điều tra.",
+          "options": [
+            {
+              "text": "Không đọc OTP cho bất kỳ ai. Tôi chặn và báo cáo trang giả mạo.",
+              "level": "safe",
+              "feedback": "Xuất sắc! OTP là chìa khóa tài khoản, không đọc cho ai dù họ dọa gì.",
+              "red_flag": "Đòi mã OTP để 'hoàn tất nộp phạt'"
+            },
+            {
+              "text": "OTP dùng cho việc gì? Tôi tự nhập trên app ngân hàng được không?",
+              "level": "neutral",
+              "feedback": "Tự nhập trên app chính thức là đúng, nhưng trang này không phải app ngân hàng."
+            },
+            {
+              "text": "Mã OTP là 512844, tôi đọc rồi đó.",
+              "level": "risky",
+              "feedback": "Thảm họa! Đọc OTP là mất tài khoản ngân hàng ngay lập tức."
+            }
+          ],
+          "safe_keywords": [
+            "không đọc otp",
+            "chặn",
+            "báo cáo",
+            "không cung cấp",
+            "giả mạo"
+          ],
+          "risky_keywords": [
+            "otp là",
+            "512844",
+            "đọc rồi",
+            "mã otp"
+          ],
+          "hint": "Không đọc mã OTP cho bất kỳ ai, kể cả người tự xưng cơ quan chức năng."
+        }
+      ],
+      "debrief": "Báo Nhân Dân hướng dẫn nhận diện chiêu phát tán link lạ, link rút gọn dẫn tới trang phishing đánh cắp thông tin đăng nhập, mật khẩu.",
+      "golden_rule": "Phạt nguội chỉ tra cứu trên trang/app chính thức, không qua link lạ."
+    },
+    {
+      "id": "web_ngan_hang_otp",
+      "icon": "🏦",
+      "title": "Web ngân hàng giả chiếm OTP",
+      "subtitle": "Tài khoản bị khóa, tên miền .top",
+      "category_name": "Giả Mạo Ngân Hàng & Chiếm Đoạt OTP",
+      "difficulty": "Trung bình",
+      "persona": "Ngân hàng (giả)",
+      "persona_avatar": "🏦",
+      "brief": "Bạn nhận tin nhắn thông báo tài khoản ngân hàng bị khóa do đăng nhập lạ, kèm link xác minh.",
+      "source_ids": [
+        15
+      ],
+      "stages": [
+        {
+          "scammer": "Ngân hàng Vietcombank thông báo: tài khoản của quý khách đã bị khóa do đăng nhập lạ. Vui lòng xác minh tại: https://vietcombank-xacminh.top để mở khóa trong 24h.",
+          "options": [
+            {
+              "text": "Tôi gọi tổng đài chính thức in trên thẻ và mở app ngân hàng để kiểm tra, không bấm link.",
+              "level": "safe",
+              "feedback": "Chuẩn! Tên miền .top và link trong SMS là dấu hiệu giả mạo rõ ràng.",
+              "red_flag": "Tên miền lạ (.top), link xác minh gửi qua SMS"
+            },
+            {
+              "text": "Tôi mở app ngân hàng xem tài khoản có bị khóa không đã.",
+              "level": "neutral",
+              "feedback": "Mở app chính thức là đúng, nhưng tuyệt đối không bấm link trong SMS."
+            },
+            {
+              "text": "Tôi bấm vào link và nhập thông tin đăng nhập luôn.",
+              "level": "risky",
+              "feedback": "Nguy hiểm! Đây là website giả mạo giống 100% giao diện ngân hàng."
+            }
+          ],
+          "safe_keywords": [
+            "tổng đài",
+            "app ngân hàng",
+            "không bấm link",
+            "chính thức",
+            "kiểm tra"
+          ],
+          "risky_keywords": [
+            "bấm vào link",
+            "nhập thông tin",
+            "đăng nhập luôn",
+            "mở link"
+          ],
+          "hint": "Ngân hàng không bao giờ gửi link lạ để mở khóa tài khoản."
+        },
+        {
+          "scammer": "[Web giả giống hệt] Trang yêu cầu nhập tên đăng nhập, mật khẩu và số thẻ. Giao diện giống 100% ngân hàng thật.",
+          "options": [
+            {
+              "text": "Tên miền .top không phải của ngân hàng. Tôi thoát ngay và đổi mật khẩu qua app chính thức.",
+              "level": "safe",
+              "feedback": "Xuất sắc! Giao diện giống không quan trọng, tên miền mới là thứ quyết định.",
+              "red_flag": "Giao diện giả giống ngân hàng thật, tên miền không chính thức"
+            },
+            {
+              "text": "Sao tên miền lạ vậy? Tôi kiểm tra lại URL.",
+              "level": "neutral",
+              "feedback": "Đúng, hãy kiểm tra tên miền trước khi nhập bất cứ thứ gì."
+            },
+            {
+              "text": "Tôi nhập đủ tên đăng nhập, mật khẩu, số thẻ rồi.",
+              "level": "risky",
+              "feedback": "Sai! Bạn vừa trao toàn bộ thông tin thẻ cho kẻ gian."
+            }
+          ],
+          "safe_keywords": [
+            "tên miền",
+            "thoát",
+            "đổi mật khẩu",
+            "app chính thức",
+            "không nhập"
+          ],
+          "risky_keywords": [
+            "nhập đủ",
+            "số thẻ",
+            "mật khẩu",
+            "nhập rồi"
+          ],
+          "hint": "Luôn kiểm tra tên miền trước khi đăng nhập. Giao diện giống không có nghĩa là thật."
+        },
+        {
+          "scammer": "Để hoàn tất mở khóa, quý khách nhập mã OTP vừa gửi về điện thoại. Nhân viên ngân hàng đang hỗ trợ trực tiếp.",
+          "options": [
+            {
+              "text": "Nhân viên ngân hàng không bao giờ hỏi OTP. Tôi khóa thẻ và báo ngân hàng ngay.",
+              "level": "safe",
+              "feedback": "Hoàn hảo! Không một nhân viên ngân hàng nào được phép hỏi OTP.",
+              "red_flag": "Nhân viên ngân hàng đòi mã OTP"
+            },
+            {
+              "text": "Tôi không nhập OTP trên web, để tôi gọi tổng đài.",
+              "level": "neutral",
+              "feedback": "Đúng, nhưng hãy gọi tổng đài chính thức, không gọi số do họ cung cấp."
+            },
+            {
+              "text": "Tôi nhập OTP rồi, xong chưa anh?",
+              "level": "risky",
+              "feedback": "Thảm họa! OTP là bước cuối để kẻ gian chuyển sạch tiền trong tài khoản."
+            }
+          ],
+          "safe_keywords": [
+            "không hỏi otp",
+            "khóa thẻ",
+            "báo ngân hàng",
+            "không nhập",
+            "tổng đài"
+          ],
+          "risky_keywords": [
+            "nhập otp",
+            "otp rồi",
+            "xong chưa",
+            "đọc otp"
+          ],
+          "hint": "Ngân hàng không bao giờ hỏi OTP, mật khẩu hay số thẻ qua điện thoại/web."
+        }
+      ],
+      "debrief": "NCSC phát hiện 28 website giả mạo ngân hàng lớn nhằm bẫy mã OTP và thông tin khách hàng.",
+      "golden_rule": "Ngân hàng không hỏi OTP/mật khẩu; kiểm tra tên miền trước khi đăng nhập."
+    },
+    {
+      "id": "sinh_trac_hoc",
+      "icon": "🫆",
+      "title": "Mạo danh ngân hàng xác thực sinh trắc học",
+      "subtitle": "App giả, quét mặt, đọc OTP",
+      "category_name": "Giả Mạo Ngân Hàng & Chiếm Đoạt OTP",
+      "difficulty": "Trung bình",
+      "persona": "Nhân viên CSKH ngân hàng (giả)",
+      "persona_avatar": "☎️",
+      "brief": "Bạn được gọi điện nhắc phải xác thực sinh trắc học trước hạn, nếu không tài khoản sẽ bị tạm khóa.",
+      "source_ids": [
+        16
+      ],
+      "stages": [
+        {
+          "scammer": "Em chào anh/chị, em là nhân viên CSKH ngân hàng. Theo quy định mới, anh/chị phải xác thực sinh trắc học trước 1/7, nếu không tài khoản sẽ bị tạm khóa. Anh/chị đã làm chưa ạ?",
+          "options": [
+            {
+              "text": "Tôi xác thực trực tiếp trong app ngân hàng chính thức hoặc ra quầy, không làm qua điện thoại.",
+              "level": "safe",
+              "feedback": "Chuẩn! Sinh trắc học chỉ thực hiện trong app chính thức hoặc tại quầy giao dịch.",
+              "red_flag": "Gọi điện giục xác thực sinh trắc học"
+            },
+            {
+              "text": "Tôi mở app ngân hàng xem có mục xác thực không.",
+              "level": "neutral",
+              "feedback": "Mở app chính thức là đúng, nhưng đừng làm theo hướng dẫn qua điện thoại."
+            },
+            {
+              "text": "Em hướng dẫn anh làm luôn đi, anh chưa làm.",
+              "level": "risky",
+              "feedback": "Sai! Để người lạ hướng dẫn là mở đường cho app giả và mất OTP."
+            }
+          ],
+          "safe_keywords": [
+            "app chính thức",
+            "ra quầy",
+            "không qua điện thoại",
+            "trực tiếp",
+            "chi nhánh"
+          ],
+          "risky_keywords": [
+            "hướng dẫn",
+            "làm luôn",
+            "chưa làm",
+            "giúp em"
+          ],
+          "hint": "Ngân hàng không gọi điện hướng dẫn xác thực sinh trắc học."
+        },
+        {
+          "scammer": "Anh/chị tải app 'Xác thực sinh trắc học' qua link em gửi, cài xong chụp CCCD 2 mặt và quét khuôn mặt là xong ạ.",
+          "options": [
+            {
+              "text": "Ngân hàng không gửi link tải app qua tin nhắn. Tôi chỉ cài từ kho ứng dụng chính thức.",
+              "level": "safe",
+              "feedback": "Đúng! Link tải app từ tin nhắn/điện thoại là dấu hiệu của app giả mạo.",
+              "red_flag": "Gửi link tải app xác thực ngoài kho ứng dụng"
+            },
+            {
+              "text": "App này tên gì, có trên CH Play không em?",
+              "level": "neutral",
+              "feedback": "Hỏi đúng, nhưng kẻ gian sẽ nói 'app nội bộ, không có trên store'."
+            },
+            {
+              "text": "Anh tải và cài rồi, giờ quét mặt ở đâu?",
+              "level": "risky",
+              "feedback": "Nguy hiểm! App giả có thể thu thập khuôn mặt và CCCD của bạn."
+            }
+          ],
+          "safe_keywords": [
+            "kho ứng dụng",
+            "ch play",
+            "app store",
+            "không bấm link",
+            "chính thức"
+          ],
+          "risky_keywords": [
+            "tải rồi",
+            "cài rồi",
+            "quét mặt",
+            "app này"
+          ],
+          "hint": "Chỉ cài app ngân hàng từ App Store/CH Play chính thức."
+        },
+        {
+          "scammer": "Anh/chị đọc giúp em mã OTP vừa gửi để hệ thống ghi nhận, rồi chuyển 2 triệu phí kích hoạt, sau 5 phút hoàn lại ạ.",
+          "options": [
+            {
+              "text": "Không có phí kích hoạt và không đọc OTP. Tôi kết thúc cuộc gọi và báo ngân hàng.",
+              "level": "safe",
+              "feedback": "Xuất sắc! Vừa đòi OTP vừa đòi tiền là hai dấu hiệu lừa đảo không thể nhầm lẫn.",
+              "red_flag": "Đòi OTP và 'phí kích hoạt' để hoàn tất"
+            },
+            {
+              "text": "Sao xác thực lại phải chuyển tiền? Anh hỏi lại tổng đài đã.",
+              "level": "neutral",
+              "feedback": "Bạn nghi ngờ đúng, nhưng đừng đọc OTP hay chuyển tiền."
+            },
+            {
+              "text": "OTP là 730215, anh chuyển 2 triệu luôn rồi.",
+              "level": "risky",
+              "feedback": "Thảm họa! Bạn vừa mất tài khoản và 2 triệu đồng."
+            }
+          ],
+          "safe_keywords": [
+            "không đọc otp",
+            "không có phí",
+            "báo ngân hàng",
+            "kết thúc",
+            "không chuyển"
+          ],
+          "risky_keywords": [
+            "otp là",
+            "730215",
+            "chuyển 2 triệu",
+            "phí kích hoạt"
+          ],
+          "hint": "Xác thực sinh trắc học hoàn toàn miễn phí và không cần OTP qua điện thoại."
+        }
+      ],
+      "debrief": "Báo Chính phủ cảnh báo thủ đoạn mạo danh ngân hàng liên hệ hướng dẫn xác thực sinh trắc học, gửi link dụ cài ứng dụng giả mạo.",
+      "golden_rule": "Sinh trắc học chỉ làm trong app chính thức, không qua link hay điện thoại."
+    },
+    {
+      "id": "app_apk_ma_doc",
+      "icon": "📱",
+      "title": "App .apk mã độc giả dịch vụ công",
+      "subtitle": "Cổng giả, file apk, quyền trợ năng",
+      "category_name": "Cài Đặt Mã Độc & Chiếm Quyền Điện Thoại",
+      "difficulty": "Khó",
+      "persona": "Cổng dịch vụ công (giả)",
+      "persona_avatar": "🏛️",
+      "brief": "Bạn nhận thông báo hồ sơ dịch vụ công cần cập nhật, kèm đường link tải ứng dụng hỗ trợ.",
+      "source_ids": [
+        17
+      ],
+      "stages": [
+        {
+          "scammer": "Cổng dịch vụ công quốc gia thông báo: hồ sơ của bạn cần cập nhật. Truy cập https://dichvucong-capnhat.xyz để tải ứng dụng hỗ trợ.",
+          "options": [
+            {
+              "text": "Tôi chỉ vào dichvucong.gov.vn. Tên miền .xyz không phải cổng nhà nước.",
+              "level": "safe",
+              "feedback": "Chuẩn! Cổng nhà nước dùng tên miền .gov.vn, không dùng .xyz.",
+              "red_flag": "Tên miền .xyz giả mạo cổng dịch vụ công"
+            },
+            {
+              "text": "Tôi vào trang chính thức kiểm tra hồ sơ trước đã.",
+              "level": "neutral",
+              "feedback": "Đúng hướng, nhưng tuyệt đối không mở link .xyz."
+            },
+            {
+              "text": "Tôi mở link và bấm tải ứng dụng về.",
+              "level": "risky",
+              "feedback": "Nguy hiểm! Đây là website giả mạo để dụ tải mã độc."
+            }
+          ],
+          "safe_keywords": [
+            "dichvucong.gov.vn",
+            "gov.vn",
+            "trang chính thức",
+            "không mở link",
+            "tên miền"
+          ],
+          "risky_keywords": [
+            "mở link",
+            "tải ứng dụng",
+            "bấm tải",
+            "tải về"
+          ],
+          "hint": "Cổng dịch vụ công quốc gia chỉ dùng tên miền .gov.vn."
+        },
+        {
+          "scammer": "Bạn tải file DVC.apk và cài đặt, cho phép 'Cài đặt từ nguồn không xác định' để cập nhật hồ sơ nhanh.",
+          "options": [
+            {
+              "text": "File .apk gửi qua web lạ là dấu hiệu mã độc. Tôi không cài.",
+              "level": "safe",
+              "feedback": "Xuất sắc! Không cơ quan nhà nước nào phát hành app dạng file .apk qua link.",
+              "red_flag": "Dụ cài file .apk từ nguồn không xác định"
+            },
+            {
+              "text": "Sao không có trên CH Play mà phải tải file apk?",
+              "level": "neutral",
+              "feedback": "Câu hỏi đúng! Kẻ gian sẽ nói 'app nội bộ' để bạn tự cài."
+            },
+            {
+              "text": "Tôi bật cài từ nguồn không xác định và cài xong rồi.",
+              "level": "risky",
+              "feedback": "Sai! Bạn vừa cài mã độc có thể chiếm quyền điều khiển điện thoại."
+            }
+          ],
+          "safe_keywords": [
+            "không cài",
+            "file apk",
+            "mã độc",
+            "ch play",
+            "không xác định"
+          ],
+          "risky_keywords": [
+            "bật cài",
+            "cài xong",
+            "nguồn không xác định",
+            "cài đặt"
+          ],
+          "hint": "Không cài file .apk từ link lạ, dù nó mang tên cơ quan nhà nước."
+        },
+        {
+          "scammer": "Ứng dụng cần quyền 'Trợ năng' (Accessibility) và quyền đọc tin nhắn để hỗ trợ. Bạn bật giúp mình nhé.",
+          "options": [
+            {
+              "text": "Không app dịch vụ công nào cần quyền trợ năng/đọc tin nhắn. Tôi gỡ app và quét mã độc.",
+              "level": "safe",
+              "feedback": "Hoàn hảo! Quyền trợ năng cho phép mã độc đọc OTP và tự động chuyển tiền.",
+              "red_flag": "Yêu cầu quyền trợ năng và đọc tin nhắn"
+            },
+            {
+              "text": "Quyền trợ năng để làm gì vậy?",
+              "level": "neutral",
+              "feedback": "Đừng bật bất kỳ quyền nào cho app không rõ nguồn gốc."
+            },
+            {
+              "text": "Tôi bật hết quyền rồi, giờ sao?",
+              "level": "risky",
+              "feedback": "Thảm họa! Điện thoại của bạn đã bị chiếm quyền điều khiển."
+            }
+          ],
+          "safe_keywords": [
+            "gỡ app",
+            "quét mã độc",
+            "không bật",
+            "không cần quyền",
+            "trợ năng"
+          ],
+          "risky_keywords": [
+            "bật hết",
+            "bật quyền",
+            "giờ sao",
+            "trợ năng rồi"
+          ],
+          "hint": "Không app hợp pháp nào cần quyền trợ năng để cập nhật hồ sơ dịch vụ công."
+        }
+      ],
+      "debrief": "Bộ KH&CN cảnh báo website tên miền quốc tế giả mạo cổng dịch vụ công, dụ cài ứng dụng chứa mã độc .apk để chiếm quyền điện thoại và rút tiền.",
+      "golden_rule": "Không cài file .apk từ link lạ, không bật trợ năng cho app không rõ nguồn."
+    },
+    {
+      "id": "sms_brandname",
+      "icon": "💬",
+      "title": "SMS Brandname đổi điểm thưởng",
+      "subtitle": "Quà sắp hết hạn, phí 15k, OTP",
+      "category_name": "Kịch Bản Lừa Đảo Mới & Video Call Sắc Phục",
+      "difficulty": "Dễ",
+      "persona": "Ngân hàng (SMS giả)",
+      "persona_avatar": "📨",
+      "brief": "Bạn nhận SMS mang tên ngân hàng thông báo có 250.000 điểm thưởng sắp hết hạn, kèm link đổi quà.",
+      "source_ids": [
+        20
+      ],
+      "stages": [
+        {
+          "scammer": "[Vietcombank] Chúc mừng quý khách có 250.000 điểm thưởng sắp hết hạn. Đổi quà tại https://doi-qua-vcb.com trước 23h59 hôm nay.",
+          "options": [
+            {
+              "text": "Tôi kiểm tra điểm thưởng trong app ngân hàng chính thức, không bấm link trong SMS.",
+              "level": "safe",
+              "feedback": "Chuẩn! SMS Brandname có thể bị giả mạo, chỉ app chính thức mới đáng tin.",
+              "red_flag": "SMS mang tên ngân hàng kèm link đổi quà"
+            },
+            {
+              "text": "Tôi vào app ngân hàng xem có điểm thưởng không.",
+              "level": "neutral",
+              "feedback": "Đúng, hãy kiểm tra trong app chính thức thay vì bấm link."
+            },
+            {
+              "text": "Tôi bấm link đổi quà luôn, sắp hết hạn rồi.",
+              "level": "risky",
+              "feedback": "Sai! Áp lực thời gian là chiêu thao túng tâm lý quen thuộc."
+            }
+          ],
+          "safe_keywords": [
+            "app ngân hàng",
+            "không bấm link",
+            "chính thức",
+            "kiểm tra"
+          ],
+          "risky_keywords": [
+            "bấm link",
+            "đổi quà luôn",
+            "hết hạn rồi",
+            "mở link"
+          ],
+          "hint": "Không bấm link đổi quà trong SMS, hãy kiểm tra trong app ngân hàng."
+        },
+        {
+          "scammer": "[Web đổi quà] Chọn quà: tai nghe Bluetooth. Quý khách chỉ cần trả 15.000đ phí vận chuyển và nhập thông tin thẻ để xác nhận.",
+          "options": [
+            {
+              "text": "Đổi điểm thưởng không cần nhập thông tin thẻ. Tôi đóng trang.",
+              "level": "safe",
+              "feedback": "Xuất sắc! Không có chương trình đổi điểm hợp pháp nào đòi số thẻ, CVV.",
+              "red_flag": "Đổi điểm thưởng nhưng đòi thông tin thẻ"
+            },
+            {
+              "text": "Sao đổi quà lại cần số thẻ?",
+              "level": "neutral",
+              "feedback": "Bạn nhận ra bất thường, nhưng đừng nhập bất kỳ thông tin thẻ nào."
+            },
+            {
+              "text": "Tôi nhập số thẻ, ngày hết hạn và CVV rồi.",
+              "level": "risky",
+              "feedback": "Nguy hiểm! Bạn vừa trao toàn bộ thông tin để kẻ gian quẹt thẻ online."
+            }
+          ],
+          "safe_keywords": [
+            "không cần thẻ",
+            "đóng trang",
+            "không nhập",
+            "số thẻ",
+            "cvv"
+          ],
+          "risky_keywords": [
+            "nhập số thẻ",
+            "cvv",
+            "ngày hết hạn",
+            "nhập rồi"
+          ],
+          "hint": "Đổi điểm thưởng không bao giờ yêu cầu số thẻ và mã CVV."
+        },
+        {
+          "scammer": "Giao dịch cần xác thực, quý khách nhập mã OTP vừa gửi. Nhập sai 3 lần sẽ khóa thẻ.",
+          "options": [
+            {
+              "text": "Tôi không nhập OTP vào web lạ. Tôi gọi tổng đài ngân hàng để kiểm tra.",
+              "level": "safe",
+              "feedback": "Hoàn hảo! OTP chỉ dùng trong app chính thức, không nhập vào web lạ.",
+              "red_flag": "Đòi OTP trên website đổi quà"
+            },
+            {
+              "text": "Tôi tự nhập OTP trong app được không?",
+              "level": "neutral",
+              "feedback": "Đúng, nhưng đừng nhập OTP vào bất kỳ trang web nào khác."
+            },
+            {
+              "text": "OTP là 908172, tôi nhập rồi.",
+              "level": "risky",
+              "feedback": "Thảm họa! Bạn vừa mất quyền kiểm soát thẻ ngân hàng."
+            }
+          ],
+          "safe_keywords": [
+            "không nhập otp",
+            "tổng đài",
+            "app chính thức",
+            "không nhập"
+          ],
+          "risky_keywords": [
+            "otp là",
+            "908172",
+            "nhập rồi",
+            "mã otp"
+          ],
+          "hint": "Không nhập OTP vào bất kỳ website nào, kể cả trang giống ngân hàng."
+        }
+      ],
+      "debrief": "Công an Thái Nguyên cảnh báo kịch bản gửi SMS Brandname giả ngân hàng dụ đổi điểm thưởng qua link giả để đánh cắp thông tin.",
+      "golden_rule": "SMS có link lạ + đòi OTP hoặc thông tin thẻ = giả mạo."
+    },
+    {
+      "id": "shipper_gia",
+      "icon": "📦",
+      "title": "Shipper giả - bẫy 2 bước",
+      "subtitle": "Đang trước cửa, đòi chuyển khoản, hoàn tiền",
+      "category_name": "Mạo Danh Người Thân & Shipper Giả",
+      "difficulty": "Trung bình",
+      "persona": "Shipper (giả)",
+      "persona_avatar": "🛵",
+      "brief": "Bạn nhận cuộc gọi từ người tự xưng shipper đang giao đơn hàng trước cửa nhà và đòi chuyển khoản tiền hàng.",
+      "source_ids": [
+        19
+      ],
+      "stages": [
+        {
+          "scammer": "Chào anh/chị, em là shipper giao đơn hàng Shopee. Em đang trước cửa nhà, anh/chị ra nhận và chuyển khoản 350.000đ tiền hàng giúp em nhé.",
+          "options": [
+            {
+              "text": "Tôi kiểm tra đơn trên app Shopee xem có đơn này và shipper này không đã.",
+              "level": "safe",
+              "feedback": "Chuẩn! Mọi đơn hàng đều có trên app, kèm mã vận đơn và thông tin shipper.",
+              "red_flag": "Shipper gọi điện đòi chuyển khoản trước khi giao"
+            },
+            {
+              "text": "Đơn mã gì vậy em? Anh xem app đã.",
+              "level": "neutral",
+              "feedback": "Hỏi mã đơn là đúng, nhưng hãy kiểm tra trực tiếp trong app."
+            },
+            {
+              "text": "Ok em chờ anh ra, anh chuyển khoản luôn.",
+              "level": "risky",
+              "feedback": "Sai! Không có đơn hàng nào cần chuyển khoản cho số cá nhân."
+            }
+          ],
+          "safe_keywords": [
+            "app shopee",
+            "kiểm tra đơn",
+            "mã vận đơn",
+            "không chuyển khoản"
+          ],
+          "risky_keywords": [
+            "chuyển khoản luôn",
+            "ok em",
+            "ra nhận",
+            "chờ anh"
+          ],
+          "hint": "Luôn kiểm tra đơn hàng trong app trước khi thanh toán cho shipper."
+        },
+        {
+          "scammer": "Dạ đơn mã SPX123, anh chuyển khoản số này giúp em, bên em không thu tiền mặt. Anh chuyển xong chụp bill cho em nha.",
+          "options": [
+            {
+              "text": "Tôi chỉ thanh toán qua app hoặc COD, không chuyển khoản cho số cá nhân.",
+              "level": "safe",
+              "feedback": "Đúng! Shopee thu tiền qua app/COD, không qua tài khoản cá nhân của shipper.",
+              "red_flag": "Đòi chuyển khoản vào tài khoản cá nhân"
+            },
+            {
+              "text": "Sao không thu COD như mọi lần?",
+              "level": "neutral",
+              "feedback": "Câu hỏi đúng, nhưng đừng chuyển tiền cho số lạ."
+            },
+            {
+              "text": "Anh chuyển 350k rồi, gửi bill đây.",
+              "level": "risky",
+              "feedback": "Sai! Bạn vừa mất 350.000đ mà không có hàng."
+            }
+          ],
+          "safe_keywords": [
+            "thanh toán qua app",
+            "cod",
+            "không chuyển khoản",
+            "tài khoản cá nhân"
+          ],
+          "risky_keywords": [
+            "chuyển 350",
+            "chuyển khoản rồi",
+            "gửi bill",
+            "chuyển rồi"
+          ],
+          "hint": "Không chuyển khoản cho tài khoản cá nhân của shipper."
+        },
+        {
+          "scammer": "Anh chuyển nhầm 3.500.000đ rồi! Anh hoàn lại 3.150.000đ qua link này giúp em, em sợ bị phạt lắm.",
+          "options": [
+            {
+              "text": "Tôi không chuyển thêm và không bấm link. Tôi liên hệ Shopee/ngân hàng xử lý.",
+              "level": "safe",
+              "feedback": "Xuất sắc! Đây là bước 2 của bẫy: lợi dụng lòng tốt để lừa thêm tiền qua link.",
+              "red_flag": "Bịa chuyển nhầm tiền để dụ hoàn tiền qua link"
+            },
+            {
+              "text": "Anh kiểm tra lại tài khoản, không thấy chuyển nhầm.",
+              "level": "neutral",
+              "feedback": "Kiểm tra tài khoản là đúng, nhưng đừng bấm link hay chuyển thêm."
+            },
+            {
+              "text": "Tội nghiệp em, anh bấm link hoàn tiền ngay.",
+              "level": "risky",
+              "feedback": "Nguy hiểm! Link hoàn tiền là trang phishing đánh cắp tài khoản."
+            }
+          ],
+          "safe_keywords": [
+            "không bấm link",
+            "không chuyển thêm",
+            "liên hệ shopee",
+            "ngân hàng",
+            "kiểm tra"
+          ],
+          "risky_keywords": [
+            "bấm link",
+            "hoàn tiền ngay",
+            "tội nghiệp",
+            "chuyển lại"
+          ],
+          "hint": "Không bấm link hoàn tiền do shipper gửi. Chỉ làm việc qua app/sàn."
+        }
+      ],
+      "debrief": "Bộ Công an phân tích kịch bản shipper giả giao hàng bẫy chuyển khoản 2 bước: đòi tiền hàng trước, sau đó bịa chuyển nhầm để dụ hoàn tiền qua link.",
+      "golden_rule": "Shipper thật không đòi chuyển khoản cá nhân hay hoàn tiền qua link."
+    },
+    {
+      "id": "muon_nguoi_than",
+      "icon": "👨‍👩‍👦",
+      "title": "'Mượn người thân' - chuyển tiền hộ",
+      "subtitle": "Anh họ đổi số, nhờ vay rồi chuyển hộ",
+      "category_name": "Mạo Danh Người Thân & Shipper Giả",
+      "difficulty": "Khó",
+      "persona": "Anh họ (giả)",
+      "persona_avatar": "🧑",
+      "brief": "Bạn nhận tin nhắn từ số lạ tự xưng là anh họ, nói mới đổi số và cần bạn giúp chuyện gấp.",
+      "source_ids": [
+        19
+      ],
+      "stages": [
+        {
+          "scammer": "Chào em, anh là anh họ của em bên quê ngoại đây. Anh mới đổi số. Em còn nhớ anh không? Anh đang cần em giúp chuyện gấp.",
+          "options": [
+            {
+              "text": "Anh cho em xin tên và gọi lại số cũ của anh để xác minh. Em không lưu số lạ.",
+              "level": "safe",
+              "feedback": "Chuẩn! Gọi lại số cũ là cách xác minh duy nhất khi có người tự xưng người thân.",
+              "red_flag": "Người thân đột nhiên đổi số và nhắn tin nhờ giúp"
+            },
+            {
+              "text": "Anh là anh nào ạ? Em hỏi mẹ em xem.",
+              "level": "neutral",
+              "feedback": "Hỏi người thân khác là đúng, nhưng đừng làm theo yêu cầu trước khi xác minh."
+            },
+            {
+              "text": "Dạ anh, anh cần em giúp gì ạ?",
+              "level": "risky",
+              "feedback": "Sai! Vừa mất cảnh giác là bạn đã bước vào kịch bản 'mượn người thân'."
+            }
+          ],
+          "safe_keywords": [
+            "gọi lại",
+            "số cũ",
+            "xác minh",
+            "tên",
+            "không lưu số lạ"
+          ],
+          "risky_keywords": [
+            "dạ anh",
+            "giúp gì",
+            "cần gì",
+            "anh nào"
+          ],
+          "hint": "Người thân thật sẽ không ngại khi bạn gọi lại số cũ để xác minh."
+        },
+        {
+          "scammer": "Em gọi cho anh trai em (anh ruột của em) vay 50 triệu giúp anh, nói là anh cần gấp. Anh sẽ chuyển lại sau. Nhưng em đừng nói anh mượn nhé, anh ngại.",
+          "options": [
+            {
+              "text": "Nếu là anh ruột em, em sẽ gọi trực tiếp cho anh ấy. Không ai nhờ vay hộ kiểu này.",
+              "level": "safe",
+              "feedback": "Xuất sắc! Kịch bản 'mượn người thân' lợi dụng chính người thân để tạo niềm tin.",
+              "red_flag": "Nhờ vay tiền hộ và yêu cầu giữ bí mật"
+            },
+            {
+              "text": "Sao anh không gọi trực tiếp cho anh ấy?",
+              "level": "neutral",
+              "feedback": "Câu hỏi đúng, nhưng kẻ gian sẽ viện lý do 'đang mất sóng, không tiện'."
+            },
+            {
+              "text": "Dạ em gọi anh em vay giúp anh ngay.",
+              "level": "risky",
+              "feedback": "Nguy hiểm! Bạn đang kéo người thân vào bẫy lừa đảo."
+            }
+          ],
+          "safe_keywords": [
+            "gọi trực tiếp",
+            "không vay hộ",
+            "xác minh",
+            "không giữ bí mật"
+          ],
+          "risky_keywords": [
+            "vay giúp",
+            "gọi anh em",
+            "ngay",
+            "dạ em gọi"
+          ],
+          "hint": "Không ai nhờ vay tiền hộ rồi yêu cầu giấu người thân."
+        },
+        {
+          "scammer": "Anh em chuyển tiền cho em rồi đúng không? Em chuyển hộ anh sang tài khoản này gấp, anh đang ở ngoài không dùng được app.",
+          "options": [
+            {
+              "text": "Em không chuyển tiền hộ người lạ. Em gọi lại cho anh trai em xác minh.",
+              "level": "safe",
+              "feedback": "Hoàn hảo! Chuyển tiền hộ là bước cuối để rửa tiền và chiếm đoạt.",
+              "red_flag": "Nhờ chuyển tiền hộ sang tài khoản lạ"
+            },
+            {
+              "text": "Anh gửi số tài khoản đứng tên anh, em kiểm tra đã.",
+              "level": "neutral",
+              "feedback": "Kiểm tra tên tài khoản là tốt, nhưng đừng chuyển tiền hộ ai."
+            },
+            {
+              "text": "Dạ em chuyển 50 triệu sang tài khoản anh gửi rồi.",
+              "level": "risky",
+              "feedback": "Thảm họa! Bạn vừa mất 50 triệu và có thể bị liên đới pháp lý."
+            }
+          ],
+          "safe_keywords": [
+            "không chuyển hộ",
+            "gọi lại",
+            "xác minh",
+            "không chuyển tiền"
+          ],
+          "risky_keywords": [
+            "chuyển hộ",
+            "50 triệu",
+            "tài khoản anh",
+            "chuyển rồi"
+          ],
+          "hint": "Không chuyển tiền hộ người khác, kể cả người tự xưng người thân."
+        }
+      ],
+      "debrief": "Bộ Công an phân tích kịch bản 'mượn người thân': kẻ gian giả mạo người anh, dẫn dụ người em gọi vay tiền chính người anh rồi chuyển tiếp cho kẻ gian.",
+      "golden_rule": "Mượn tiền/chuyển hộ qua tin nhắn = gọi lại số cũ để xác minh."
+    },
+    {
+      "id": "combo_du_lich_khoa_sim",
+      "icon": "🏖️",
+      "title": "Combo du lịch giá rẻ + khóa SIM",
+      "subtitle": "Cọc 100%, link chuẩn hóa thuê bao",
+      "category_name": "Tổng Hợp 24 Chiêu Trò Lừa Đảo",
+      "difficulty": "Dễ",
+      "persona": "Công ty du lịch (giả)",
+      "persona_avatar": "✈️",
+      "brief": "Bạn thấy quảng cáo combo nghỉ dưỡng 5 sao giá sốc, sau đó bị dọa khóa SIM nếu không cập nhật qua link.",
+      "source_ids": [
+        18
+      ],
+      "stages": [
+        {
+          "scammer": "Combo nghỉ dưỡng 5 sao Phú Quốc 3 ngày 2 đêm chỉ 990.000đ/người, áp dụng cho 50 khách đầu tiên. Đặt ngay kẻo hết!",
+          "options": [
+            {
+              "text": "Giá thấp bất thường. Tôi kiểm tra khách sạn và công ty lữ hành trên website chính thức trước.",
+              "level": "safe",
+              "feedback": "Chuẩn! Giá rẻ bất thường là mồi câu kinh điển của lừa đảo du lịch.",
+              "red_flag": "Giá combo thấp bất thường, tạo áp lực số lượng"
+            },
+            {
+              "text": "Có hợp đồng và thông tin công ty lữ hành không?",
+              "level": "neutral",
+              "feedback": "Hỏi đúng, nhưng kẻ gian sẽ gửi hợp đồng giả và giục cọc."
+            },
+            {
+              "text": "Rẻ quá, tôi đặt 2 suất luôn.",
+              "level": "risky",
+              "feedback": "Sai! Bạn đang bị cuốn theo tâm lý 'sợ lỡ'."
+            }
+          ],
+          "safe_keywords": [
+            "giá thấp",
+            "kiểm tra",
+            "công ty lữ hành",
+            "website chính thức",
+            "không đặt"
+          ],
+          "risky_keywords": [
+            "đặt luôn",
+            "rẻ quá",
+            "2 suất",
+            "đặt 2"
+          ],
+          "hint": "Combo du lịch giá quá rẻ thường là bẫy cọc tiền."
+        },
+        {
+          "scammer": "Dạ anh/chị chuyển cọc 100% trong 15 phút để giữ suất. Bên em chỉ nhận chuyển khoản cá nhân, không qua sàn.",
+          "options": [
+            {
+              "text": "Tôi không đặt cọc 100% cho tài khoản cá nhân. Tôi chỉ thanh toán qua công ty có hợp đồng.",
+              "level": "safe",
+              "feedback": "Đúng! Thanh toán qua tài khoản cá nhân là dấu hiệu không có pháp nhân.",
+              "red_flag": "Đòi cọc 100% vào tài khoản cá nhân"
+            },
+            {
+              "text": "Sao không cho thanh toán khi nhận phòng?",
+              "level": "neutral",
+              "feedback": "Câu hỏi hợp lý, nhưng đừng chuyển tiền trước."
+            },
+            {
+              "text": "Tôi chuyển khoản 1.980.000đ ngay.",
+              "level": "risky",
+              "feedback": "Sai! Bạn vừa mất tiền mà không có bất kỳ bảo đảm nào."
+            }
+          ],
+          "safe_keywords": [
+            "không đặt cọc",
+            "tài khoản cá nhân",
+            "hợp đồng",
+            "công ty",
+            "thanh toán sau"
+          ],
+          "risky_keywords": [
+            "chuyển khoản",
+            "1.980",
+            "cọc 100",
+            "chuyển ngay"
+          ],
+          "hint": "Không chuyển cọc 100% vào tài khoản cá nhân."
+        },
+        {
+          "scammer": "Thuê bao của anh/chị chưa chuẩn hóa theo Nghị định 49, sẽ bị khóa SIM trong 24h. Cập nhật tại link này để không mất liên lạc.",
+          "options": [
+            {
+              "text": "Tôi kiểm tra trên app nhà mạng và ra cửa hàng chính thức, không bấm link.",
+              "level": "safe",
+              "feedback": "Xuất sắc! Chuẩn hóa thuê bao chỉ làm qua app nhà mạng hoặc cửa hàng chính thức.",
+              "red_flag": "Dọa khóa SIM và gửi link cập nhật lạ"
+            },
+            {
+              "text": "Tôi gọi tổng đài nhà mạng hỏi trước đã.",
+              "level": "neutral",
+              "feedback": "Gọi tổng đài chính thức là đúng, nhưng đừng bấm link."
+            },
+            {
+              "text": "Tôi bấm link và nhập thông tin CCCD, số điện thoại rồi.",
+              "level": "risky",
+              "feedback": "Nguy hiểm! Bạn vừa lộ CCCD và có thể bị chiếm SIM."
+            }
+          ],
+          "safe_keywords": [
+            "app nhà mạng",
+            "cửa hàng",
+            "không bấm link",
+            "chính thức",
+            "tổng đài"
+          ],
+          "risky_keywords": [
+            "bấm link",
+            "nhập cccd",
+            "nhập thông tin",
+            "cập nhật tại link"
+          ],
+          "hint": "Không bấm link chuẩn hóa thuê bao. Chỉ làm qua app nhà mạng/cửa hàng."
+        }
+      ],
+      "debrief": "VnExpress tổng hợp 24 chiêu lừa đảo của Cục An toàn thông tin, gồm combo du lịch giá rẻ, dọa khóa SIM chưa chuẩn hóa, chuyển nhầm tiền và đánh cắp CCCD.",
+      "golden_rule": "Giá rẻ bất thường + cọc 100% + link khóa SIM = chuỗi bẫy."
+    }
+  ]
+}
