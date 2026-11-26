@@ -46,3 +46,14 @@ scratch/
 # Chặn file .env và các file biến môi trường phụ
 .env
 .env.*
+
+# Next.js / Node.js build & dependencies
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+npm-debug.log*
+
+# Repo tham khảo cục bộ (không commit vào dự án chính)
+hallmark/

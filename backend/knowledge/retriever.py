@@ -25,10 +25,17 @@ def load_knowledge_articles(path: Optional[str] = None) -> List[Dict[str, Any]]:
         return []
 
 
+STOP_WORDS = {
+    "ngân", "hàng", "khoản", "chuyển", "tiền", "thông", "giao", "dịch",
+    "người", "dùng", "khách", "nhận", "thực", "hiện", "kiểm", "cảnh",
+    "lừa", "đảo", "trực", "tuyến", "ngay", "nhanh", "miễn", "phí"
+}
+
+
 def find_matching_article(user_text: str, path: Optional[str] = None) -> Optional[Dict[str, Any]]:
     """
     Thuật toán so khớp từ khóa và ngữ nghĩa bốc bài báo tương đồng nhất.
-    Chỉ trả về bài báo nếu đạt ngưỡng khớp từ khóa >= 2 điểm.
+    Loại bỏ các mẫu an toàn tự học và từ đơn quá chung chung để tránh khớp nhầm.
     """
     articles = load_knowledge_articles(path)
     if not articles or not user_text:
@@ -39,18 +46,26 @@ def find_matching_article(user_text: str, path: Optional[str] = None) -> Optiona
     max_score = 0
 
     for article in articles:
+        title = (article.get("title") or "").lower()
+        # Không đối soát nhầm vào các mẫu an toàn tự học
+        if "mẫu an toàn" in title:
+            continue
+
         score = 0
         for kw in article.get("keywords", []):
-            kw_lower = kw.lower()
+            kw_lower = kw.lower().strip()
+            if not kw_lower:
+                continue
             if kw_lower in text_lower:
-                score += 3  # Khớp cả cụm từ khóa ưu tiên
+                # Ưu tiên cụm từ khóa dài khớp chính xác
+                score += 6 if " " in kw_lower else 4
             else:
                 for word in kw_lower.split():
-                    if len(word) >= 4 and word in text_lower:
-                        score += 1  # Khớp từ đơn có ý nghĩa
+                    if len(word) >= 4 and word not in STOP_WORDS and word in text_lower:
+                        score += 1
 
         if score > max_score:
             max_score = score
             best_article = article
 
-    return best_article if max_score >= 2 else None
+    return best_article if max_score >= 4 else None

@@ -1,0 +1,225 @@
+@import "tailwindcss";
+
+/* ============================================================================
+ * Lá Chắn Số — Warm Charcoal (Dark) & Furrow Stone (Light)
+ * Tự động theo hệ điều hành lần đầu, lưu lựa chọn người dùng trong localStorage
+ * ============================================================================ */
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --r-paper: #1a1918;
+  --r-paper-2: #242220;
+  --r-paper-3: #2f2c29;
+  --r-sidebar: #131211;
+  --r-sb-hover: #22201d;
+  --r-sb-active-bg: #2e231b;
+  --r-sb-active-ink: #ffffff;
+
+  --r-ink: #f7f4ee;
+  --r-ink-2: #ded8cf;
+  --r-muted: #b2aaa0;
+
+  --r-rule: #34312d;
+  --r-rule-2: #48433d;
+  --r-gauge-track: #3a3632;
+  --r-toggle-off: #48433d;
+
+  --r-accent: #f07832;
+  --r-accent-hover: #fa8844;
+  --r-accent-ink: #ffffff;
+  --r-accent-soft: #2e2219;
+
+  --r-safe: #5ad494;
+  --r-safe-soft: rgba(90, 212, 148, 0.14);
+  --r-warn: #f5b942;
+  --r-warn-soft: rgba(245, 185, 66, 0.15);
+  --r-danger: #f87171;
+  --r-danger-soft: rgba(239, 68, 68, 0.16);
+  --r-danger-ink: #fecaca;
+
+  --r-user-bubble: #2c251f;
+  --r-user-border: #594435;
+
+  /* Emergency drawer dark tokens */
+  --r-em-border: #5e2a2a;
+  --r-em-header-bg: #2b1515;
+  --r-em-title: #fecaca;
+  --r-em-sub: #e6c8c8;
+  --r-em-step: #fca5a5;
+  --r-em-badge-bg: #3b1c1c;
+  --r-em-badge-border: #632c2c;
+  --r-em-badge-ink: #fecaca;
+  --r-em-police-bg: #2b1717;
+  --r-em-hl-bg: #471c1c;
+  --r-em-hl-ink: #fecaca;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --r-paper: #ebe7df;         /* Xám đá ấm dịu mắt, không chói trắng */
+  --r-paper-2: #faf8f4;       /* Thẻ giấy trắng ngà */
+  --r-paper-3: #e3ded4;       /* Hover ấm */
+  --r-sidebar: #e1dcd2;       /* Sidebar xám đá đầm hơn 1 bậc */
+  --r-sb-hover: #d6d0c4;
+  --r-sb-active-bg: #221f1c;  /* Mục đang chọn đen than nổi bật */
+  --r-sb-active-ink: #fdfcf9;
+
+  --r-ink: #12100e;
+  --r-ink-2: #2b2622;
+  --r-muted: #4a443d;
+
+  --r-rule: #d3cdc1;
+  --r-rule-2: #bdb6a8;
+  --r-gauge-track: #d5cfc4;
+  --r-toggle-off: #bfb8aa;
+
+  --r-accent: #c85614;
+  --r-accent-hover: #ad470d;
+  --r-accent-ink: #ffffff;
+  --r-accent-soft: #f5e6db;
+
+  --r-safe: #1f6b40;
+  --r-safe-soft: #e4f2ea;
+  --r-warn: #945207;
+  --r-warn-soft: #faf0dc;
+  --r-danger: #bd2b2b;
+  --r-danger-soft: #faeaea;
+  --r-danger-ink: #8f1d1d;
+
+  --r-user-bubble: #f4efe6;
+  --r-user-border: #cfc7b8;
+
+  /* Emergency drawer light tokens */
+  --r-em-border: #dfb3b3;
+  --r-em-header-bg: #faeaea;
+  --r-em-title: #8f1d1d;
+  --r-em-sub: #5c2b2b;
+  --r-em-step: #991b1b;
+  --r-em-badge-bg: #faeaea;
+  --r-em-badge-border: #e8bcbc;
+  --r-em-badge-ink: #8f1d1d;
+  --r-em-police-bg: #faeaea;
+  --r-em-hl-bg: #f9dcdc;
+  --r-em-hl-ink: #8f1d1d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background-color: var(--r-paper);
+  color: var(--r-ink);
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+/* Flat Surfaces */
+.ribbon-panel {
+  background: var(--r-paper-2);
+  border: 1px solid var(--r-rule);
+  border-radius: 8px;
+}
+[data-theme="light"] .ribbon-panel {
+  box-shadow: 0 1px 2px rgba(24, 21, 18, 0.06);
+}
+
+.chat-input-box:focus-within {
+  border-color: var(--r-accent);
+}
+
+.ribbon-part {
+  background: var(--r-accent-soft);
+  border: 1px solid var(--r-accent);
+  border-radius: 6px;
+}
+
+.ribbon-recessed {
+  background: var(--r-sidebar);
+  border: 1px solid var(--r-rule);
+  border-radius: 6px;
+}
+
+.ribbon-btn {
+  background: var(--r-paper-2);
+  border: 1px solid var(--r-rule-2);
+  border-radius: 6px;
+  color: var(--r-ink);
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+.ribbon-btn:hover {
+  background: var(--r-paper-3);
+}
+
+.ribbon-btn-accent {
+  background: var(--r-accent);
+  color: var(--r-accent-ink);
+  border: 1px solid var(--r-accent);
+  border-radius: 6px;
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+.ribbon-btn-accent:hover {
+  background: var(--r-accent-hover);
+  border-color: var(--r-accent-hover);
+}
+
+.ribbon-btn-sos {
+  background: #c92a2a;
+  color: #ffffff;
+  border: 1px solid #b52424;
+  border-radius: 6px;
+  transition: background-color 140ms ease;
+}
+.ribbon-btn-sos:hover {
+  background: #a82020;
+}
+
+/* Nút Chơi ngay trong Đấu trường lừa đảo: cam tươi sáng nhẹ mắt ở Light mode */
+[data-theme="light"] .game-play-btn {
+  background: #ff7d2e;
+  border-color: #f26f20;
+  color: #ffffff;
+}
+[data-theme="light"] .game-play-btn:hover {
+  background: #f26b1d;
+  border-color: #e05e12;
+}
+[data-theme="light"] .game-play-btn svg {
+  color: #ffffff !important;
+}
+/* Phân cấp nút Chơi ngẫu nhiên ở Light mode để không trùng màu với 15 nút Chơi ngay */
+[data-theme="light"] .game-random-btn {
+  background: #221f1c;
+  border-color: #221f1c;
+  color: #fdfcf9;
+}
+[data-theme="light"] .game-random-btn:hover {
+  background: #38332e;
+  border-color: #38332e;
+}
+
+mark.kw-danger {
+  background-color: var(--r-em-hl-bg);
+  color: var(--r-em-hl-ink);
+  padding: 0.05rem 0.3rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: var(--r-paper);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--r-rule-2);
+  border-radius: 4px;
+}
