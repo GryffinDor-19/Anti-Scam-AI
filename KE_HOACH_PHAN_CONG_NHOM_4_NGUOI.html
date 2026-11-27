@@ -129,15 +129,15 @@
       <td>• Giao dataset cho <strong>TV1 & TV4</strong>.<br>• Giao 3 module cho <strong>TV1</strong> ráp backend.</td>
     </tr>
     <tr>
-      <td><strong>THÀNH VIÊN 3</strong><br><span class="badge badge-orange">Frontend & UX</span></td>
-      <td><code>app_anti_scam.py</code><br><code>modules/emergency_manager.py</code></td>
+      <td><strong>THÀNH VIÊN 3</strong><br><span class="badge badge-orange">Frontend Next.js &amp; UX</span></td>
+      <td><code>frontend/</code> (Next.js 15)<br><code>backend/api/server.py</code><br><code>backend/emergency/emergency_manager.py</code></td>
       <td>
-        <strong>• Bước 1 (Đầu T9):</strong> Thống nhất JSON với TV1 &rarr; Dùng mock data dựng UI độc lập.<br>
-        <strong>• Bước 2 (T9):</strong> Viết <code>emergency_manager.py</code> (hotline ngân hàng) + Dựng khung Streamlit <code>app_anti_scam.py</code> tĩnh (nút cấp cứu, chữ to cho người già).<br>
-        <strong>• Bước 3 (Cuối T10):</strong> Cắm nối với <code>backend.py</code> của TV1 &rarr; Giao diện sống (đổi màu Xanh/Vàng/Đỏ, tự bung cấp cứu nếu rủi ro &gt; 85%, nút chia sẻ Zalo).<br>
-        <strong>• Bước 4 (T12):</strong> Cùng TV4 làm kịch bản Live Demo 3 phút.
+        <strong>• Bước 1 (Đầu T9):</strong> Thống nhất JSON với TV1 &rarr; Dựng lớp REST API (<code>backend/api/server.py</code>) và mock data để phát triển UI độc lập.<br>
+        <strong>• Bước 2 (T9):</strong> Viết <code>emergency_manager.py</code> (hotline ngân hàng) + Dựng khung <strong>Next.js (App Router + Tailwind CSS)</strong> với Sidebar trái cố định, nút cấp cứu đỏ, công tắc Light/Dark mode và chữ to cho người cao tuổi.<br>
+        <strong>• Bước 3 (Cuối T10):</strong> Kết nối 4 màn hình (<code>/</code>, <code>/fake-bill</code>, <code>/game</code>, <code>/library</code>) với Backend API &rarr; Hoàn thiện đồng hồ <code>RiskGauge</code>, gợi ý nhập nhanh, phóng to bill, sao chép cảnh báo và lưu lịch sử trên trình duyệt.<br>
+        <strong>• Bước 4 (T12):</strong> Cùng TV4 kiểm thử E2E trên Desktop &amp; Mobile và làm kịch bản Live Demo 3 phút.
       </td>
-      <td>• File <code>emergency_manager.py</code>.<br>• Giao diện Web Streamlit hoàn chỉnh <code>app_anti_scam.py</code>.</td>
+      <td>• File <code>emergency_manager.py</code> &amp; REST API <code>backend/api/server.py</code>.<br>• Ứng dụng Web <strong>Next.js (<code>frontend/</code>)</strong> mang tên <strong>Lá Chắn Số</strong>.</td>
       <td>• Nhận JSON từ <strong>TV1</strong>.<br>• Giao app cho <strong>TV4</strong> test.<br>• Phối hợp kịch bản demo với <strong>TV4</strong>.</td>
     </tr>
     <tr>
@@ -166,7 +166,7 @@
 <h2>⏱️ PHẦN 3: TIMELINE TỔNG THỂ 4 TUẦN ĐẾN HẠN NỘP</h2>
 <ul>
   <li><strong>TUẦN 9:</strong> Hoàn thiện Lõi AI (<code>semantic_analyzer.py</code>), RAG bài báo (<code>rag_case_matcher.py</code>) và chuẩn bị xong Dataset.</li>
-  <li><strong>TUẦN 10:</strong> Hoàn thiện Giao diện Streamlit (<code>app_anti_scam.py</code>), ghép nối toàn bộ Backend - Frontend thành Web App chạy thông suốt.</li>
+  <li><strong>TUẦN 10:</strong> Hoàn thiện Giao diện <strong>Next.js (<code>frontend/</code>)</strong> và lớp <strong>REST API (<code>backend/api/server.py</code>)</strong>, ghép nối toàn bộ Backend - Frontend thành Web App chạy thông suốt trên Desktop &amp; Mobile.</li>
   <li><strong>TUẦN 11:</strong> Chạy toàn bộ Test Cases, đo F1-Score thực tế, xử lý các lỗi phát sinh (chống crash khi mất mạng/file rác).</li>
   <li><strong>TUẦN 12:</strong> Đóng gói Kịch bản Live Demo 3 phút, làm Slide thuyết trình, quay video demo dự phòng và tổng duyệt thuyết trình.</li>
   <li><strong>TUẦN 13:</strong> Nộp toàn bộ sản phẩm và tự tin bảo vệ trước Hội đồng chấm thi!</li>
