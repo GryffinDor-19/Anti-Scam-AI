@@ -275,7 +275,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </button>
         </div>
 
-        <main className="flex-1 w-full max-w-5xl mx-auto px-5 sm:px-8 py-6">
+        <main className="flex-1 w-full max-w-[1360px] mx-auto px-5 sm:px-8 lg:px-10 py-6">
           {children}
         </main>
       </div>

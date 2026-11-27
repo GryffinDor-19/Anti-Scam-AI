@@ -335,7 +335,7 @@ export default function ChatCheckPage() {
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className="ribbon-btn inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium cursor-pointer flex-shrink-0"
+          className="ribbon-btn inline-flex items-center gap-1.5 px-3.5 py-2.5 text-sm font-medium cursor-pointer flex-shrink-0"
           title="Đính kèm ảnh biên lai hoặc ảnh chụp màn hình"
         >
           <Paperclip className="w-4 h-4" style={{ color: "var(--r-accent)" }} />
@@ -345,7 +345,7 @@ export default function ChatCheckPage() {
         <button
           type="button"
           onClick={handleQuickPaste}
-          className="ribbon-btn inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium cursor-pointer flex-shrink-0"
+          className="ribbon-btn inline-flex items-center gap-1.5 px-3.5 py-2.5 text-sm font-medium cursor-pointer flex-shrink-0"
           title="Dán nhanh tin nhắn từ bộ nhớ tạm"
         >
           <ClipboardPaste className="w-4 h-4 text-[var(--r-ink-2)]" />
@@ -369,23 +369,23 @@ export default function ChatCheckPage() {
             setInputFocused(true);
           }}
           placeholder="Dán tin nhắn nghi ngờ, đường link lạ hoặc gõ từ khóa (VD: ngân hàng, công an, shipper)..."
-          className="flex-1 bg-transparent px-2.5 py-2 text-sm text-[var(--r-ink)] placeholder-[var(--r-muted)] focus:outline-none min-w-0"
+          className="flex-1 bg-transparent px-2.5 py-2 text-[0.9375rem] sm:text-base text-[var(--r-ink)] placeholder-[var(--r-muted)] focus:outline-none min-w-0"
         />
 
         <button
           type="submit"
           disabled={loading || (!inputText.trim() && !attachedFile)}
-          className="ribbon-btn-accent inline-flex items-center gap-1.5 px-4 py-2 disabled:opacity-40 disabled:cursor-not-allowed text-xs sm:text-sm font-semibold cursor-pointer flex-shrink-0"
+          className="ribbon-btn-accent inline-flex items-center gap-1.5 px-4 py-2.5 disabled:opacity-40 disabled:cursor-not-allowed text-sm sm:text-[0.9375rem] font-semibold cursor-pointer flex-shrink-0"
         >
           <span>Phân tích</span>
-          <Send className="w-3.5 h-3.5" />
+          <Send className="w-4 h-4" />
         </button>
       </form>
 
       {/* Danh sách gợi ý tự động khi đang gõ (nhấn Tab hoặc bấm để điền nhanh) */}
       {inputFocused && matchedHints.length > 0 && (
         <div className="border-t border-[var(--r-rule)] pt-2 space-y-1">
-          <div className="flex items-center justify-between px-2 text-[11px] text-[var(--r-muted)]">
+          <div className="flex items-center justify-between px-2 text-xs text-[var(--r-muted)]">
             <span>Gợi ý nhập nhanh</span>
             <span className="hidden sm:inline font-mono">Nhấn Tab để chọn dòng đầu</span>
           </div>
@@ -397,11 +397,11 @@ export default function ChatCheckPage() {
                 e.preventDefault();
                 applyHint(hint.text);
               }}
-              className="w-full text-left px-2.5 py-1.5 rounded-md text-xs text-[var(--r-ink-2)] hover:bg-[var(--r-paper-3)] hover:text-[var(--r-ink)] transition-colors flex items-center justify-between gap-2 cursor-pointer"
+              className="w-full text-left px-2.5 py-2 rounded-md text-sm text-[var(--r-ink-2)] hover:bg-[var(--r-paper-3)] hover:text-[var(--r-ink)] transition-colors flex items-center justify-between gap-2 cursor-pointer"
             >
               <span className="truncate">{hint.text}</span>
               <span
-                className="text-[11px] font-medium flex-shrink-0"
+                className="text-xs font-medium flex-shrink-0"
                 style={{ color: "var(--r-accent)" }}
               >
                 Chọn
@@ -413,14 +413,16 @@ export default function ChatCheckPage() {
 
       {/* Dải chip gợi ý 1-chạm khi ô nhập đang trống */}
       {!inputText.trim() && (
-        <div className="flex items-center gap-1.5 flex-wrap px-1 pt-0.5">
-          <span className="text-[11px] text-[var(--r-muted)] mr-0.5">Gợi ý nhanh:</span>
+        <div className="flex items-center gap-2 flex-wrap px-1 pt-1">
+          <span className="text-sm sm:text-[0.9375rem] font-medium text-[var(--r-muted)] mr-0.5">
+            Gợi ý nhanh:
+          </span>
           {QUICK_INPUT_HINTS.slice(0, 5).map((hint, i) => (
             <button
               key={i}
               type="button"
               onClick={() => applyHint(hint.text)}
-              className="px-2.5 py-1 rounded text-[11.5px] font-medium bg-[var(--r-paper)] hover:bg-[var(--r-paper-3)] text-[var(--r-ink-2)] hover:text-[var(--r-ink)] border border-[var(--r-rule)] transition-colors cursor-pointer"
+              className="px-3.5 py-1.5 rounded-md text-sm sm:text-[0.9375rem] font-medium bg-[var(--r-paper)] hover:bg-[var(--r-paper-3)] text-[var(--r-ink-2)] hover:text-[var(--r-ink)] border border-[var(--r-rule)] transition-colors cursor-pointer"
             >
               + {hint.chip}
             </button>
@@ -439,10 +441,10 @@ export default function ChatCheckPage() {
       {/* Header trang */}
       <div className="flex flex-wrap items-end justify-between gap-3 pb-4 border-b border-[var(--r-rule)]">
         <div>
-          <h1 className="text-2xl sm:text-[1.75rem] font-semibold tracking-tight text-[var(--r-ink)] leading-tight">
+          <h1 className="text-2xl sm:text-[1.85rem] font-semibold tracking-tight text-[var(--r-ink)] leading-tight">
             Kiểm tra tin nhắn và đường link
           </h1>
-          <p className="text-sm text-[var(--r-ink-2)] mt-1">
+          <p className="text-base sm:text-[1.0625rem] text-[var(--r-ink-2)] mt-1.5 leading-relaxed">
             Dán tin nhắn SMS, Zalo, đường link lạ hoặc ảnh chụp màn hình để thẩm định dấu hiệu lừa đảo
           </p>
         </div>
@@ -451,9 +453,9 @@ export default function ChatCheckPage() {
           <button
             type="button"
             onClick={clearChatMessages}
-            className="ribbon-btn inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium cursor-pointer"
+            className="ribbon-btn inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium cursor-pointer"
           >
-            <Trash2 className="w-3.5 h-3.5 text-[var(--r-muted)]" />
+            <Trash2 className="w-4 h-4 text-[var(--r-muted)]" />
             <span>Xóa đoạn chat</span>
           </button>
         )}
@@ -466,11 +468,11 @@ export default function ChatCheckPage() {
             {/* Khi chưa có tin nhắn: đưa ô nhập lên ngay trên đầu để thao tác tức thì */}
             {inputBar}
 
-            <div className="space-y-2.5">
-              <div className="text-xs font-semibold text-[var(--r-ink-2)]">
+            <div className="space-y-4">
+              <div className="text-lg sm:text-[1.1875rem] font-semibold text-[var(--r-ink-2)]">
                 Hoặc chọn nhanh một tình huống mẫu để kiểm thử:
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {SAMPLE_SCENARIOS.map((sc, idx) => {
                   const tagColor =
                     sc.tone === "danger"
@@ -489,20 +491,20 @@ export default function ChatCheckPage() {
                       key={idx}
                       type="button"
                       onClick={() => submitAnalysis(sc.text)}
-                      className="ribbon-panel text-left p-4 space-y-1.5 cursor-pointer transition-colors hover:bg-[var(--r-paper-3)] hover:border-[var(--r-rule-2)]"
+                      className="ribbon-panel text-left p-5 space-y-3 cursor-pointer transition-colors hover:bg-[var(--r-paper-3)] hover:border-[var(--r-rule-2)]"
                     >
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="font-semibold text-[14.5px] text-[var(--r-ink)]">
+                      <div className="flex items-start justify-between gap-2.5">
+                        <span className="font-semibold text-lg sm:text-[1.1875rem] text-[var(--r-ink)] leading-snug">
                           {sc.label}
                         </span>
                         <span
-                          className="text-xs font-medium px-2 py-0.5 rounded flex-shrink-0"
+                          className="text-[0.9375rem] font-medium px-2.5 py-1 rounded flex-shrink-0"
                           style={{ backgroundColor: tagBg, color: tagColor }}
                         >
                           {sc.tag}
                         </span>
                       </div>
-                      <p className="text-[13px] text-[var(--r-ink-2)] line-clamp-2 leading-relaxed">
+                      <p className="text-[1.0625rem] sm:text-lg text-[var(--r-ink-2)] line-clamp-3 leading-relaxed">
                         &ldquo;{sc.text}&rdquo;
                       </p>
                     </button>
@@ -527,7 +529,7 @@ export default function ChatCheckPage() {
                         borderColor: "var(--r-user-border)",
                       }}
                     >
-                      <div className="text-sm sm:text-[15px] text-[var(--r-ink)] leading-relaxed">
+                      <div className="text-base sm:text-[1.0625rem] text-[var(--r-ink)] leading-relaxed">
                         {highlightKeywords(msg.content)}
                       </div>
                       {msg.imagePreview && (
@@ -537,7 +539,7 @@ export default function ChatCheckPage() {
                           className="max-h-56 rounded-lg border border-[var(--r-rule-2)] object-contain"
                         />
                       )}
-                      <div className="text-[11px] font-mono text-[var(--r-muted)] text-right">
+                      <div className="text-xs font-mono text-[var(--r-muted)] text-right">
                         {msg.timestamp}
                       </div>
                     </div>
@@ -550,7 +552,7 @@ export default function ChatCheckPage() {
                   <div
                     key={msg.id}
                     ref={isLatestAssistant ? latestResponseRef : null}
-                    className="ribbon-panel p-4 text-sm flex items-center gap-3"
+                    className="ribbon-panel p-4 text-base flex items-center gap-3"
                     style={{ borderColor: "var(--r-danger)", color: "var(--r-danger)" }}
                   >
                     <AlertTriangle className="w-5 h-5 flex-shrink-0" />
@@ -571,48 +573,48 @@ export default function ChatCheckPage() {
                 >
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-4">
                     <RiskGauge score={res.risk_score} threatLevel={res.threat_level} />
-                    <div className="flex-1 space-y-2 min-w-0">
+                    <div className="flex-1 space-y-2.5 min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
                         <span
-                          className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-md"
+                          className="inline-flex items-center gap-1.5 text-sm font-medium px-3 py-1 rounded-md"
                           style={{
                             backgroundColor: "var(--r-accent-soft)",
                             color: "var(--r-accent)",
                           }}
                         >
                           {isSafe ? (
-                            <ShieldCheck className="w-3.5 h-3.5" />
+                            <ShieldCheck className="w-4 h-4" />
                           ) : (
-                            <ShieldAlert className="w-3.5 h-3.5" />
+                            <ShieldAlert className="w-4 h-4" />
                           )}
                           {res.detected_tactic}
                         </span>
 
-                        <div className="ml-auto flex items-center gap-2">
+                        <div className="ml-auto flex items-center gap-2.5">
                           <button
                             type="button"
                             onClick={() => handleCopyAlert(msg.id, res)}
-                            className="ribbon-btn inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium cursor-pointer"
+                            className="ribbon-btn inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium cursor-pointer"
                             title="Sao chép tóm tắt cảnh báo để gửi cho người thân"
                           >
                             {copiedId === msg.id ? (
                               <>
-                                <Check className="w-3.5 h-3.5" style={{ color: "var(--r-safe)" }} />
+                                <Check className="w-4 h-4" style={{ color: "var(--r-safe)" }} />
                                 <span>Đã chép</span>
                               </>
                             ) : (
                               <>
-                                <Copy className="w-3.5 h-3.5 text-[var(--r-muted)]" />
+                                <Copy className="w-4 h-4 text-[var(--r-muted)]" />
                                 <span>Sao chép cảnh báo</span>
                               </>
                             )}
                           </button>
-                          <span className="text-[11px] font-mono text-[var(--r-muted)]">
+                          <span className="text-xs font-mono text-[var(--r-muted)]">
                             {msg.timestamp}
                           </span>
                         </div>
                       </div>
-                      <p className="text-sm sm:text-[15px] text-[var(--r-ink)] leading-relaxed">
+                      <p className="text-base sm:text-[1.0625rem] text-[var(--r-ink)] leading-relaxed">
                         {res.explanation}
                       </p>
                     </div>
@@ -620,20 +622,20 @@ export default function ChatCheckPage() {
 
                   {res.url_analysis && res.url_analysis.warnings.length > 0 && (
                     <div
-                      className="rounded-lg p-3.5 space-y-1.5 border"
+                      className="rounded-lg p-4 space-y-2 border"
                       style={{
                         backgroundColor: "var(--r-warn-soft)",
                         borderColor: "var(--r-warn)",
                       }}
                     >
                       <div
-                        className="text-xs font-semibold flex items-center gap-1.5"
+                        className="text-sm sm:text-[0.9375rem] font-semibold flex items-center gap-1.5"
                         style={{ color: "var(--r-warn)" }}
                       >
                         <Link2 className="w-4 h-4" />
                         Cảnh báo kỹ thuật về đường link và tên miền
                       </div>
-                      <ul className="text-xs sm:text-sm text-[var(--r-ink)] space-y-1 list-disc list-inside">
+                      <ul className="text-[0.9375rem] sm:text-base text-[var(--r-ink)] space-y-1.5 list-disc list-inside leading-relaxed">
                         {res.url_analysis.warnings.map((w, i) => (
                           <li key={i}>{w}</li>
                         ))}
@@ -642,7 +644,7 @@ export default function ChatCheckPage() {
                   )}
 
                   <div
-                    className="rounded-lg p-4 space-y-2 border"
+                    className="rounded-lg p-4.5 space-y-2.5 border"
                     style={{
                       backgroundColor: isHigh
                         ? "var(--r-danger-soft)"
@@ -658,7 +660,7 @@ export default function ChatCheckPage() {
                   >
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <div
-                        className="text-xs font-semibold flex items-center gap-1.5"
+                        className="text-[0.9375rem] sm:text-base font-semibold flex items-center gap-1.5"
                         style={{
                           color: isHigh
                             ? "var(--r-danger)"
@@ -667,20 +669,20 @@ export default function ChatCheckPage() {
                             : "var(--r-warn)",
                         }}
                       >
-                        <CheckCircle2 className="w-4 h-4" />
+                        <CheckCircle2 className="w-4.5 h-4.5" />
                         {isHigh ? "Việc bạn cần làm ngay lập tức" : "Khuyến nghị an toàn"}
                       </div>
                       {isHigh && (
                         <button
                           type="button"
                           onClick={() => setEmergencyOpen(true)}
-                          className="ribbon-btn-sos text-xs font-semibold px-3 py-1 cursor-pointer"
+                          className="ribbon-btn-sos text-sm font-semibold px-3.5 py-1.5 cursor-pointer"
                         >
                           Mở quy trình cấp cứu 15 phút
                         </button>
                       )}
                     </div>
-                    <ul className="space-y-1.5 text-sm text-[var(--r-ink)]">
+                    <ul className="space-y-2 text-base sm:text-[1.0625rem] text-[var(--r-ink)] leading-relaxed">
                       {res.action_recommendations.map((rec, i) => (
                         <li key={i} className="flex items-start gap-2">
                           <span style={{ color: "var(--r-accent)" }}>•</span>
@@ -690,16 +692,16 @@ export default function ChatCheckPage() {
                     </ul>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div className="ribbon-recessed p-3.5 space-y-2">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                    <div className="ribbon-recessed p-4 space-y-2">
                       <div
-                        className="text-xs font-medium flex items-center gap-1.5"
+                        className="text-sm sm:text-[0.9375rem] font-semibold flex items-center gap-1.5"
                         style={{ color: "var(--r-accent)" }}
                       >
                         <Brain className="w-4 h-4" />
                         Dấu hiệu và bẫy tâm lý
                       </div>
-                      <ul className="space-y-1 text-xs sm:text-sm text-[var(--r-ink-2)]">
+                      <ul className="space-y-1.5 text-[0.9375rem] sm:text-base text-[var(--r-ink-2)] leading-relaxed">
                         {res.psychological_traps.map((trap, i) => (
                           <li key={i} className="flex items-start gap-2">
                             <span className="text-[var(--r-muted)]">▸</span>
@@ -710,14 +712,14 @@ export default function ChatCheckPage() {
                     </div>
 
                     {res.matched_article && (
-                      <div className="ribbon-recessed p-3.5 space-y-2">
-                        <div className="text-xs font-medium text-[var(--r-muted)]">
+                      <div className="ribbon-recessed p-4 space-y-2">
+                        <div className="text-sm font-medium text-[var(--r-muted)]">
                           Đối chiếu cảnh báo (RAG)
                         </div>
-                        <div className="text-sm font-medium text-[var(--r-ink)]">
+                        <div className="text-base font-medium text-[var(--r-ink)] leading-snug">
                           {res.matched_article.title}
                         </div>
-                        <div className="text-xs text-[var(--r-muted)]">
+                        <div className="text-sm text-[var(--r-muted)]">
                           Nguồn: {res.matched_article.source}
                         </div>
                         {res.matched_article.url &&
@@ -728,10 +730,10 @@ export default function ChatCheckPage() {
                               href={res.matched_article.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 text-xs font-medium hover:underline"
+                              className="inline-flex items-center gap-1.5 text-sm font-medium hover:underline"
                               style={{ color: "var(--r-accent)" }}
                             >
-                              Đọc bài báo gốc <ExternalLink className="w-3 h-3" />
+                              Đọc bài báo gốc <ExternalLink className="w-3.5 h-3.5" />
                             </a>
                           )}
                       </div>
@@ -742,8 +744,8 @@ export default function ChatCheckPage() {
             })}
 
             {loading && (
-              <div className="ribbon-panel p-4 flex items-center gap-3 text-sm text-[var(--r-ink-2)]">
-                <Loader2 className="w-4 h-4 animate-spin" style={{ color: "var(--r-accent)" }} />
+              <div className="ribbon-panel p-4 flex items-center gap-3 text-base text-[var(--r-ink-2)]">
+                <Loader2 className="w-5 h-5 animate-spin" style={{ color: "var(--r-accent)" }} />
                 <span>Đang phân tích URL, đối soát kho RAG và thẩm định bẫy tâm lý...</span>
               </div>
             )}
