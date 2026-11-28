@@ -48,7 +48,9 @@ export function ApiKeyModal() {
             </div>
           </div>
           <button
+            type="button"
             onClick={() => setApiModalOpen(false)}
+            aria-label="Đóng cửa sổ cài đặt API key"
             className="p-1.5 rounded-lg text-[var(--r-muted)] hover:text-[var(--r-ink)] cursor-pointer"
           >
             <X className="w-4 h-4" />
@@ -57,11 +59,16 @@ export function ApiKeyModal() {
 
         <form onSubmit={handleSave} className="p-5 space-y-4">
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-[var(--r-ink-2)]">
+            <label
+              htmlFor="gemini-api-key-input"
+              className="text-xs font-medium text-[var(--r-ink-2)]"
+            >
               Khóa Google Gemini API (tùy chọn)
             </label>
             <div className="relative">
               <input
+                id="gemini-api-key-input"
+                name="geminiApiKey"
                 type={showKey ? "text" : "password"}
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}

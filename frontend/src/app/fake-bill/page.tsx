@@ -27,6 +27,7 @@ export default function FakeBillPage() {
   const [error, setError] = useState<string | null>(null);
   const [zoomOpen, setZoomOpen] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const initialLoadedRef = useRef<boolean>(false);
 
   const runSample = async (sample: "fake" | "real") => {
     setMode(sample);
@@ -59,6 +60,8 @@ export default function FakeBillPage() {
   };
 
   useEffect(() => {
+    if (initialLoadedRef.current) return;
+    initialLoadedRef.current = true;
     runSample("fake");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -113,6 +116,8 @@ export default function FakeBillPage() {
         className="ribbon-recessed p-5 transition cursor-pointer flex flex-col sm:flex-row items-center justify-between gap-4 border-dashed hover:border-[var(--r-accent)]"
       >
         <input
+          id="fake-bill-file-input"
+          name="billImage"
           ref={fileInputRef}
           type="file"
           accept="image/png,image/jpeg,image/jpg"

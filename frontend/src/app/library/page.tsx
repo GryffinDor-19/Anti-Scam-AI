@@ -147,6 +147,9 @@ export default function LibraryPage() {
         <div className="relative flex-1">
           <Search className="w-4 h-4 text-[var(--r-muted)] absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
+            id="library-search-input"
+            name="q"
+            aria-label="Tìm kiếm cảnh báo theo từ khóa"
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -155,6 +158,9 @@ export default function LibraryPage() {
           />
         </div>
         <select
+          id="library-category-select"
+          name="category"
+          aria-label="Lọc theo nhóm thủ đoạn"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
           className="ribbon-recessed px-3.5 py-2.5 text-sm text-[var(--r-ink)] focus:outline-none focus:border-[var(--r-accent)]"

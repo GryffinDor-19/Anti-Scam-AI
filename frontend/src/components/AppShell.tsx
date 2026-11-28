@@ -171,6 +171,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               type="button"
               role="switch"
               aria-checked={elderlyMode}
+              aria-label="Bật hoặc tắt chế độ chữ to, dễ đọc"
               onClick={() => setElderlyMode(!elderlyMode)}
               className="relative inline-flex h-5 w-9 items-center rounded-full transition-colors cursor-pointer flex-shrink-0"
               style={{
@@ -252,7 +253,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* Nội dung chính bên phải */}
       <div className="flex-1 flex flex-col min-w-0 min-h-screen">
-        <div className="lg:hidden sticky top-0 z-30 flex items-center justify-between gap-2 px-4 py-3 bg-[var(--r-paper-2)] border-b border-[var(--r-rule)]">
+        <div className="lg:hidden sticky top-0 z-30 shrink-0 flex items-center justify-between gap-2 px-4 py-3 bg-[var(--r-paper-2)] border-b border-[var(--r-rule)]">
           <button
             type="button"
             onClick={() => setMobileMenuOpen(true)}
@@ -275,7 +276,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </button>
         </div>
 
-        <main className="flex-1 w-full max-w-[1360px] mx-auto px-5 sm:px-8 lg:px-10 py-6">
+        <main className="flex-1 w-full max-w-[1360px] mx-auto px-5 sm:px-8 lg:px-10 pt-7 pb-6 sm:py-6">
           {children}
         </main>
       </div>

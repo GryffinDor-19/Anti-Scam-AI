@@ -37,7 +37,7 @@ const SAMPLE_SCENARIOS = [
   },
   {
     label: "Tuyển CTV chốt đơn Shopee",
-    tag: "Việc nhẹ lương cao",
+    tag: "CTV lừa đảo",
     tone: "danger",
     text: "Tuyển cộng tác viên chốt đơn Shopee tại nhà, mỗi ngày chỉ cần 30 phút làm nhiệm vụ nạp tiền nhận hoa hồng 20% thanh toán ngay lập tức.",
   },
@@ -323,36 +323,22 @@ export default function ChatCheckPage() {
           e.preventDefault();
           submitAnalysis();
         }}
-        className="flex items-center gap-2"
+        className="flex flex-col sm:flex-row sm:items-center gap-2"
       >
         <input
+          id="chat-file-input"
+          name="attachment"
           ref={fileInputRef}
           type="file"
           accept="image/png,image/jpeg,image/jpg"
           onChange={handleFileChange}
           className="hidden"
         />
-        <button
-          type="button"
-          onClick={() => fileInputRef.current?.click()}
-          className="ribbon-btn inline-flex items-center gap-1.5 px-3.5 py-2.5 text-sm font-medium cursor-pointer flex-shrink-0"
-          title="Đính kèm ảnh biên lai hoặc ảnh chụp màn hình"
-        >
-          <Paperclip className="w-4 h-4" style={{ color: "var(--r-accent)" }} />
-          <span className="hidden sm:inline">Tải ảnh bill</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={handleQuickPaste}
-          className="ribbon-btn inline-flex items-center gap-1.5 px-3.5 py-2.5 text-sm font-medium cursor-pointer flex-shrink-0"
-          title="Dán nhanh tin nhắn từ bộ nhớ tạm"
-        >
-          <ClipboardPaste className="w-4 h-4 text-[var(--r-ink-2)]" />
-          <span className="hidden md:inline">Dán nhanh</span>
-        </button>
 
         <input
+          id="chat-message-input"
+          name="message"
+          aria-label="Nhập tin nhắn nghi ngờ hoặc đường link lạ cần kiểm tra"
           ref={inputRef}
           type="text"
           value={inputText}
@@ -368,14 +354,47 @@ export default function ChatCheckPage() {
             setInputText(e.target.value);
             setInputFocused(true);
           }}
-          placeholder="Dán tin nhắn nghi ngờ, đường link lạ hoặc gõ từ khóa (VD: ngân hàng, công an, shipper)..."
-          className="flex-1 bg-transparent px-2.5 py-2 text-[0.9375rem] sm:text-base text-[var(--r-ink)] placeholder-[var(--r-muted)] focus:outline-none min-w-0"
+          placeholder="Dán tin nhắn nghi ngờ hoặc đường link lạ cần kiểm tra..."
+          className="order-1 sm:order-2 flex-1 w-full bg-transparent px-2.5 py-2 text-[0.9375rem] sm:text-base text-[var(--r-ink)] placeholder-[var(--r-muted)] focus:outline-none min-w-0"
         />
+
+        <div className="order-2 sm:order-1 flex items-center justify-between sm:justify-start gap-2 flex-shrink-0">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="ribbon-btn inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-2 sm:py-2.5 text-sm font-medium cursor-pointer flex-shrink-0"
+              title="Đính kèm ảnh biên lai hoặc ảnh chụp màn hình"
+            >
+              <Paperclip className="w-4 h-4" style={{ color: "var(--r-accent)" }} />
+              <span>Tải ảnh bill</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleQuickPaste}
+              className="ribbon-btn inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-2 sm:py-2.5 text-sm font-medium cursor-pointer flex-shrink-0"
+              title="Dán nhanh tin nhắn từ bộ nhớ tạm"
+            >
+              <ClipboardPaste className="w-4 h-4 text-[var(--r-ink-2)]" />
+              <span className="sm:hidden md:inline">Dán nhanh</span>
+            </button>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading || (!inputText.trim() && !attachedFile)}
+            className="sm:hidden ribbon-btn-accent inline-flex items-center gap-1.5 px-4 py-2 disabled:opacity-40 disabled:cursor-not-allowed text-sm font-semibold cursor-pointer flex-shrink-0"
+          >
+            <span>Phân tích</span>
+            <Send className="w-4 h-4" />
+          </button>
+        </div>
 
         <button
           type="submit"
           disabled={loading || (!inputText.trim() && !attachedFile)}
-          className="ribbon-btn-accent inline-flex items-center gap-1.5 px-4 py-2.5 disabled:opacity-40 disabled:cursor-not-allowed text-sm sm:text-[0.9375rem] font-semibold cursor-pointer flex-shrink-0"
+          className="hidden sm:inline-flex order-3 ribbon-btn-accent items-center gap-1.5 px-4 py-2.5 disabled:opacity-40 disabled:cursor-not-allowed text-sm sm:text-[0.9375rem] font-semibold cursor-pointer flex-shrink-0"
         >
           <span>Phân tích</span>
           <Send className="w-4 h-4" />
@@ -411,8 +430,8 @@ export default function ChatCheckPage() {
         </div>
       )}
 
-      {/* Dải chip gợi ý 1-chạm khi ô nhập đang trống */}
-      {!inputText.trim() && (
+      {/* Dải chip gợi ý 1-chạm khi chưa có hội thoại và ô nhập đang trống */}
+      {chatMessages.length === 0 && !inputText.trim() && (
         <div className="flex items-center gap-2 flex-wrap px-1 pt-1">
           <span className="text-sm sm:text-[0.9375rem] font-medium text-[var(--r-muted)] mr-0.5">
             Gợi ý nhanh:
@@ -569,7 +588,7 @@ export default function ChatCheckPage() {
                 <div
                   key={msg.id}
                   ref={isLatestAssistant ? latestResponseRef : null}
-                  className="ribbon-panel p-5 space-y-4 scroll-mt-6"
+                  className="ribbon-panel p-5 space-y-4 scroll-mt-20 lg:scroll-mt-6"
                 >
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-4">
                     <RiskGauge score={res.risk_score} threatLevel={res.threat_level} />
@@ -578,8 +597,10 @@ export default function ChatCheckPage() {
                         <span
                           className="inline-flex items-center gap-1.5 text-sm font-medium px-3 py-1 rounded-md"
                           style={{
-                            backgroundColor: "var(--r-accent-soft)",
-                            color: "var(--r-accent)",
+                            backgroundColor: isSafe
+                              ? "var(--r-safe-soft)"
+                              : "var(--r-accent-soft)",
+                            color: isSafe ? "var(--r-safe)" : "var(--r-accent)",
                           }}
                         >
                           {isSafe ? (
@@ -595,7 +616,7 @@ export default function ChatCheckPage() {
                             type="button"
                             onClick={() => handleCopyAlert(msg.id, res)}
                             className="ribbon-btn inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium cursor-pointer"
-                            title="Sao chép tóm tắt cảnh báo để gửi cho người thân"
+                            title="Sao chép tóm tắt kết quả để gửi cho người thân"
                           >
                             {copiedId === msg.id ? (
                               <>
@@ -605,7 +626,7 @@ export default function ChatCheckPage() {
                             ) : (
                               <>
                                 <Copy className="w-4 h-4 text-[var(--r-muted)]" />
-                                <span>Sao chép cảnh báo</span>
+                                <span>{isSafe ? "Sao chép kết quả" : "Sao chép cảnh báo"}</span>
                               </>
                             )}
                           </button>
@@ -693,7 +714,11 @@ export default function ChatCheckPage() {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-                    <div className="ribbon-recessed p-4 space-y-2">
+                    <div
+                      className={`ribbon-recessed p-4 space-y-2 ${
+                        !res.matched_article ? "md:col-span-2" : ""
+                      }`}
+                    >
                       <div
                         className="text-sm sm:text-[0.9375rem] font-semibold flex items-center gap-1.5"
                         style={{ color: "var(--r-accent)" }}
